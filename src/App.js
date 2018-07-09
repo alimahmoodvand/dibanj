@@ -38,6 +38,7 @@ import Bookmark from "./pages/bookmark/bookmark";
 import Contact from "./pages/contact/contact";
 import Help from "./pages/help/help";
 import VerifyCode from "./pages/verifycode/verifycode";
+import Messages from "./pages/message/message";
 EStyleSheet.build({
    $statusBarColor:'red',
     $mainColor:'rgb(255, 200, 0)',
@@ -50,21 +51,29 @@ EStyleSheet.build({
 class BadgeIcon extends Component {
     render() {
         let style={}
-        if(this.props.badgeCount===0){
+        if(this.props.basketCount===0&&this.props.messageCount==0){
             style.height=0;
         }
+        const {name,focused,field}=this.props;
+        // console.log(this.props)
         return(
             <View>
-                <MIcon name="shopping-basket" color={(this.props.focused ? "#ffc800" : "white")}
-                       size={28}/>
+                <MIcon name={name} color={(focused ? "#ffc800" : "white")} size={28}/>
                 <Text style={[{left:-15,position:'absolute',color:'white',fontWeight:'bold',backgroundColor:'red',paddingLeft:4,paddingRight:4},style]}>
-                {this.props.badgeCount}
+                {this.props[field]}
             </Text>
             </View>
         )
     }
 }
-const mapStateToPropsStore = state => {return {badgeCount: state.basket.basket.length};};
+const mapStateToPropsStore = state => {return {
+    basketCount: state.basket.basket.length,
+    messageCount:state.messages.messages.filter((item)=>{
+        if(item.Status==0){
+            return item;
+        }
+    }).length
+};};
 const ConnectedYourTabIcon = connect(mapStateToPropsStore)(BadgeIcon);
 
 export default class App extends Component{
@@ -96,8 +105,11 @@ export default class App extends Component{
                                   hideNavBar
                                   key="پیام ها"
                               >
-                                  <Scene key="messagesp" hideNavBar component={Search} icon={({focused}) => {
-                                      return <MIcon name="email" color={(focused ? "#ffc800" : "white")} size={28}/>;
+                                  <Scene key="messagesp" hideNavBar component={Messages} icon={({focused}) => {
+                                      // const icon=(<MIcon name="email" color={(focused ? "#ffc800" : "white")} size={28}/>);
+                                      // return <ConnectedYourTabIcon myicon={icon} />
+                                      return <ConnectedYourTabIcon field="messageCount" name="email" focused={focused} />
+
                                   }} title="پیام ها">
                                   </Scene>
                               </Stack>
@@ -106,9 +118,9 @@ export default class App extends Component{
                                   key="سبد خرید"
                               >
                                   <Scene key="basketp" hideNavBar component={Basket} icon={({focused}) => {
-                                      // return <MIcon name="shopping-basket" color={(focused ? "#ffc800" : "white")}
-                                      //               size={28}/>;
-                                  return <ConnectedYourTabIcon focused={focused} />
+                                      // const icon=(<MIcon name="shopping-basket" color={(focused ? "#ffc800" : "white")}
+                                      //               size={28}/>);
+                                  return <ConnectedYourTabIcon field="basketCount" name="shopping-basket" focused={focused} />
                                   }} title="سبد خرید">
                                   </Scene>
                               </Stack>

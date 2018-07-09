@@ -8,18 +8,6 @@ import FIcon from 'react-native-vector-icons/FontAwesome';
 import {SegmentedControls} from "react-native-radio-buttons";
 import Product from "../../components/product/product";
 import {connect} from "react-redux";
-const SECTIONS = [
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-];
 class Bookmark extends Component{
     _renderItem = (item, index) => {
         item['id'] = index;

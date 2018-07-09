@@ -28,22 +28,7 @@ class Course extends Component{
             }, 2000),
             position: 1,
             interval: null,
-            dataSource: [
-                {
-                    url: 'https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png',
-                }, {
-                    url: 'http://placeimg.com/640/480/any',
-                }, {
-                    url: 'http://placeimg.com/640/480/dog',
-                },
-                {
-                    url: 'https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png',
-                }, {
-                    url: 'http://placeimg.com/640/480/any',
-                }, {
-                    url: 'http://placeimg.com/640/480/dog',
-                },
-            ],
+            dataSource: [],
             favorite:false,
             save:false,
 
@@ -53,6 +38,7 @@ class Course extends Component{
         clearInterval(this.state.interval);
     }
     product={};
+    childs=[];
     _findProduct=async()=>{
         // for(let i=0;i<this.props.products.products.length;i++){
         //     if(this.props.id===this.props.products.products[i].ProductAndCourseId){
@@ -65,12 +51,23 @@ class Course extends Component{
             ProductAndCourseId:this.props.id,
         }
        let response=await Http._postAsyncData(data,'singleProduct')
-         this.product= response;
-        this.setState({
-            favorite:response.isLiked,
-            save:response.isBookmarked,
-            comment:false,
-        })
+        // console.log(response)
+        if(Array.isArray(response)&&response.length==3) {
+            // response.map((item,index)=>{
+            //     if(item.ProductAndCourseId===this.props.id){
+            //         this.product = item;
+            //         response.splice(index,1)
+            //     }
+            // })
+            this.product = response[0][0];
+            this.childs=response[1];
+            this.setState({
+                favorite:   this.product.isLiked,
+                save:   this.product.isBookmarked,
+                comment: false,
+                dataSource:response[2]
+            })
+        }
 
     }
 
@@ -80,8 +77,6 @@ class Course extends Component{
     };
     _renderWindowItem = (item,index) => {
         item['id']=index;
-        // console.log( <WindowProduct  prod={item}/>)
-
        return(<WindowProduct   prod={item}/>);
     };
     render() {
@@ -152,16 +147,18 @@ class Course extends Component{
                                    color="white" size={25}/>
                         </View>
                     </View>
-
-                    <Slideshow
-                        height={125}
-                        containerStyle={styles.slideshow}
-                        dataSource={this.state.dataSource}
-                        position={this.state.position}
-                        arrowSize={1}
-                        indicatorSelectedColor='rgb(255, 200, 0)'
-                        onPositionChanged={(position) => this.setState({ position })}
-                    />
+                    {
+                        this.state.dataSource.length>0&&
+                        <Slideshow
+                            height={125}
+                            containerStyle={styles.slideshow}
+                            dataSource={this.state.dataSource}
+                            position={this.state.position}
+                            arrowSize={1}
+                            indicatorSelectedColor='rgb(255, 200, 0)'
+                            onPositionChanged={(position) => this.setState({position})}
+                        />
+                    }
                     <SingleProduct  prod={this.product}/>
                     <View style={styles.childHeader}>
                         <Text style={styles.childHeaderText}>
@@ -170,7 +167,7 @@ class Course extends Component{
 
                     </View>
                     <FlatList
-                    data={this.props.products.products}
+                    data={this.childs}
                     keyExtractor={(item,index)=>index.toString()}
                     renderItem={({item,index})=>
                         this._renderItem(item,index)

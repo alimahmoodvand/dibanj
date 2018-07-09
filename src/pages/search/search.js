@@ -20,17 +20,25 @@ class Search extends Component{
         this.options = [
             {
                 label: 'همه',
-                value: 'opt1'
+                value: 'opt1',
+                type:0,
+                subType:0,
             }, {
                 label: 'مجازی',
-                value: 'opt'
+                value: 'opt',
+                type:1,
+                subType:2,
             }, {
                 label: 'حضوری',
-                value: 'opt3'
+                value: 'opt3',
+                type:1,
+                subType:1,
             },
             {
                 label: 'محصول فیزیکی',
-                value: 'opt2'
+                value: 'opt2',
+                type:2,
+                subType:1,
             }
         ]
         this.searchParams={
@@ -59,6 +67,7 @@ class Search extends Component{
         // console.log(item)
        this.setState({selectedOptionIndex:this.options.indexOf(item)});
     }
+    onEndReachedCalledDuringMomentum=true;
     products=[];
     render(){
         return(
@@ -66,7 +75,7 @@ class Search extends Component{
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
                 <HeaderLayout back={true}/>
-                <ScrollView style={styles.content}>
+                <View style={styles.content}>
                     <View style={styles.searchSection}>
                         <View style={styles.serachBtnSection}>
                             <Button  block  style={styles.btnSearch} title={0} onPress={()=>{
@@ -153,14 +162,15 @@ class Search extends Component{
                                     this._renderItem(item, index)
                                 }
                                 ListEmptyComponent={() => <Spinner/>}
-                                onEndReached={() => {
-                                    this._searchProduct();
+                                onEndReached={({distanceFromEnd}) => {
+                                        this._searchProduct();
                                 }}
-                                onEndReachedThreshold={0.1}
+                                removeClippedSubviews={true}
+                                onEndReachedThreshold = {0.1}
                             />
                         </View>
                     }
-                </ScrollView>
+                </View>
             </View>
         );
     }
@@ -183,8 +193,8 @@ class Search extends Component{
     }
     _searchProduct=async()=>{
         if(!this.searchParams.text.trim()){
+            this.setState({page:0});
             alert("search is empty")
-            return
         }else if(this.state.page>0) {
             let catsId = [];
             if (this.searchParams.cats.length > 0) {
@@ -196,7 +206,8 @@ class Search extends Component{
                 token: this.props.user.token,
                 search: this.searchParams.text,
                 categories: catsId,
-                type: this.options[this.state.selectedOptionIndex],
+                type: this.options[this.state.selectedOptionIndex].type,
+                subType: this.options[this.state.selectedOptionIndex].subType,
                 page:this.state.page
             }
             // console.log(data)
@@ -208,6 +219,8 @@ class Search extends Component{
                 this.setState({page:this.state.page+1});
             }
         }
+        // this.onEndReachedCalledDuringMomentum=false;
+
     }
     _change=(selectCatIndex)=>{
         this.setState({selectCatIndex})

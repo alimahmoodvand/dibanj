@@ -2,6 +2,7 @@ import {combineReducers}from "redux";
 import user from "./userReducer"
 import products from "./productsReducers"
 import favorites from "./favorietsReducers"
+import messages from "./messageReducers"
 import basket from "./shopReducers"
 import categories from "./categoriesReducers"
 
@@ -25,5 +26,6 @@ export default combineReducers({
     products,
     favorites,
     basket,
+    messages,
     user
 })

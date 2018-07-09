@@ -79,8 +79,8 @@ export default styles = EStyleSheet.create({
 
     },
     detalsText:{
-        color:'black',
-        fontSize:17,
+        // color:'black',
+        // fontSize:17,
         margin:2,
         direction:'rtl',
     },

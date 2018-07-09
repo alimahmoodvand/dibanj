@@ -31,7 +31,7 @@ export default class WorkoutReport extends Component{
         const {workout}=this.props
         return(
             <View style={styles.main}>
-                <Button style={styles.buy} title={workout.id} onPress={()=>Actions.practice()}>
+                <Button style={styles.buy} title={workout.id} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:workout.userCoursesExamAndPracticeId})}>
                 <Text style={styles.proBtnText}>سوابق
                     پاسخ
                 </Text>
@@ -41,12 +41,12 @@ export default class WorkoutReport extends Component{
                     <View style={styles.practiceContainer}>
                         <View style={styles.practiceTitle}>
                             <Text style={styles.practiceTitleText}>
-                                {workout.title}</Text>
+                                {workout.courseTitle}</Text>
                         </View>
                         <View style={styles.practiceDescContainer}>
                             <View style={styles.practiceDesc}>
                                 <Text style={styles.practiceDescText}>
-                                    {workout.title}</Text>
+                                    {workout.Title}</Text>
                             </View>
                             <View style={styles.circleYellow}>
                                 <Text style={styles.circleText}> {workout.id}</Text>
@@ -54,7 +54,7 @@ export default class WorkoutReport extends Component{
                         </View>
                         </View>
                 </View>
-                <Button style={styles.sample} title={workout.id} onPress={()=>Actions.course({id:prod.productAndCourseId})}>
+                <Button style={styles.sample} title={workout.id} onPress={()=>Actions.course({id:workout.CourseId})}>
                     <Text style={styles.proBtnText}>اطلاعات
                         دوره</Text>
                 </Button>

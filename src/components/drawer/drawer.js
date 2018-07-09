@@ -29,10 +29,10 @@ class DrawerLayout extends Component{
                 <Button block style={styles.drawerBtn} onPress={()=>{Actions.term()}}>
                     <Text style={styles.proImageText}>دوره های من</Text>
                 </Button>
-                <Button block style={styles.drawerBtn} onPress={()=>{Actions.workout()}}>
+                <Button block style={styles.drawerBtn} onPress={()=>{Actions.workout({examType:1})}}>
                     <Text style={styles.proImageText}>تمرین های من</Text>
                 </Button>
-                <Button block style={styles.drawerBtn} onPress={()=>{}}>
+                <Button block style={styles.drawerBtn} onPress={()=>{Actions.workout({examType:2})}}>
                     <Text style={styles.proImageText}>ازمون های من</Text>
                 </Button>
                 <Button block style={styles.drawerBtn} onPress={()=>{Actions.help()}}>

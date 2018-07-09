@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container} from "native-base";
-import {Image, ImageBackground, Text, View} from "react-native";
+import {Image, ImageBackground, Text, View, WebView} from "react-native";
 import styles from './product.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -25,7 +25,6 @@ class Product extends Component{
                 </Text>
                 <Text>{prod.DiscountPercent}</Text>
                 <Text>{prod.PriceAfterDiscount}</Text>
-
             </View>
         );
     }
@@ -39,6 +38,7 @@ class Product extends Component{
     }
     render(){
         const {prod}=this.props
+        prod.Thumbnail='http://dibanzh.raaz.co/images/dibanzh/thumbnails/'+prod.Thumbnail;
         return(
             <View style={styles.main}>
                 {/*<Button style={styles.buy} title={prod.id} onPress={()=>{
@@ -55,12 +55,12 @@ class Product extends Component{
                     <View style={styles.container}>
                     <View style={styles.details}>
                         <Text style={styles.detalsText}>{prod.Title}</Text>
-                        <Text style={styles.detalsText}>{prod.RegisterDeadLineStr}</Text>
-                        <Text style={styles.detalsText}>{prod.Description}</Text>
+                        <WebView  style={styles.detalsText} source={{html:prod.Description.toString()}} />
+                        <Text style={styles.detalsText}>{prod.RegisterDeadLine}</Text>
                         {this._getPrices(prod)}
                     </View>
-                    <ImageBackground style={styles.image} source={{uri:prod.image}}>
-                    <Image style={styles.image} source={{uri:prod.Thumbnail}}/>
+                    <ImageBackground style={styles.image} source={{uri: prod.Thumbnail}}>
+                    <Image style={styles.image} source={{uri: prod.Thumbnail}}/>
                 </ImageBackground>
                     </View>
                     <View style={styles.basket}>

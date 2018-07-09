@@ -12,4 +12,5 @@ export const INC_PAGE='INC_PAGE';
 export const DEC_PAGE='DEC_PAGE';
 export const ADD_PRODUCTS='ADD_PRODUCTS';
 export const SAVE_CATEGORIES='SAVE_CATEGORIES';
+export const SAVE_MESSAGES='SAVE_MESSAGES';
 

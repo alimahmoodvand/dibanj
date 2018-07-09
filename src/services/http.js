@@ -26,21 +26,26 @@ export default class Http{
     }
     static async _postAsyncData(data,url='login'){
         try {
+            let token=data.token
+            delete data.token;
             let response = await fetch(Http.baseurl+url, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization':'JWT '+data.token
+                    'Authorization':'JWT '+token
                 },
                 body: JSON.stringify(data),
             });
+            // console.log("_postAsyncData",url,data,response)
+
             const responseJson = await response.json();
-            // console.log("_postAsyncData",response.body)
+            console.log("_postAsyncData",url,data,responseJson)
+
             return responseJson;
         }
         catch (err){
-            console.log("_postAsyncData",err,response)
+            console.log("_postAsyncData",url,data,err)
             return err;
         }
     }

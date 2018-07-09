@@ -5,7 +5,7 @@ import {Image, StyleSheet, View} from "react-native";
 import {connect} from "react-redux";
 import {Actions} from "react-native-router-flux";
 import Http from "../../services/http";
-import {saveCategories} from "../../redux/actions";
+import {saveCategories,saveMessages} from "../../redux/actions";
 // import OneSignal from "react-native-onesignal";
 
  class Splash extends Component{
@@ -39,9 +39,19 @@ import {saveCategories} from "../../redux/actions";
                 Http._postDataPromise({token:this.props.user.token},'categories').then((response) => response.json())
                     .then((responseData) => {
                         this.props.saveCategories(responseData)
-                        Actions.reset('drawer')
-
-                    })
+                        Http._postDataPromise({token:this.props.user.token},'userMessages').then((response) => response.json())
+                            .then((responseData) => {
+                                // console.log(responseData)
+                                this.props.saveMessages(responseData)
+                                Actions.reset('drawer')
+                            }).catch((err)=>{
+                            Actions.reset('drawer')
+                        })
+                    }).catch((err)=>{
+                        console.log(err)
+                    Actions.reset('drawer')
+                })
+                //     Actions.reset('drawer')
             }
             else if (this.props.user.userId&&!this.props.user.token) {
                     Actions.signuppage();
@@ -89,6 +99,9 @@ const mapDispatchToProps=(dispatch)=> {
     return{
         saveCategories:(categories)=>{
             dispatch(saveCategories(categories));
+        },
+        saveMessages:(messages)=>{
+            dispatch(saveMessages(messages))
         }
     }
 }

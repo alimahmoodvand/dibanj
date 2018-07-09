@@ -23,6 +23,7 @@ class ProfileFields extends Component {
     _toggleModal = () =>
         this.setState({isModalVisible: !this.state.isModalVisible});
     textValue;
+    field;
     render() {
 
         const {field} = this.props;
@@ -60,17 +61,8 @@ class ProfileFields extends Component {
                                 <Text style={styles.modalButtonCancelText} >انصراف</Text>
                             </Button>
                             <Button  style={styles.modalButtonVerify} title={0} onPress={()=>{
-                                if(this.textValue==''){
-                                    alert("field empty")
-                                }
-                                else{
-                                    let user=this.props.user;
-                                    user[field.enKey]=this.textValue
-                                    field.value=this.textValue;
-                                    Http._postAsyncData(user,'user/update')
-                                    this.props.saveUser(user);
-                                    this._toggleModal();
-                                }
+                                this.field=field;
+                                this._updateUser();
                             }}>
                                 <Text style={styles.modalButtonVerifyText}>تاييد</Text>
                             </Button>
@@ -80,6 +72,22 @@ class ProfileFields extends Component {
             </View>
         )
     }
+    _updateUser=async()=>{
+        if(this.textValue==''){
+            alert("field empty")
+        }
+        else{
+            let user=this.props.user;
+            user[this.field.enKey]=this.textValue
+            this.field.value=this.textValue;
+            let token=this.props.user.token.toString();
+            await Http._postAsyncData(user,'user/update')
+            user.token=token;
+            this.props.saveUser(user);
+            this._toggleModal();
+        }
+    }
+
 }
 
 const mapDispatchToProps=(dispatch)=> {

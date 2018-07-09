@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
-import { Image, ScrollView, Text, View} from "react-native";
+import {Image, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import styles from './term.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -17,22 +17,30 @@ class Term extends Component{
         if (Array.isArray(response)) {
             this.courses=response;
         }
-        console.log(response)
+        // console.log("userCourses",response,{userId:this.props.user.userId,token:this.props.user.token})
         this.setState({changeUI:this.state.changeUI+1,selectCatIndex:false})
                 response = await Http._postAsyncData({
                     userId: this.props.user.userId,
-                    courseId: 2,//this.courses[CourseIndex].ProductAndCourseId,
+                    // courseId: 2,//this.courses[CourseIndex].ProductAndCourseId,
                     token: this.props.user.token
                 }, 'userCourseAndPractice');
         if (Array.isArray(response)) {
             this.userPAC=response;
         }
-        console.log(response)
+        // console.log(response)
     };
     courses=[];
     userPAC=[];
+    curPAC=[];
     _selectCourse=async(CourseIndex)=> {
-        // if(CourseIndex!==false) {
+        if(CourseIndex!==false) {
+            this.curPAC=[];
+            this.userPAC.map((item,index)=>{
+                if(item.ParentId===this.courses[CourseIndex].ProductAndCourseId){
+                    this.curPAC.push(item)
+                }
+            })
+        }
         //     let response = await Http._postAsyncData({
         //         userId: this.props.user.userId,
         //         courseId: 2,//this.courses[CourseIndex].ProductAndCourseId,
@@ -49,7 +57,7 @@ class Term extends Component{
         // }else
         {
             this.setState({selectCatIndex: CourseIndex}, () => {
-                console.log(this.state.selectCatIndex, this.userPAC.length)
+                // console.log(this.state.selectCatIndex,CourseIndex, this.userPAC.length)
             })
         }
     }
@@ -69,7 +77,7 @@ class Term extends Component{
                 <ScrollView style={styles.content}>
                     <View style={styles.filter}>
                         <View style={styles.filterExist} >
-                            <MIcon style={styles.filterIcon} name="filter-list" onPress={() => Actions.pop()} color="white"
+                            <MIcon style={styles.filterIcon} name="filter-list" onPress={() =>{}} color="white"
                                    size={25}/>
                         </View>
                     </View>
@@ -99,10 +107,26 @@ class Term extends Component{
         return (
             <View onPress={()=>{}} style={styles.accordianHeader}>
                 {
-                    this.state.selectCatIndex!==index&&<FIcon style={styles.filterIcon} name="angle-left"  color="black" size={25}/>
+                    section.child&&
+                        this.state.selectCatIndex !== index &&
+                    <FIcon style={styles.filterIcon} name="angle-left" color="black" size={25}/>
                 }
                 {
-                    this.state.selectCatIndex===index&&<FIcon style={styles.filterIcon} name="angle-down"  color="black" size={25}/>
+                    section.child&&
+                    this.state.selectCatIndex===index&&
+                    <FIcon style={styles.filterIcon} name="angle-down"  color="black" size={25}/>
+                }
+                {
+                    section.practice&&
+                    <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:section.practice})}>
+                        <Text>{"تمرین"}</Text>
+                    </TouchableOpacity>
+                }
+                {
+                    section.exam&&
+                    <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:section.exam})}>
+                        <Text>{"آزمون"}</Text>
+                    </TouchableOpacity>
                 }
                 <View style={styles.accordianHeaderContainerText}>
                     <Text onPress={()=>{}} style={styles.accordianHeaderText}>{section.Title}</Text>
@@ -111,13 +135,13 @@ class Term extends Component{
         );
     }
     _renderContent=(section)=> {
-        console.log(this.userPAC)
-        if(this.userPAC.length>0) {
+        // console.log(section)
+        if(this.curPAC.length>0) {
             return (
                 <View style={styles.accordianSubContent}>
                     <View style={styles.accordianSubContainer}>
                         <View style={styles.accordianSectionStepper}>
-                            <Stepper pacs={this.userPAC}/>
+                            <Stepper pacs={this.curPAC}/>
                         </View>
                     </View>
                 </View>

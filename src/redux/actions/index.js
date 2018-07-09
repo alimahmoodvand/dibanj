@@ -2,7 +2,7 @@ import {
     ADD_BASKET, ADD_BOOKMARK, ADD_CLOUD, ADD_PRODUCTS, COURSE_ABS, DEC_PAGE, INC_PAGE, REMOVE_BASKET,
     REMOVE_BOOKMARK,
     REMOVE_CLOUD,
-    REMOVE_USER, SAVE_CATEGORIES,
+    REMOVE_USER, SAVE_CATEGORIES, SAVE_MESSAGES,
     SAVE_USER
 } from "./types";
 
@@ -57,5 +57,9 @@ export const addProducts=(products)=>({
 export const saveCategories=(categories)=>({
     type:SAVE_CATEGORIES,
     categories
+})
+export const saveMessages=(messages)=>({
+    type:SAVE_MESSAGES,
+    messages
 })
 

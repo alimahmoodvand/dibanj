@@ -116,5 +116,12 @@ export default styles = EStyleSheet.create({
     },
     accordianSectionStepper:{
         flex:1,
-    }
+    },
+    train:{
+        alignItems:'center',
+        justifyContent:'center',
+        // flex:0.4,
+        // height:'$productBnt/4',
+        // paddingTop:'$productBnt/4' ,
+    },
 });

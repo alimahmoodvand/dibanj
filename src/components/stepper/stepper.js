@@ -10,12 +10,12 @@ export default class Stepper extends Component {
     courses=[];
     render() {
         const {pacs}=this.props;
-        this.courses=pacs[1];
-        this.practices=pacs[0];
+        // this.courses=pacs[1];
+        // this.practices=pacs[0];
         return (
             <View style={styles.container}>
                     {
-                        this.courses.map((item,index)=>{
+                        pacs.map((item,index)=>{
                           return  this._renderSteps(item,index);
                             }
                         )
@@ -28,8 +28,11 @@ export default class Stepper extends Component {
     _renderSteps=(item,index)=> {
         return (
             <View key={index} style={styles.steps}>
-            <TouchableOpacity style={styles.train} onPress={()=>Actions.workout()}>
-                <Text>{this.practices[index]?"تمرین":""}</Text>
+            <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:item.practice})}>
+                <Text>{item.practice?"تمرین":""}</Text>
+            </TouchableOpacity>
+                <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:item.exam})}>
+                <Text>{item.exam?"آزمون":""}</Text>
             </TouchableOpacity>
                 <TouchableOpacity style={styles.title} >
                     <Text>{(index+1).toString()+"جلسه "}</Text>
@@ -43,7 +46,8 @@ export default class Stepper extends Component {
         );
     }
     _renderLine=(index,active)=>{
-        if(index< this.courses.length-1) {
+        // if(index< active)
+        {
             if (index > active||index === active) {
                 return (<View style={styles.lineGray}>
                 </View>);
@@ -57,12 +61,12 @@ export default class Stepper extends Component {
     _renderCircle=(index,active)=>{
             if (index > active) {
                 return (<View style={styles.circleGray}>
-                    <Text style={styles.circleText}>{index}</Text>
+                    <Text style={styles.circleText}>{index+1}</Text>
                 </View>);
             }
             else {
                 return (<View style={styles.circleYellow}>
-                    <Text style={styles.circleText}>{index}</Text>
+                    <Text style={styles.circleText}>{index+1}</Text>
                 </View>);
             }
     }

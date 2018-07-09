@@ -15,6 +15,7 @@ const ImagePicker = require('react-native-image-picker');
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {connect} from "react-redux";
 import {addBasket} from "../../redux/actions";
+import Http from "../../services/http";
 
 const options = {
     title: 'Select Avatar',
@@ -28,33 +29,9 @@ const options = {
 };
 class Profile extends Component {
     componentWillMount(){
-        // this.fields=[];
-        // setTimeout(()=>{
             this.fields=this._mapEnToFa();
-        // },1000)
     }
     render() {
-        const arr=[
-            {teacher:"home",deadline:new Date()
-                ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-            {teacher:"home",deadline:new Date()
-                ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-            {teacher:"home",deadline:new Date()
-                ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-            {teacher:"home",deadline:new Date()
-                ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-            {teacher:"home",deadline:new Date()
-                ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-            {teacher:"home",deadline:new Date()
-                ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-            {teacher:"home",deadline:new Date()
-                ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-            {teacher:"home",deadline:new Date()
-                ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-            {teacher:"home",deadline:new Date()
-                ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-        ];
-
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
@@ -86,10 +63,6 @@ class Profile extends Component {
                                         }
                                         else {
                                             let source = { uri: response.uri };
-
-                                            // You can also display the image using data:
-                                            // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
                                             this.setState({
                                                 avatarSource: source
                                             });
@@ -104,7 +77,7 @@ class Profile extends Component {
                     <View style={styles.editableInfo}>
 
                         <View style={{flex: 1}}>
-                            <ProfileCategory cats={arr}/>
+                            <ProfileCategory/>
                             <FlatList
                                 data={this.fields}
                                 keyExtractor={(item, index) => index.toString()}

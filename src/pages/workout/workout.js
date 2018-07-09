@@ -7,19 +7,29 @@ import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
 import {SegmentedControls} from "react-native-radio-buttons";
 import WorkoutReport from "../../components/workoutreport/workoutreport";
-const SECTIONS = [
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-];
-export default class Workout extends Component{
+import {connect} from "react-redux";
+import Http from "../../services/http";
+
+class Workout extends Component{
+    _getExamAndPractice=async()=> {
+        let response = await Http._postAsyncData({
+            userId: this.props.user.userId,
+            type: this.props.examType,
+            token: this.props.user.token
+        }, 'userExamAndPractices');
+        if (Array.isArray(response)) {
+            this.practices = response;
+        }
+        // console.log("userCourses",response,{userId:this.props.user.userId,token:this.props.user.token})
+        this.setState({changeUI: this.state.changeUI + 1})
+    }
+    practices=[];
+    state={
+        changeUI:0,
+    }
+    componentWillMount(){
+        this._getExamAndPractice();
+    }
     _renderItem = (item, index) => {
         item['id'] = index;
         return (<WorkoutReport workout={item}/>);
@@ -31,7 +41,7 @@ export default class Workout extends Component{
                 <HeaderLayout back={true}/>
 
                     <FlatList
-                        data={SECTIONS}
+                        data={this.practices}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item, index}) =>
                             this._renderItem(item, index)
@@ -42,3 +52,9 @@ export default class Workout extends Component{
     }
 
 }
+const mapStateToProps=state=>{
+    return{
+        user:state.user,
+    }
+};
+export default connect(mapStateToProps,null)(Workout);

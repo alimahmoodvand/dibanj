@@ -85,6 +85,15 @@ export default styles = StyleSheet.create({
         marginRight: 15,
         justifyContent:'center',
         alignItems:'center',
-
+    },
+    filterExist:{
+        flexDirection:'row',
+        flex:0.95,
+        alignContent:'flex-start',
+        justifyContent:'flex-start'
+    },
+    filterExistText:{
+        color:'white',
+        marginRight:10,
     }
 });

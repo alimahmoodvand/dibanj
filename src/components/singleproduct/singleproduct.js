@@ -46,10 +46,9 @@ class SingleProduct extends Component{
                 <View style={styles.content}>
                     <View style={styles.details}>
                         <Text>{prod.Title}</Text>
-                        <Text>{prod.TypeStr}</Text>
-                        <Text>{prod.RegisterDeadLineStr}</Text>
+                        <Text>{prod.RegisterDeadLine}</Text>
                         <Text>{prod.Duration}</Text>
-                        <Text>{prod.Description}</Text>
+                        {/*<Text>{prod.Description}</Text>*/}
                     </View>
                     {this._getPrices(prod)}
                 </View>

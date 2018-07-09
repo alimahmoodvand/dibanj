@@ -11,16 +11,31 @@ import FIcon from 'react-native-vector-icons/FontAwesome';
 import Modal from "react-native-modal";
 import ProfileModal from "../profilemodal/profilemodal";
 import MIcon from 'react-native-vector-icons/MaterialIcons';
+import {saveCategories} from "../../redux/actions";
+import {connect} from "react-redux";
+import Http from "../../services/http";
 var categories=null;
-export default class ProfileCategory extends Component {
+ class ProfileCategory extends Component {
     state = {
         isModalVisible: false,
         language:'java',
-        index:0,
+        index:1,
+        updateUI:1,
         tabIndex:0,
     };
-
-    componentWillUnmount(){
+    userCats=[];
+     _getUserCats=async()=>{
+         let response = await Http._postAsyncData({userId:this.props.user.userId,token:this.props.user.token},'userCategoryBookmarks');
+         // console.log(response)
+         if(Array.isArray(response)){
+             this.userCats=response;
+             this.setState({updateUI:this.state.updateUI++});
+         }
+     }
+     componentWillMount(){
+         this._getUserCats();
+     }
+         componentWillUnmount(){
         if(this.state.isModalVisible)
         this._toggleModal();
     }
@@ -37,15 +52,13 @@ export default class ProfileCategory extends Component {
                     <Text  style={styles.fieldText}>موضوعات مورد علاقه</Text>
                 </View>
                 <View style={styles.bookmarks} >
-                    <Text style={styles.bookmarkText}>
-                        #پژوهشگر
-                    </Text>
-                    <Text style={styles.bookmarkText}>
-                        #ورزشکار
-                    </Text>
-                    <Text style={styles.bookmarkText}>
-                        #عکاس
-                    </Text>
+                    {
+                        this.userCats.map((item,index)=>{
+                            return(<Text key={index} style={styles.bookmarkText}>
+                                #{item.title}
+                            </Text>)
+                        })
+                    }
                 </View>
                 <Modal
                     onBackButtonPress={this._toggleModal}
@@ -55,7 +68,11 @@ export default class ProfileCategory extends Component {
                     isVisible={this.state.isModalVisible}>
                     <View style={styles.modalContainer}>
                         <FlatList
-                            data={categories}
+                            data={ (this.props.categories&&this.props.categories.length> 0)?(this.props.categories.filter((item,index)=>{
+                                if(!item.parentId){
+                                    return item;
+                                }
+                            })):[]}
                             extraData={{ index:this.state.index }}
                             horizontal={true}
                             keyExtractor={(item, index) => index.toString()}
@@ -69,7 +86,10 @@ export default class ProfileCategory extends Component {
                             <Button style={styles.modalButtonCancel} title={0} onPress={this._toggleModal}>
                                 <Text style={styles.modalButtonCancelText} >انصراف</Text>
                             </Button>
-                            <Button  style={styles.modalButtonVerify} title={0} onPress={this._toggleModal}>
+                            <Button  style={styles.modalButtonVerify} title={0} onPress={()=>{
+                                this._sendUserCats();
+
+                            }}>
                                 <Text style={styles.modalButtonVerifyText}>تاييد</Text>
                             </Button>
                         </View>
@@ -82,24 +102,50 @@ export default class ProfileCategory extends Component {
         // if(idx!=null)
         // this.setState({index:idx});
         // alert(this.state.index);
-        // console.log(this.state.index,idx)
+        // console.log(this.state.index)
         return(
             <View style={styles.subCatContainer}>
-                <Button style={styles.subCatBtn} title={1}  small  onPress={()=>{}}>
-                    <Text>پژوهشگر</Text>
-                </Button>
-                <Button disabled={true} style={styles.subCatBtn} title={1} small   onPress={()=>{}}>
-                <Text>نویسنده</Text>
-            </Button>
-                <Button style={styles.subCatBtn} title={1}  small  onPress={()=>{}}>
-                <Text>کارآفرین</Text>
-            </Button>
-                <Button style={styles.subCatBtn} title={1}  small  onPress={()=>{}}>
-                <Text>خبرنگار</Text>
-            </Button>
+                {
+                    this._getCatChild().map((item,index)=>{
+                        let flag=false;
+                        let bg={};
+                        let color={color:'black'}
+                        if(this._isMarked(item.categoryId)){
+                         bg.backgroundColor='#cecaca';
+                             color={color:'gray'}
+
+                            flag=true;
+                        }
+                       return(
+                           <Button style={[styles.subCatBtn,bg]} key={index}title={1}  small  onPress={()=>{
+                               this._toggleCat(item)
+                           }}>
+                            <Text  style={color}>{item.title}</Text>
+                        </Button> )
+                    })
+                }
             </View>
         );
     };
+    _getCatChild=()=>{
+        let tmp=[];
+        this.props.categories.map((item,index)=>{
+            if(item.parentId===this.state.index&&item.categoryId!==this.state.index){
+                tmp.push(item)
+            }
+        })
+        return tmp;
+    }
+     _isMarked=(categoryId)=>{
+        let isMarked=false;
+         this.userCats.map((item,index)=>{
+             // console.log(item.categoryId,categoryId,item.categoryId===categoryId)
+             if(item.categoryId===categoryId){
+                 isMarked= true;
+             }
+         })
+         return isMarked;
+     }
     _renderSelectedCat=()=>{
         // if(idx!=null)
         // this.setState({index:idx});
@@ -107,24 +153,17 @@ export default class ProfileCategory extends Component {
         // console.log(this.state.index,idx)
         return(
             <View style={styles.selectedCatContainer}>
-                <Text style={styles.limitTitle}># پژوهشگر #ورزشکار # عکاس</Text>
-                <Button style={styles.selectedCatBtn} title={1}  small  onPress={()=>{}}>
-                    <Text style={styles.selectedCatText}>پژوهشگر</Text>
-                    <MIcon  name="check" size={20} color="green"/>
-                </Button>
-                <Button  style={styles.selectedCatBtn} title={1} small   onPress={()=>{}}>
-                <Text style={styles.selectedCatText}>نویسنده</Text>
-                    <MIcon  name="check" size={20} color="green"/>
-                </Button>
-                <Button style={styles.selectedCatBtn} title={1}  small  onPress={()=>{}}>
-                <Text style={styles.selectedCatText}>کارآفرین</Text>
-                    <MIcon  name="check" size={20} color="green"/>
-
-                </Button>
-                <Button style={styles.selectedCatBtn} title={1}  small  onPress={()=>{}}>
-                <Text style={styles.selectedCatText}>خبرنگار</Text>
-                    <MIcon  name="check" size={20} color="green"/>
-                </Button>
+                <Text style={styles.limitTitle}>حداکثر تعداد هشتگ ها 50 عدد می باشد
+                </Text>
+                {this.userCats.map((item, index) => {
+                    return (
+                        <Button style={styles.selectedCatBtn} disabled={true} key={index} title={1} small onPress={() => {
+                        }}>
+                            <Text style={styles.selectedCatText}>{item.title}</Text>
+                            <MIcon name="check" size={20} color="green"/>
+                        </Button>)
+                })
+                }
             </View>
         );
     };
@@ -133,23 +172,60 @@ export default class ProfileCategory extends Component {
 
         return (
             <View style={[styles.tabBtnContainer]}>
-                {(this.state.index == index) &&
+                {(this.state.index === item.categoryId) &&
                 (
                     <Button style={[styles.tabBtn, {borderBottomColor: 'yellow', borderBottomWidth: 3}]}
-                            onPress={() =>{this.setState({index});}}>
-                        <Text style={{color: 'yellow' }}>{item.teacher}</Text></Button>
+                            onPress={() =>{this.setState({index:item.categoryId});}}>
+                        <Text style={{color: 'yellow' }}>{item.title}</Text></Button>
                 )}
-                {(this.state.index != index) &&
+                {(this.state.index !== item.categoryId) &&
                     (<Button style={[styles.tabBtn, {borderBottomColor: 'black', borderBottomWidth: 3}]}
-                             onPress={() =>{this.setState({index});}}>
-                            <Text style={{color:  'black'}}>{item.teacher}</Text></Button>
+                             onPress={() =>{this.setState({index:item.categoryId});}}>
+                            <Text style={{color:  'black'}}>{item.title}</Text></Button>
                     )}
             </View>
         )
     }
-}
-const style = StyleSheet.create({
-    container: {
-        flex: 0.5,
-    },
-});
+
+     _toggleCat=(target)=> {
+        let isMarked=false;
+         this.userCats.map((item,index)=>{
+             // console.log(item.categoryId,categoryId,item.categoryId===categoryId)
+             if(item.categoryId===target.categoryId){
+                 isMarked= true;
+                 this.userCats.splice(index,1);
+             }
+         })
+         if(!isMarked){
+             this.userCats.push(target)
+         }
+         this.setState({updateUI:this.state.updateUI++});
+     }
+
+     _sendUserCats=async()=> {
+        // console.log({
+        //     userId:this.props.user.userId,
+        //     categoryIds:this.userCats.filter((item)=>{return item.categoryId}),
+        //     token:this.props.user.token})
+         let categoryIds=[];
+         this.userCats.map((item,index)=>{
+             categoryIds.push(item.categoryId);
+         });
+         let response = await Http._postAsyncData({
+             userId:this.props.user.userId,
+             categoryIds,
+             token:this.props.user.token},'categoryBookmark');
+         // console.log(response)
+         this._toggleModal();
+
+     }
+ }
+const mapStateToProps=(state)=>{
+    return{
+        user:state.user,
+        categories:state.categories.categories,
+
+    }
+};
+export default connect(mapStateToProps,null)(ProfileCategory);
+

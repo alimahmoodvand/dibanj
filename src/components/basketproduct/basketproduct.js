@@ -12,20 +12,27 @@ import {addBasket, removeBasket} from "../../redux/actions";
 class BasketProduct extends Component{
     render(){
         const {prod}=this.props
+        prod.Thumbnail='http://dibanzh.raaz.co/images/dibanzh/thumbnails/'+prod.Thumbnail;
+
         return(
             <View style={styles.main}>
 
                 <View style={styles.content}>
-                    <ImageBackground style={styles.image} source={{uri:prod.image}}>
+                    <ImageBackground style={styles.image} source={{uri: prod.Thumbnail}}>
                     </ImageBackground>
                     <View style={styles.details}>
-                        <Text>{prod.title}</Text>
-                        <Text>{prod.description}</Text>
+                        <Text>{prod.Title}</Text>
+                        <Text>{prod.Master}</Text>
+                        <Text>{prod.RegisterDeadLine}</Text>
                     </View>
                     <View style={styles.prices}>
                         <View style={styles.price}>
+                            <Text style={{textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>
+                                {prod.price}
+                            </Text>
+                            <Text>{prod.DiscountPercent}</Text>
                             <Text style={styles.priceText}>
-                                {prod.priceAfterDiscount}
+                                {prod.PriceAfterDiscount}
                             </Text>
                         </View>
                         <View style={styles.delete}>

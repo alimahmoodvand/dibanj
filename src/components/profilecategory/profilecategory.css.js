@@ -97,9 +97,13 @@ export default styles = EStyleSheet.create({
         borderBottomWidth:1,
         borderBottomColor:'black',
     },
+    subCatBtnText:{
+      color:'black'
+    },
     subCatBtn:{
        backgroundColor:'white',
        borderColor:'$grayColor',
+
         borderWidth:2,
         borderRadius:25,
         paddingTop:0,

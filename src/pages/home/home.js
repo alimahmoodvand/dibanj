@@ -6,6 +6,7 @@ import {Actions} from "react-native-router-flux";
 import Slideshow from "react-native-slideshow";
 import {connect} from "react-redux";
 import {removeUser, saveProducts} from "../../redux/actions";
+import Http from "../../services/http";
 // import SVGImage from 'react-native-remote-svg';
 // import DIcon from "../../components/dicon/dicon";
 // import DIcon from "../../components/dicon/dicon";
@@ -13,35 +14,19 @@ const {height, width} = Dimensions.get('window');
 
 
 class Home extends Component {
+    _getSlider=async()=> {
+        let response = await Http._postAsyncData({token: this.props.user.token}, 'sliderImages')
+        if (Array.isArray(response)) {
+            this.setState({dataSource:response})
+
+        }
+    }
     constructor(props) {
         super(props);
-        console.log(this.props)
-
-        // setTimeout(()=>{
-        //     this.props.removeUser(this.props.user);
-        //      Actions.reset("auth")
-        // },2000)
-
-        // this._rendeMenu = this._rendeMenu().bind(this);
         this.state = {
             position: 1,
             interval: null,
-            dataSource: [
-                {
-                    url: 'https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png',
-                }, {
-                    url: 'http://placeimg.com/640/480/any',
-                }, {
-                    url: 'http://placeimg.com/640/480/dog',
-                },
-                {
-                    url: 'https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png',
-                }, {
-                    url: 'http://placeimg.com/640/480/any',
-                }, {
-                    url: 'http://placeimg.com/640/480/dog',
-                },
-            ],
+            dataSource: [],
         };
     }
     componentWillMount() {
@@ -52,6 +37,7 @@ class Home extends Component {
                 });
             }, 2000)
         });
+        this._getSlider();
     }
 
     componentWillUnmount() {
@@ -80,7 +66,12 @@ class Home extends Component {
                         <Text style={style.label}>
                             دوره های مجازی
                         </Text>
-                        <TouchableOpacity  style={[ style.circle, {marginRight: one}]} onPress={() => {Actions.absentia();}} >
+                        <TouchableOpacity  style={[ style.circle, {marginRight: one}]} onPress={() => {Actions.absentia({
+                            subType:1,
+                            proType:2,
+                            img:"absentia",
+                            label:"دوره های مجازی"
+                        });}} >
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/absentia.svg')}/>*/}
                             <Image style={styles.menuIcon} source={require('../../assets/images/absentia.png')} />
                             </TouchableOpacity >
@@ -90,7 +81,12 @@ class Home extends Component {
                         <Text style={style.label}>
                             دوره های حضوری
                         </Text>
-                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: two}]} onPress={() => {Actions.absentia();}}>
+                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: two}]} onPress={() => {Actions.absentia({
+                            subType:1,
+                            proType:1,
+                            img:"course",
+                            label:"دوره های حضوری"
+                        });}}>
                             {/*<SVGImage style={{width:'80%',*/}
                                 {/*height:'80%',}} source={require('../../assets/images/absentia.svg')}/>*/}
                             <Image style={styles.menuIcon} source={require('../../assets/images/course.png')} />
@@ -101,7 +97,15 @@ class Home extends Component {
                         <Text style={style.label}>
                             فروشگاه
                         </Text>
-                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: three}]} onPress={() => Actions.store()} >
+                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: three}]} onPress={() => Actions.absentia(
+                            {
+                                store:true,
+                                subType:1,
+                                proType:1,
+                                img:"store",
+                                label:"فروشگاه"
+                            }
+                        )} >
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/store.svg')}/>*/}
                             <Image style={styles.menuIcon} source={require('../../assets/images/store.png')} />
 
@@ -111,7 +115,12 @@ class Home extends Component {
                         <Text style={style.label}>
                             رایگان
                         </Text>
-                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: four}]} onPress={() => Actions.workout()}>
+                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: four}]} onPress={() => Actions.absentia({
+                            subType:-1,
+                            proType:0,
+                            img:"lock",
+                            label:"رایگان"
+                        })}>
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/lock.svg')}/>*/}
                             <Image style={styles.menuIcon} source={require('../../assets/images/lock.png')} />
 
@@ -121,7 +130,12 @@ class Home extends Component {
                         <Text style={style.label}>
                             پیشنهادات ویژه
                         </Text>
-                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: five}]}>
+                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: five}]}  onPress={() => Actions.absentia({
+                            subType:0,
+                            proType:-1,
+                            img:"roocket",
+                            label:" پیشنهادات ویژه"
+                        })}>
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/roocket.svg')}/>*/}
                             <Image style={styles.menuIcon} source={require('../../assets/images/roocket.png')} />
                         </TouchableOpacity>
