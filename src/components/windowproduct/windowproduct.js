@@ -26,6 +26,7 @@ export default class WindowProduct extends Component{
     }
     render(){
         const {prod}=this.props
+        // console.log(this.props)
         return(
             <View style={styles.main}>
                 <View style={styles.content}>
@@ -34,7 +35,6 @@ export default class WindowProduct extends Component{
                         <Text style={styles.detailsText}>{prod.title}</Text>
                     </View>
                 </View>
-
             </View>
         );
     }

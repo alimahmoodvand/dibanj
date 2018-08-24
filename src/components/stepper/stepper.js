@@ -28,10 +28,10 @@ export default class Stepper extends Component {
     _renderSteps=(item,index)=> {
         return (
             <View key={index} style={styles.steps}>
-            <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:item.practice})}>
+            <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:item.practice,ProductAndCourseId:item.ProductAndCourseId,EAPtype:2})}>
                 <Text>{item.practice?"تمرین":""}</Text>
             </TouchableOpacity>
-                <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:item.exam})}>
+                <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:item.exam,ProductAndCourseId:item.ProductAndCourseId,EAPtype:1})}>
                 <Text>{item.exam?"آزمون":""}</Text>
             </TouchableOpacity>
                 <TouchableOpacity style={styles.title} >

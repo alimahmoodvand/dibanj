@@ -2,28 +2,6 @@ import {REMOVE_USER} from "../redux/actions/types";
 
 export default class Http{
     static baseurl="http://199.127.99.12:3001/";
-    static  _postdata(data) {
-        return fetch('http://199.127.99.12:3000/login', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        }).then((response) =>  response.json())
-            .then((responseJson) => {
-                console.log(responseJson)
-                return  responseJson;
-            })
-            .catch((error) => {
-                console.log(error);
-                return error;
-            });
-
-        // console.log(response)
-        // return response;
-
-    }
     static async _postAsyncData(data,url='login'){
         try {
             let token=data.token
@@ -49,14 +27,17 @@ export default class Http{
             return err;
         }
     }
+
     static _postDataPromise(data,url='login'){
         try {
+            let token=data.token
+            delete data.token;
             return fetch(Http.baseurl+url, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization':'JWT '+data.token
+                    'Authorization':'JWT '+token
                 },
                 body: JSON.stringify(data),
             });
@@ -66,23 +47,38 @@ export default class Http{
             return err;
         }
     }
-    static async _getAsyncData(data,url=''){
+    static _postFilePromise(data,file,url='login') {
         try {
-            let response = await fetch(Http.baseurl+url, {
-                method: 'GET',
+            let token=data.token
+            delete data.token;
+            const form = new FormData();
+            for (const key of Object.keys(data)) {
+                if(Array.isArray( data[key])){
+                    form.append(key,JSON.stringify(data[key]));
+                }else{
+                    form.append(key, data[key])
+                }
+            }
+            file.map((item,index)=> {
+                form.append('photo', {
+                    uri: item.uri,
+                    type:item.type,
+                    name:item.fileName
+                });
+            })
+            console.log("_postFilePromise",data,file,form,url)
+            return fetch(Http.baseurl + url, {
+                method: 'POST',
                 headers: {
                     Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization':'JWT '+data.token
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'JWT ' + token
                 },
-                body: JSON.stringify(data),
+                body: form,
             });
-            const responseJson = await response.json();
-            // console.log("_postAsyncData",response.body)
-            return responseJson;
         }
-        catch (err){
-            console.log("_postAsyncData",err)
+        catch (err) {
+            console.log("_postAsyncData", err, response)
             return err;
         }
     }

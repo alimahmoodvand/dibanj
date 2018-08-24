@@ -139,6 +139,7 @@ class Category extends Component{
                 this.setState({page: this.state.page + 1});
             }
             if (this.products.length == 0) {
+                alert('محصولی یافت نشد')
                 this.setState({page: 0})
             }
         }

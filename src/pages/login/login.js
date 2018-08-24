@@ -9,7 +9,7 @@ import {Actions} from "react-native-router-flux";
 import styles from "./login.css";
 
  class Login extends Component{
-     mobile="09119132329"
+      mobile=""
     render(){
         // console.log(this.props)
 
@@ -19,13 +19,18 @@ import styles from "./login.css";
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
                 <View style={styles.container}>
+                    <View style={styles.logoContainer}>
+                        <Image source={require("../../assets/images/dibanzh.png")} style={styles.logo}/>
+                    </View>
+
                     <Form>
+
                         <Label style={styles.labelText}>ورود</Label>
                         <Item fixedLabel>
-                            <Input value={this.mobile} keyboardType="numeric" onChangeText={ (text) => this.mobile = text }  />
+                            <Input keyboardType="numeric" onChangeText={ (text) => this.mobile = text }  />
                             <Label style={styles.labelText}>شماره تلفن</Label>
                         </Item>
-                        <Button full style={styles.loginBtn} onPress={this._sendCode}>
+                        <Button  full style={styles.loginBtn} onPress={this._sendCode}>
                             <Text>ادامه</Text>
                         </Button>
                     </Form>

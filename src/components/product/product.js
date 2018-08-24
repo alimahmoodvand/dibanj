@@ -9,7 +9,9 @@ import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {connect} from "react-redux";
 import {addBasket, saveProducts} from "../../redux/actions";
 
-;
+import HTML from 'react-native-render-html';
+import Modal from "react-native-modal";
+
 
 class Product extends Component{
     _getNotExistImage(prod){
@@ -20,11 +22,18 @@ class Product extends Component{
     _getPrices(prod){
         return(
             <View style={styles.prices}>
-                <Text style={{textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>
-                    {prod.price}
-                </Text>
+                { prod.price>0&&
+                    <Text style={{textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>
+                        {prod.price}
+                    </Text>
+                }
+                {prod.DiscountPercent > 0 &&
+
                 <Text>{prod.DiscountPercent}</Text>
+                }
+                {prod.PriceAfterDiscount > 0 &&
                 <Text>{prod.PriceAfterDiscount}</Text>
+                }
             </View>
         );
     }
@@ -38,7 +47,22 @@ class Product extends Component{
     }
     render(){
         const {prod}=this.props
-        prod.Thumbnail='http://dibanzh.raaz.co/images/dibanzh/thumbnails/'+prod.Thumbnail;
+        let maxlimit=50;
+        let regex = /(<([^>]+)>)/ig
+        if(prod.Description){
+            prod.Description=prod.Description.replace(regex,'').replace(/(\&.*\;)/gi, '').replace(/^\s*$(?:\r\n?|\n)/gm,'')
+        }
+        prod.Description=(prod.Description&&((prod.Description).length > maxlimit) ?
+            (((prod.Description).substring(0,maxlimit-3)) + '...') :
+            prod.Description );
+        let duration=false;
+        if(prod.Duration&&prod.Duration.trim()!==''){
+            duration=true;
+        }
+        // console.log(prod,(prod.Duration&&prod.Duration.trim()!==''),prod.Duration,prod.Duration.trim()!=='',duration)
+        // prod.Description=(((prod.Description).length > maxlimit) ?
+        //     (((prod.Description).substring(0,maxlimit-3)) + '...') :
+        //     prod.Description );
         return(
             <View style={styles.main}>
                 {/*<Button style={styles.buy} title={prod.id} onPress={()=>{
@@ -55,29 +79,48 @@ class Product extends Component{
                     <View style={styles.container}>
                     <View style={styles.details}>
                         <Text style={styles.detalsText}>{prod.Title}</Text>
-                        <WebView  style={styles.detalsText} source={{html:prod.Description.toString()}} />
-                        <Text style={styles.detalsText}>{prod.RegisterDeadLine}</Text>
+                        <Text style={styles.detalsText} >{prod.fullName}</Text>
+                        {duration&&
+                        <Text style={styles.detalsText}>{'مدت دوره:'+prod.Duration}</Text>
+                        }
+                        {duration==false&&
+                        <Text style={styles.detalsText}>{prod.Description}</Text>
+                        }
+
+                        <Text style={styles.detalsText}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'ندارد'}</Text>
                         {this._getPrices(prod)}
                     </View>
-                    <ImageBackground style={styles.image} source={{uri: prod.Thumbnail}}>
-                    <Image style={styles.image} source={{uri: prod.Thumbnail}}/>
+                    <ImageBackground style={styles.image} source={{uri: prod.thumbnailUrl}}>
+                    <Image style={styles.image} source={{uri: prod.thumbnailUrl}}/>
                 </ImageBackground>
                     </View>
                     <View style={styles.basket}>
-                        <Button style={styles.buyBtn} title={prod.id} onPress={()=>{
-                            if(this._findBasket()){
-                                alert("before add to basket")
+                        {prod.canBuySeperatly != 0 &&
+                        <Button style={[styles.buyBtn,{backgroundColor:(prod.price>0?'#0094cc':'green')}]} title={prod.id} onPress={() => {
+                            if (this._findBasket()) {
+                                alert("قبلا به سبد اضافه شده است")
                             }
-                            else{
-                                alert("add to basket")
+                            else if (prod.canBuySeperatly === 0) {
+                                alert("این محصول جداگانه قابل خرید نیست ")
+                            }
+                            else {
+                                alert("به سبد خرید اضافه شد")
                                 this.props.addBasket(prod);
                             }
                         }}>
+                            {prod.price == 0 &&
+                            <Text style={styles.proBtnText}>رایگان</Text>
+                            }
+                            {prod.price > 0 &&
                             <Text style={styles.proBtnText}>خرید</Text>
+                            }
                         </Button>
+                        }
+                    </View>
                 </View>
-                </View>
-                <Button style={styles.sample} title={prod.id} onPress={()=>alert("not exist sample")}>
+                <Button style={styles.sample} title={prod.id} onPress={()=>{
+                    Actions.lesson({ProductAndCourseId:prod.ProductAndCourseId,isSample:1});
+                }}>
                     <Text style={styles.proBtnText}>نمونه</Text>
                 </Button>
             </View>

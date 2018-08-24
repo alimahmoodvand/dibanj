@@ -11,26 +11,19 @@ import FIcon from 'react-native-vector-icons/FontAwesome';
 import Modal from "react-native-modal";
 import ProfileFields from "../../components/profilefields/profilefields";
 import ProfileCategory from "../../components/profilecategory/profilecategory";
-const ImagePicker = require('react-native-image-picker');
+import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {connect} from "react-redux";
-import {addBasket} from "../../redux/actions";
+import {addBasket, saveUser} from "../../redux/actions";
 import Http from "../../services/http";
-
-const options = {
-    title: 'Select Avatar',
-    customButtons: [
-        // {name: 'fb', title: 'Choose Photo from Facebook'},
-    ],
-    storageOptions: {
-        skipBackup: true,
-        path: 'images'
-    }
-};
 class Profile extends Component {
     componentWillMount(){
+        this.uri=this.props.user.image;
             this.fields=this._mapEnToFa();
+
     }
+    state={updateUI:0};
+    uri="";
     render() {
         return (
             <View style={styles.main}>
@@ -49,24 +42,27 @@ class Profile extends Component {
                             </Image>
                             <View style={styles.profileTakePic}>
                                 <MIcon name="photo-camera" onPress={() => {
-                                    ImagePicker.showImagePicker(options, (response) => {
-                                        console.log('Response = ', response);
+                                    DocumentPicker.show({
+                                        filetype: [DocumentPickerUtil.images()],
+                                    },(error,res) => {
+                                        // Android
+                                        // console.log(res);
+                                        if(res) {
+                                            Http._postFilePromise({
+                                                token: this.props.user.token,
+                                                userId: this.props.user.userId
+                                            }, [res], 'userImage')
+                                                .then((response) => response.json()).then(response => {
+                                                // console.log(response)
+                                                let user = this.props.user;
+                                                user.image = response.image;
+                                                this.props.saveUser(user);
+                                                this.setState({updateUI: this.state.updateUI++});
+                                            }).catch(err => {
+                                                console.log(err)
+                                            })
+                                        }
 
-                                        if (response.didCancel) {
-                                            console.log('User cancelled image picker');
-                                        }
-                                        else if (response.error) {
-                                            console.log('ImagePicker Error: ', response.error);
-                                        }
-                                        else if (response.customButton) {
-                                            console.log('User tapped custom button: ', response.customButton);
-                                        }
-                                        else {
-                                            let source = { uri: response.uri };
-                                            this.setState({
-                                                avatarSource: source
-                                            });
-                                        }
                                     });
                                 }} color="black" size={20}/>
                             </View>
@@ -121,6 +117,9 @@ class Profile extends Component {
 }
 const mapDispatchToProps=(dispatch)=> {
     return{
+        saveUser:(user)=>{
+            dispatch(saveUser(user));
+        },
     }
 }
 const mapStateToProps=state=>{

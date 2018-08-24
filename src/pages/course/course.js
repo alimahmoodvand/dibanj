@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container} from "native-base";
-import {FlatList, Image, ScrollView, SectionList, Slider, Switch, Text, TextInput, View,Share} from "react-native";
+import {FlatList, Image, ScrollView, SectionList, Slider, Switch, Text, TextInput, View,Share,ToastAndroid} from "react-native";
 import styles from './course.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -14,6 +14,8 @@ import {connect} from "react-redux";
 import {
     saveProducts, addBookmark, removeBookmark, removeCloud, addCloud} from "../../redux/actions";
 import Http from "../../services/http";
+import CommentComp from "../../components/comment/comment";
+import Stars from "react-native-stars-rating";
 
 class Course extends Component{
     product=null;
@@ -39,6 +41,7 @@ class Course extends Component{
     }
     product={};
     childs=[];
+    comments=[];
     _findProduct=async()=>{
         // for(let i=0;i<this.props.products.products.length;i++){
         //     if(this.props.id===this.props.products.products[i].ProductAndCourseId){
@@ -50,23 +53,39 @@ class Course extends Component{
             token:this.props.user.token,
             ProductAndCourseId:this.props.id,
         }
+        // console.log(data)
        let response=await Http._postAsyncData(data,'singleProduct')
         // console.log(response)
-        if(Array.isArray(response)&&response.length==3) {
+        if(Array.isArray(response)) {
             // response.map((item,index)=>{
             //     if(item.ProductAndCourseId===this.props.id){
             //         this.product = item;
             //         response.splice(index,1)
             //     }
             // })
-            this.product = response[0][0];
-            this.childs=response[1];
-            this.setState({
-                favorite:   this.product.isLiked,
-                save:   this.product.isBookmarked,
-                comment: false,
-                dataSource:response[2]
-            })
+            if(response[0][0]) {
+                this.product = response[0][0];
+                this.childs = response[1];
+                this.comments = response[3];
+                let cmt=false;
+                if(Array.isArray(this.comments)){
+                    this.comments.map((item)=>{
+                        if(item.UserId==this.props.user.userId){
+                            cmt=true
+                        }
+                    })
+                }
+                this.setState({
+                    favorite: this.product.isLiked,
+                    save: this.product.isBookmarked,
+                    comment: cmt,
+                    dataSource: response[2]
+                })
+            }
+            else{
+                alert('مجصولی یافت نشد')
+                Actions.pop();
+            }
         }
 
     }
@@ -79,6 +98,12 @@ class Course extends Component{
         item['id']=index;
        return(<WindowProduct   prod={item}/>);
     };
+
+    _renderCommentItem= (item, index) => {
+        item['id'] = index
+        return (<CommentComp cmnt={item} userId={this.props.user.userId} deleteComment={this._deleteComment}/>)
+    };
+
     render() {
         return (
             <View style={styles.main}>
@@ -90,12 +115,12 @@ class Course extends Component{
                     <View style={styles.filter}>
                         <MIcon style={styles.filterIcon} name="share" onPress={() =>{
                             Share.share({
-                                message: 'BAM: we\'re helping your business with awesome React Native apps',
-                                url: 'http://bam.tech',
-                                title: 'Wow, did you see that?'
+                                message: this.product.shareText+'\r\n'+(this.product.shareUrl),
+                                url: (this.product.shareUrl),
+                                title: 'اشتراک گذاری'
                             }, {
                                 // Android only:
-                                dialogTitle: 'Share BAM goodness',
+                                dialogTitle: 'اشتراک گذاری',
                                 // iOS only:
                                 excludedActivityTypes: [
                                     'com.apple.UIKit.activity.PostToTwitter'
@@ -113,16 +138,16 @@ class Course extends Component{
                                            data.type="insert";
                                            this.product.likeCount++;
                                            this.props.addCloud(this.product)
-                                        }
-                                        else{
-                                           data.type="delete";
-                                           this.product.likeCount--;
-                                           this.props.removeCloud(this.product)
+                                           Http._postAsyncData(data,'like')
+                                           this.setState({favorite:!this.state.favorite})
                                        }
-                                       Http._postAsyncData(data,'like')
+                                       //  else{
+                                       //     data.type="delete";
+                                       //     this.product.likeCount--;
+                                       //     this.props.removeCloud(this.product)
+                                       // }
 
-                                       this.setState({favorite:!this.state.favorite})
-                                   }} color="white" size={25}/>
+                                   }} color={(!this.state.favorite?"white":"yellow")} size={25}/>
                         <Text style={[styles.filterIcon,{color:'white'}]}>{this.product.likeCount}</Text>
                         <View style={styles.filterExist} >
                             <MIcon style={styles.filterIcon} name={(this.state.save?"bookmark":"bookmark-border")}
@@ -135,16 +160,26 @@ class Course extends Component{
                                        if(!this.state.save){
                                            data.type="insert";
                                            this.props.addBookmark(this.product)
+                                           ToastAndroid.showWithGravity(
+                                               'به لیست علاقه مندی های شما افزوده شد',
+                                               ToastAndroid.SHORT,
+                                               ToastAndroid.CENTER
+                                           );
                                        }
                                        else{
                                            data.type="delete";
                                            this.props.removeBookmark(this.product)
+                                           ToastAndroid.showWithGravity(
+                                               'از لیست علاقه مندی های شما حذف شد',
+                                               ToastAndroid.SHORT,
+                                               ToastAndroid.CENTER
+                                           );
                                        }
                                        Http._postAsyncData(data,'bookmark')
 
                                        this.setState({save:!this.state.save})
                                    }}
-                                   color="white" size={25}/>
+                                   color={(!this.state.save?"white":"yellow")} size={25}/>
                         </View>
                     </View>
                     {
@@ -160,25 +195,25 @@ class Course extends Component{
                         />
                     }
                     <SingleProduct  prod={this.product}/>
+                    {this.childs.length > 0 &&
                     <View style={styles.childHeader}>
                         <Text style={styles.childHeaderText}>
-                            این دوره شامل مباحث زیر است
+                            این دوره شامل دروس زیر است
                         </Text>
-
                     </View>
-                    <FlatList
-                    data={this.childs}
-                    keyExtractor={(item,index)=>index.toString()}
-                    renderItem={({item,index})=>
-                        this._renderItem(item,index)
                     }
-                    />
+                    < FlatList
+                        data={this.childs}
+                        keyExtractor={(item,index)=>index.toString()}
+                        renderItem={({item,index})=>
+                        this._renderItem(item,index)
+                    }/>
                     {
-                        !this.state.comment&&
                         <View style={styles.commentsContainer}>
                             {this._renderHeaderComment()}
                             <View style={styles.comments}>
                                 {this._renderHeader()}
+
                                 <View style={styles.commentInputContainer}>
                                     <TextInput
                                         style={styles.commentInput}
@@ -194,29 +229,35 @@ class Course extends Component{
                                         <Text style={styles.commentBtnText}>ارسال</Text>
                                     </Button>
                                 </View>
-
                             </View>
+                            <ScrollView style={styles.commentsSection}>
+                                < FlatList
+                                    data={this.comments}
+                                    keyExtractor={(item,index)=>index.toString()}
+                                    renderItem={({item,index})=>
+                                        this._renderCommentItem(item,index)
+                                    }/>
+                            </ScrollView>
                         </View>
                     }
-                    <View style={styles.productsSection}>
-                        {this._renderHeaderComment()}
-                        <View style={styles.products}>
-                        <FlatList
-                            // numColumns={2}
-                            horizontal={true}
-                            // ListHeaderComponent={this._renderHeader}
-                            data={this.props.products.products}
-                            keyExtractor={(item,index)=>index.toString()}
-                            renderItem={({item,index})=>
-                                this._renderWindowItem(item,index)
-                            }
-                        />
-                    </View>
-                    </View>
+                    {/*<View style={styles.productsSection}>*/}
+                        {/*{this._renderHeaderComment()}*/}
+                        {/*<View style={styles.products}>*/}
+                        {/*<FlatList*/}
+                            {/*// numColumns={2}*/}
+                            {/*horizontal={true}*/}
+                            {/*// ListHeaderComponent={this._renderHeader}*/}
+                            {/*data={this.props.products.products}*/}
+                            {/*keyExtractor={(item,index)=>index.toString()}*/}
+                            {/*renderItem={({item, index}) => {*/}
+                                {/*this._renderWindowItem(item, index)*/}
+                            {/*}}*/}
+                        {/*/>*/}
+                    {/*</View>*/}
+                    {/*</View>*/}
                 </ScrollView>
-
             </View>
-        );
+                );
     }
     _renderHeader() {
         return (
@@ -243,7 +284,18 @@ class Course extends Component{
             </View>
         )
     }
-
+    _deleteComment=async(cmnt)=>{
+        let data={
+            token:this.props.user.token,
+            CommentId:cmnt.CommentId,
+            ProductAndCourseId:this.props.id,
+        }
+        let response=await Http._postAsyncData(data,'comment/delete');
+        if(Array.isArray(response)){
+            this.comments=response
+        }
+        this.setState({comment:false})
+    }
     sendComment=async()=> {
         let data={
             token:this.props.user.token,
@@ -251,8 +303,14 @@ class Course extends Component{
             ProductAndCourseId:this.props.id,
             Comment:this.comment
         }
-        let response=await Http._postAsyncData(data,'comment/delete');
-        console.log(response)
+        let response=await Http._postAsyncData(data,'comment/insert');
+        if(Array.isArray(response)){
+            this.comments=response
+            this.comment="";
+            alert('نظر شما ثبت شد')
+        }else{
+            alert('خطا دوباره تلاش کنید')
+        }
         this.setState({comment:true})
     }
 }

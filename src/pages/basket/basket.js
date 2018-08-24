@@ -8,7 +8,7 @@ import FIcon from 'react-native-vector-icons/FontAwesome';
 import BasketProduct from "../../components/basketproduct/basketproduct";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {connect} from "react-redux";
-import {addBasket, removeBasket} from "../../redux/actions";
+import {addBasket, emptyBasket, removeBasket} from "../../redux/actions";
 import Http from "../../services/http";
 
 class Basket extends Component{
@@ -44,11 +44,14 @@ class Basket extends Component{
         offcode: false,
         offPercent:0,
         offPrice:0,
+        discountCode:0,
+        discountId:0,
     };
     prices={};
     render() {
-        this.prices={};
+        this.prices={price:0};
         this._sumBasketPrices()
+        console.log(this.prices)
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
@@ -63,7 +66,9 @@ class Basket extends Component{
                             }
                         />
                     </View>
+                    {(this.props.basket.basket.length > 0 )&&
                     <View style={styles.paymentSection}>
+                        {this.prices.price > 0 &&
                         <View style={styles.offSection}>
                             <View style={styles.offSwitch}>
                                 <Switch value={this.state.offcode}
@@ -74,6 +79,7 @@ class Basket extends Component{
                                 <Text style={styles.offText}>کد تخفیف دارم</Text>
                             </View>
                         </View>
+                        }
                         {
                             this.state.offcode &&
                             <View style={styles.offcodeSection}>
@@ -100,12 +106,13 @@ class Basket extends Component{
                             <View style={styles.priceSection}>
                                 <Text style={[styles.priceText]}>{this.prices.priceDiscount}</Text>
                                 <Text style={[styles.priceText]}>{this.prices.offPercent}</Text>
-                                <Text style={[styles.priceText,this.prices.decStyle]}>{this.prices.price}</Text>
+                                <Text style={[styles.priceText, this.prices.decStyle]}>{this.prices.price}</Text>
                                 <Text style={styles.priceSumText}>جمع مبلغ</Text>
                             </View>
                         </View>
 
                     </View>
+                    }
                 </View>
             </View>
         );
@@ -115,13 +122,13 @@ class Basket extends Component{
         this.props.basket.basket.map((item,index)=>{
             price+=item.PriceAfterDiscount;
         })
-        if(this.state.offPercent!==0){
+        if(this.state.offPercent!==0&&this.state.offcode){
            this.prices.price= price;
            this.prices.decStyle={textDecorationLine: 'line-through', textDecorationStyle: 'solid',color:'black', textDecorationColor: 'red'};
            this.prices.priceDiscount=price-(price*0.01*this.state.offPercent);
            this.prices.offPercent=this.state.offPercent+"%";
         }
-        else if(this.state.offPrice!==0){
+        else if(this.state.offPrice!==0&&this.state.offcode){
             this.prices.price= price;
             this.prices.decStyle={textDecorationLine: 'line-through', textDecorationStyle: 'solid',color:'black', textDecorationColor: 'red'};
             this.prices.priceDiscount=price-this.state.offPrice;
@@ -141,10 +148,17 @@ class Basket extends Component{
             token:this.props.user.token,
             UserId:this.props.user.userId,
             products:this.props.basket.basket,
-            discountCode:13,
+            discountCode:this.state.offcode?this.state.discountCode:0,
+            discountId:this.state.offcode?this.state.discountId:0,
         }
         let response=await Http._postAsyncData(data,'order');
-        Actions.pop();
+        if(response.message&&response.message.indexOf('successful')!=-1){
+            this.props.emptyBasket()
+            alert("خرید با موفقیت انجام شد")
+            Actions.reset();
+        }else{
+            alert("خطا دوباره تلاش کنید")
+        }
         // console.log(response,data)
     }
 
@@ -159,9 +173,11 @@ class Basket extends Component{
             this.setState({
                 offPercent:response[0].percent,
                 offPrice:response[0].price,
+                discountId:response[0].discountId,
+                discountCode:response[0].discountCode,
             })
         }else{
-            alert("code is wrong")
+            alert("کد معتبر  نیست")
         }
         console.log(response)
     }
@@ -170,6 +186,8 @@ const mapDispatchToProps=(dispatch)=> {
     return{
         removeBasket:(product)=>{
             dispatch(removeBasket(product));
+        },emptyBasket:()=>{
+            dispatch(emptyBasket());
         },
 
     }

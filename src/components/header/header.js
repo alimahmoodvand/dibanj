@@ -53,12 +53,15 @@ const styles = StyleSheet.create({
         justifyContent:'flex-end',
         alignItems:'flex-end',
         marginRight:15,
+        overflow:'visible',
         // backgroundColor:'red',
-        width:'100%'
+        // width:'100%'
 },
     logo:{
-    width:50,
-        height:30,
+    width:60,
+    height:30,
+        overflow:'visible',
+
         // backgroundColor:'blue'
     },
   headerTitle:{

@@ -35,7 +35,7 @@ class Home extends Component {
                 this.setState({
                     position: this.state.position+1 === this.state.dataSource.length ? 0 : this.state.position + 1
                 });
-            }, 2000)
+            }, 4000)
         });
         this._getSlider();
     }
@@ -67,10 +67,11 @@ class Home extends Component {
                             دوره های مجازی
                         </Text>
                         <TouchableOpacity  style={[ style.circle, {marginRight: one}]} onPress={() => {Actions.absentia({
-                            subType:1,
-                            proType:2,
+                            subType:2,
+                            proType:1,
                             img:"absentia",
-                            label:"دوره های مجازی"
+                            label:"دوره های مجازی",
+                            empty:'دوره ای یافت نشد',
                         });}} >
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/absentia.svg')}/>*/}
                             <Image style={styles.menuIcon} source={require('../../assets/images/absentia.png')} />
@@ -85,7 +86,8 @@ class Home extends Component {
                             subType:1,
                             proType:1,
                             img:"course",
-                            label:"دوره های حضوری"
+                            label:"دوره های حضوری",
+                            empty:'دوره ای یافت نشد',
                         });}}>
                             {/*<SVGImage style={{width:'80%',*/}
                                 {/*height:'80%',}} source={require('../../assets/images/absentia.svg')}/>*/}
@@ -99,11 +101,13 @@ class Home extends Component {
                         </Text>
                         <TouchableOpacity style={[styles.circle, style.circle, {marginRight: three}]} onPress={() => Actions.absentia(
                             {
-                                store:true,
+                                isstore:true,
                                 subType:1,
                                 proType:1,
                                 img:"store",
-                                label:"فروشگاه"
+                                label:"فروشگاه",
+                                empty:'محصولی یافت نشد',
+
                             }
                         )} >
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/store.svg')}/>*/}
@@ -119,7 +123,8 @@ class Home extends Component {
                             subType:-1,
                             proType:0,
                             img:"lock",
-                            label:"رایگان"
+                            label:"رایگان",
+                            empty:'محصولی یافت نشد',
                         })}>
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/lock.svg')}/>*/}
                             <Image style={styles.menuIcon} source={require('../../assets/images/lock.png')} />
@@ -134,7 +139,9 @@ class Home extends Component {
                             subType:0,
                             proType:-1,
                             img:"roocket",
-                            label:" پیشنهادات ویژه"
+                            label:" پیشنهادات ویژه",
+                            empty:'محصولی یافت نشد',
+
                         })}>
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/roocket.svg')}/>*/}
                             <Image style={styles.menuIcon} source={require('../../assets/images/roocket.png')} />

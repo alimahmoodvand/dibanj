@@ -39,6 +39,7 @@ import Contact from "./pages/contact/contact";
 import Help from "./pages/help/help";
 import VerifyCode from "./pages/verifycode/verifycode";
 import Messages from "./pages/message/message";
+import Lesson from "./pages/lesson/lesson";
 EStyleSheet.build({
    $statusBarColor:'red',
     $mainColor:'rgb(255, 200, 0)',
@@ -50,11 +51,11 @@ EStyleSheet.build({
 });
 class BadgeIcon extends Component {
     render() {
-        let style={}
-        if(this.props.basketCount===0&&this.props.messageCount==0){
+        let style={};
+        const {name,focused,field}=this.props;
+        if(this.props[field]===0){
             style.height=0;
         }
-        const {name,focused,field}=this.props;
         // console.log(this.props)
         return(
             <View>
@@ -68,11 +69,7 @@ class BadgeIcon extends Component {
 }
 const mapStateToPropsStore = state => {return {
     basketCount: state.basket.basket.length,
-    messageCount:state.messages.messages.filter((item)=>{
-        if(item.Status==0){
-            return item;
-        }
-    }).length
+    messageCount:0
 };};
 const ConnectedYourTabIcon = connect(mapStateToPropsStore)(BadgeIcon);
 
@@ -196,6 +193,12 @@ export default class App extends Component{
                                   }}>
                                   </Scene>
                                   <Scene key="practice" hideNavBar component={Practice} title="practice"
+                                         icon={({focused}) => {
+                                             return <MIcon name="home" color={(focused ? "#ffc800" : "white")}
+                                                           size={28}/>;
+                                         }}>
+                                  </Scene>
+                                  <Scene key="lesson" hideNavBar component={Lesson} title="lesson"
                                          icon={({focused}) => {
                                              return <MIcon name="home" color={(focused ? "#ffc800" : "white")}
                                                            size={28}/>;

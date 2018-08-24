@@ -9,16 +9,15 @@ import {SegmentedControls} from "react-native-radio-buttons";
 import Http from "../../services/http";
 import {connect} from "react-redux";
 import RadioForm,{} from "react-native-simple-radio-button";
+import {DocumentPicker, DocumentPickerUtil} from "react-native-document-picker";
 class Practice extends Component{
     _getQuestions=async()=>{
-        console.log("zshcbjhbSVf","xdgsg")
 
-        let response = await Http._postAsyncData({userId:this.props.user.userId,
+        let response = await Http._postAsyncData({
+            userId:this.props.user.userId,
             token:this.props.user.token,
             userCoursesExamAndPracticeId:this.props.userCoursesExamAndPracticeId,
         },'getQuestions');
-        // console.log("zshcbjhbSVf",response)
-
         if (Array.isArray(response)) {
             this.questions=response;
             this.setState({changeUI:this.state.changeUI+1})
@@ -42,6 +41,7 @@ class Practice extends Component{
         return tmp;
     }
     answers=[];
+    files=[];
     render() {
         console.log(this.questions.filter((item,index)=>{
             if(item.sortNumber==-1){
@@ -58,15 +58,6 @@ class Practice extends Component{
                             <Text style={styles.practiceTitleText}>
                                 {this.questions.length>0?this.questions.Title:""}</Text>
                         </View>
-                        {/*<View style={styles.practiceDescContainer}>*/}
-                            {/*<View style={styles.practiceDesc}>*/}
-                            {/*<Text style={styles.practiceDescText}>*/}
-                                {/*practices section one</Text>*/}
-                            {/*</View>*/}
-                            {/*<View style={styles.circleYellow}>*/}
-                                {/*<Text style={styles.circleText}>0</Text>*/}
-                            {/*</View>*/}
-                        {/*</View>*/}
                         <View style={styles.practiceQuestionContainer}>
 
                             {
@@ -137,8 +128,18 @@ class Practice extends Component{
                             />
                     }
                     {
-                        question.CanUploadFile===1&&
-                        (<Button small style={styles.uploadBtn} title={0} onPress={() => alert('sakhca')}>
+                        question.CanUploadFile==1&&
+                        (<Button small style={styles.uploadBtn} title={0} onPress={() =>{
+                            DocumentPicker.show({
+                                filetype: [DocumentPickerUtil.allFiles()],
+                            },(error,res) => {
+                                if(res&&question) {
+                                    question.uploadedFileUrl = res.fileName;
+                                    this.answers[index] = question;
+                                    this.files.push(res);
+                                }
+                            })
+                        }}>
                             <Text style={styles.uploadBtnText}>آپلود</Text>
                         </Button>)
                     }
@@ -150,16 +151,24 @@ class Practice extends Component{
     //     console.log(index, value,question)
     // }
 
-    _sendAnswer=async()=> {
+    _sendAnswer=()=> {
         if(this.answers.length==0){
-            alert("answers is empty")
+            alert("جواب های خالی را پر کنید")
             return;
         }else{
-            let response = await Http._postAsyncData({userId:this.props.user.userId,
+            Http._postFilePromise({userId:this.props.user.userId,
                 token:this.props.user.token,
+                ProductAndCourseId:this.props.ProductAndCourseId,
+                EAPtype:this.props.EAPtype,
                 answers:this.answers,
-            },'insertAnswer');
-            Actions.pop();
+            },this.files,'insertAnswer').then((response) => response.json()).then(response=>{
+                console.log(response)
+                alert("جواب های شما ثبت شد")
+                Actions.term();
+            }).catch(err=>{
+                console.log(err)
+               alert("خطا دوباره تلاش کنید")
+        })
         }
     }
 }

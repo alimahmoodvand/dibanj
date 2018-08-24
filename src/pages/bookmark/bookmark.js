@@ -8,17 +8,34 @@ import FIcon from 'react-native-vector-icons/FontAwesome';
 import {SegmentedControls} from "react-native-radio-buttons";
 import Product from "../../components/product/product";
 import {connect} from "react-redux";
+import Http from "../../services/http";
+import MIcon from 'react-native-vector-icons/MaterialIcons';
+import {emptyBasket, emptyFavoriets, removeBookmark, removeCloud, removeUser} from "../../redux/actions";
+
 class Bookmark extends Component{
     _renderItem = (item, index) => {
         item['id'] = index;
-        return (<Product prod={item}/>);
+        return (
+            <View>
+            <MIcon name="delete-forever" onPress={()=>{
+                let data={
+                    token:this.props.user.token,
+                    UserId:this.props.user.userId,
+                    ProductAndCourseId:item.ProductAndCourseId,
+                };
+                data.type="delete";
+                this.props.removeBookmark(item)
+                Http._postAsyncData(data,'bookmark')
+            }} color="red" size={25}/>
+            <Product prod={item}/>
+            </View>
+    );
     };
     render() {
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
                 <HeaderLayout back={true}/>
-
                     <FlatList
                         data={this.props.bookmarks}
                         keyExtractor={(item, index) => index.toString()}
@@ -34,6 +51,14 @@ class Bookmark extends Component{
 const mapStateToProps=state=>{
     return{
         bookmarks:state.favorites.bookmarks,
-    }
+            user:state.user,
+    };
 };
-export default connect(mapStateToProps,null)(Bookmark);
+const mapDispatchToProps=(dispatch)=> {
+    return{
+        removeBookmark:(product)=>{
+            dispatch(removeBookmark(product));
+        },
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Bookmark);

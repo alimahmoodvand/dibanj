@@ -12,8 +12,15 @@ import {addBasket, removeBasket} from "../../redux/actions";
 class BasketProduct extends Component{
     render(){
         const {prod}=this.props
-        prod.Thumbnail='http://dibanzh.raaz.co/images/dibanzh/thumbnails/'+prod.Thumbnail;
-
+        prod.Thumbnail= prod.Thumbnail;
+        let maxlimit=50;
+        let regex = /(<([^>]+)>)/ig
+        if(prod.Description){
+            prod.Description=prod.Description.replace(regex,'').replace(/(\&.*\;)/gi, '').replace(/^\s*$(?:\r\n?|\n)/gm,'')
+        }
+        prod.Description=(prod.Description&&((prod.Description).length > maxlimit) ?
+            (((prod.Description).substring(0,maxlimit-3)) + '...') :
+            prod.Description );
         return(
             <View style={styles.main}>
 
@@ -22,18 +29,25 @@ class BasketProduct extends Component{
                     </ImageBackground>
                     <View style={styles.details}>
                         <Text>{prod.Title}</Text>
-                        <Text>{prod.Master}</Text>
-                        <Text>{prod.RegisterDeadLine}</Text>
+                        <Text>{prod.fullName}</Text>
+                        <Text>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'ندارد'}</Text>
                     </View>
                     <View style={styles.prices}>
                         <View style={styles.price}>
+
+                            { prod.price>0&&
                             <Text style={{textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>
                                 {prod.price}
                             </Text>
+                            }
+                            {prod.DiscountPercent > 0 &&
                             <Text>{prod.DiscountPercent}</Text>
+                            }
+                            {prod.PriceAfterDiscount > 0 &&
                             <Text style={styles.priceText}>
                                 {prod.PriceAfterDiscount}
                             </Text>
+                            }
                         </View>
                         <View style={styles.delete}>
                             <MIcon name="delete-forever" onPress={()=>{

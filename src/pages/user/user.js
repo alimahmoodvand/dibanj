@@ -73,7 +73,7 @@ class User extends Component{
                             <Text style={styles.userInfoText}>{this.props.user.regdate}</Text>
                         </View>
                         <View style={styles.userImageContainer}>
-                            <Image style={styles.userImage} source={require('../../assets/images/bg.jpg')}/>
+                            <Image style={styles.userImage} source={{uri:this.props.user.image}}/>
                         </View>
                     </View>
                     <View style={styles.courseInfo}>

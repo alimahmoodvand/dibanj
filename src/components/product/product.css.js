@@ -39,6 +39,11 @@ export default styles = EStyleSheet.create({
         fontSize:15,
         textAlign:'center'
     },
+    modal: {
+
+        justifyContent: "flex-end",
+        margin: 0
+    },
     sample: {
         position:'absolute',
         top:'10%',

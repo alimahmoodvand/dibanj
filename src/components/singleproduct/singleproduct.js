@@ -10,6 +10,7 @@ import {
     addBasket, addBookmark, addCloud, removeBasket, removeBookmark, removeCloud,
     saveProducts
 } from "../../redux/actions";
+import HTML from "react-native-render-html";
 
 class SingleProduct extends Component{
     _getNotExistImage(prod){
@@ -20,11 +21,18 @@ class SingleProduct extends Component{
     _getPrices(prod){
         return(
             <View style={styles.prices}>
+                { prod.price>0&&
                 <Text style={{textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>
                     {prod.price}
                 </Text>
+                }
+                {prod.DiscountPercent > 0 &&
+
                 <Text>{prod.DiscountPercent}</Text>
+                }
+                {prod.PriceAfterDiscount > 0 &&
                 <Text>{prod.PriceAfterDiscount}</Text>
+                }
             </View>
         );
     }
@@ -38,27 +46,46 @@ class SingleProduct extends Component{
     }
     render(){
         const {prod}=this.props
+        // console.log(prod)
+
+        let maxlimit=100;
+        let regex = /(<([^>]+)>)/ig
+        if(prod.Description){
+            prod.Description=prod.Description.replace(regex,'').replace(/(\&.*\;)/gi, '').replace(/^\s*$(?:\r\n?|\n)/gm,'')
+        }
+        prod.Description=(prod.Description&&((prod.Description).length > maxlimit) ?
+            (((prod.Description).substring(0,maxlimit-3)) + '...') :
+            prod.Description );
+        // console.log(prod)
         return(
             <View style={styles.main}>
-                <Button style={styles.buy} title={prod.id} onPress={()=>alert("::::")}>
+                <Button style={styles.buy} title={prod.id} onPress={()=>{
+                    if(this._findBasket()){
+                        alert("قبلا به سبد اضافه شده است")
+                    }
+                    else if(prod.canBuySeperatly===0){
+                        alert("این محصول جداگانه قابل خرید نیست ")
+                    }
+                    else{
+                        alert("به سبد خرید اضافه شد")
+                        this.props.addBasket(prod);
+                    }
+                }}>
                 <Text style={styles.proBtnText}>خرید</Text>
                 </Button>
                 <View style={styles.content}>
                     <View style={styles.details}>
                         <Text>{prod.Title}</Text>
-                        <Text>{prod.RegisterDeadLine}</Text>
+                        <Text>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'ندارد'}</Text>
                         <Text>{prod.Duration}</Text>
+                        <Text>{prod.fullName}</Text>
+                        <Text>{prod.Description}</Text>
                         {/*<Text>{prod.Description}</Text>*/}
                     </View>
                     {this._getPrices(prod)}
                 </View>
                 <Button style={styles.sample} title={prod.id} onPress={()=>{
-                    if(this._findBasket()){
-                        alert("before add to basket")
-                    }
-                    else{
-                        this.props.addBasket(prod);
-                    }
+                    Actions.lesson({ProductAndCourseId:prod.ProductAndCourseId,isSample:1});
                 }}>
                     <Text style={styles.proBtnText}>نمونه</Text>
                 </Button>

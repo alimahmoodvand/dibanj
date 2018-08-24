@@ -19,8 +19,17 @@ export default styles = EStyleSheet.create({
     labelText:{
         color:'white'
     },
-    loginBtn:{
-        marginTop:15,
-        backgroundColor:'$mainColor'
+    loginBtn: {
+        marginTop: 15,
+        backgroundColor: '$mainColor'
+    },
+    logo:{
+        width:100,
+        height:50,
+    },
+    logoContainer:{
+        alignItems:'center',
+        justifyContent:'center',
+        flexDirection:'row'
     }
 })

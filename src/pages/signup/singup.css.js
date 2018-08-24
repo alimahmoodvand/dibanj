@@ -25,5 +25,14 @@ export default styles = EStyleSheet.create({
         marginTop:15,
         marginBottom:10,
         backgroundColor:'$mainColor'
+    },
+    logo:{
+        width:100,
+        height:50,
+    },
+    logoContainer:{
+        alignItems:'center',
+        justifyContent:'center',
+        flexDirection:'row'
     }
 })

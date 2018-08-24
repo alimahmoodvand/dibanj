@@ -69,6 +69,7 @@ class Search extends Component{
     }
     onEndReachedCalledDuringMomentum=true;
     products=[];
+    showSpinner=true;
     render(){
         return(
             <View style={styles.main}>
@@ -80,8 +81,9 @@ class Search extends Component{
                         <View style={styles.serachBtnSection}>
                             <Button  block  style={styles.btnSearch} title={0} onPress={()=>{
                                 this.products=[];
-                                this.setState({page:1});
-                                this._searchProduct()
+                                this.setState({page:1},()=>{
+                                    this._searchProduct()
+                                });
                             }}>
                                 <Text  style={styles.btnSearchText} >جستجو</Text>
                             </Button>
@@ -161,7 +163,15 @@ class Search extends Component{
                                 renderItem={({item, index}) =>
                                     this._renderItem(item, index)
                                 }
-                                ListEmptyComponent={() => <Spinner/>}
+                                ListEmptyComponent={() => {
+                                    if(this.showSpinner){
+                                        return(<Spinner/>);
+                                    }
+                                    else{
+                                        return(<View></View>)
+                                    }
+
+                                }}
                                 onEndReached={({distanceFromEnd}) => {
                                         this._searchProduct();
                                 }}
@@ -194,7 +204,7 @@ class Search extends Component{
     _searchProduct=async()=>{
         if(!this.searchParams.text.trim()){
             this.setState({page:0});
-            alert("search is empty")
+            alert("عبارتی وارد نشده است")
         }else if(this.state.page>0) {
             let catsId = [];
             if (this.searchParams.cats.length > 0) {
@@ -215,7 +225,12 @@ class Search extends Component{
             if(Array.isArray(response)){
                 this.products=this.products.concat(response);
                 // console.log(response)
-
+                if (this.products.length != 0) {
+                    this.showSpinner = true;
+                } else {
+                    this.showSpinner = false;
+                    alert('محصولی یافت نشد')
+                }
                 this.setState({page:this.state.page+1});
             }
         }

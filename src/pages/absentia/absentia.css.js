@@ -24,7 +24,9 @@ export default styles = StyleSheet.create({
     filterIcon: {
         marginRight: 15,
     },
-    products: {},
+    products: {
+        flex:1,
+    },
     halfCircleContainer: {
         width: '60%',
         position: 'absolute',

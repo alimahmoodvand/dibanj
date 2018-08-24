@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
 import {Button, Container, Text} from "native-base";
 import {Actions} from "react-native-router-flux";
-import {addBasket, removeUser, saveUser} from "../../redux/actions";
+import {
+    addBasket, emptyBasket, emptyBookmark, emptyFavoriets, removeBasket, removeUser,
+    saveUser
+} from "../../redux/actions";
 import {connect} from "react-redux";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {Image, ImageBackground, View} from "react-native";
+import {EMPTY_FAVORITES} from "../../redux/actions/types";
 
 class DrawerLayout extends Component{
     render(){
         return(
-            <Container>
+            <Container style={{backgroundColor:'gray'}}>
                 <View>
-                    <ImageBackground source={{uri:this.props.user.image}} style={styles.proImage}>
+                    <ImageBackground source={{uri:this.props.user.imageUrl}} style={[styles.proImage,{backgroundColor:'gray'}]}>
                         <Text style={styles.proImageText}>{this.props.user.fullName}</Text>
                         <Text style={styles.proImageText}>{this.props.user.userName}</Text>
                     </ImageBackground>
@@ -20,9 +24,9 @@ class DrawerLayout extends Component{
                     <Text style={styles.proImageText}>اطلاعات کاربری</Text>
                 </Button>
 
-                <Button block style={styles.drawerBtn} onPress={()=>Actions.user()}>
-                    <Text style={styles.proImageText}>پنل کاربری</Text>
-                </Button>
+                {/*<Button block style={styles.drawerBtn} onPress={()=>Actions.user()}>*/}
+                    {/*<Text style={styles.proImageText}>پنل کاربری</Text>*/}
+                {/*</Button>*/}
                 <Button block style={styles.drawerBtn} onPress={()=>{Actions.bookmark()}}>
                     <Text style={styles.proImageText}>لیست علاقه مندی ها</Text>
                 </Button>
@@ -43,6 +47,9 @@ class DrawerLayout extends Component{
                 </Button>
                 <Button block style={styles.drawerBtn} onPress={()=>{
                     this.props.removeUser(this.props.user);
+                    this.props.emptyBasket();
+                    this.props.emptyFavoriets();
+
                     Actions.reset('auth');
                 }}>
                     <Text style={styles.proImageText}>خروج</Text>
@@ -77,11 +84,18 @@ const mapDispatchToProps=(dispatch)=> {
         removeUser:(user)=>{
             dispatch(removeUser(user));
         },
+        emptyBasket:()=>{
+            dispatch(emptyBasket());
+        },
+        emptyFavoriets:()=>{
+            dispatch(emptyFavoriets());
+        }
     }
 }
 const mapStateToProps=state=>{
     return{
         user:state.user,
+        basket:state.basket,
     }
 };
 export default connect(mapStateToProps,mapDispatchToProps)(DrawerLayout);

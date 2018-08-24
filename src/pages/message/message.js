@@ -9,12 +9,17 @@ import {SegmentedControls} from "react-native-radio-buttons";
 import Product from "../../components/product/product";
 import {connect} from "react-redux";
 import Accordion from "react-native-collapsible/Accordion";
+import Http from "../../services/http";
 class Message extends Component{
     _renderItem = (item, index) => {
         item['id'] = index;
         return (<Product prod={item}/>);
     };
+    state={
+        changeUI:0,
+    }
     render() {
+
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
@@ -26,7 +31,7 @@ class Message extends Component{
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                     onChange={(index)=>this._readMessage(index)}
-            />
+                />
             </View>
         );
     }
@@ -40,12 +45,12 @@ class Message extends Component{
 
     _renderHeader=(section)=> {
         let unread={}
-        if(section.Status===0){
+        if(section.Status===0||true){
             unread={backgroundColor:'yellow'}
         }
         return (
             <View style={[style.header,unread]}>
-                <Text style={style.headerText}>{section.Title}   {section.CreateAt}</Text>
+                <Text style={style.headerText}>{section.Title}</Text>
             </View>
         );
     }
@@ -60,6 +65,8 @@ class Message extends Component{
 
     _readMessage=(index)=> {
         console.log(this.props.messages[index])
+        if(this.props.messages[index]) {
+        }
     }
 }
 const style = StyleSheet.create({

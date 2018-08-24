@@ -14,6 +14,7 @@ import styles from "./singup.css";
          "username":"siamak",
          "mobile": null,
          "password":"12345",
+         "passwordRepeat":null,
          "email": null,
          "ostan": null,
          "city": null,
@@ -30,9 +31,12 @@ import styles from "./singup.css";
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
                 <View style={styles.container}>
+                    <View style={styles.logoContainer}>
+                        <Image source={require("../../assets/images/dibanzh.png")} style={styles.logo}/>
+                    </View>
                     <ScrollView>
                     <Form style={styles.signupForm}>
-                        <Label style={styles.labelText}> ثبت نام</Label>
+                        <Label style={styles.labelText}> لطفا برای خود نام کاربری و رمز عبور انتخاب کنید. </Label>
 
                         {/*<Item fixedLabel>*/}
                             {/*<Input onChangeText={ (text) => this.singup.fullName = text }  />*/}
@@ -40,7 +44,7 @@ import styles from "./singup.css";
                         {/*</Item>*/}
 
                         <Item fixedLabel>
-                            <Input value={this.singup.username} onChangeText={ (text) => this.singup.username = text }  />
+                            <Input onChangeText={ (text) => this.singup.username = text }  />
                             <Label style={styles.labelText}>نام کاربری</Label>
                         </Item>
 
@@ -49,8 +53,13 @@ import styles from "./singup.css";
                             {/*<Label style={styles.labelText}>ایمیل</Label>*/}
                         {/*</Item>*/}
                         <Item fixedLabel>
-                            <Input value={this.singup.password} onChangeText={ (text) => this.singup.password = text }  />
+                            <Input onChangeText={ (text) => this.singup.password = text }  />
                                                 <Label style={styles.labelText}>رمزکاربری</Label>
+
+                        </Item>
+                        <Item fixedLabel>
+                            <Input onChangeText={ (text) => this.singup.passwordRepeat = text }  />
+                                                <Label style={styles.labelText}>تکرار رمز </Label>
 
                         </Item>
 
@@ -79,9 +88,9 @@ import styles from "./singup.css";
                             <Text>ثبت نام</Text>
                         </Button>
                     </Form>
-                    <Button bordered style={styles.loginBtn} onPress={()=>Actions.loginpage()}>
-                        <Text style={styles.labelText} >ورود</Text>
-                    </Button>
+                    {/*<Button bordered style={styles.loginBtn} onPress={()=>Actions.loginpage()}>*/}
+                        {/*<Text style={styles.labelText} >ورود</Text>*/}
+                    {/*</Button>*/}
                     </ScrollView>
                 </View>
 
@@ -93,14 +102,19 @@ import styles from "./singup.css";
         //     email:'a@a.a',
         //     password:'123',
         // }
-           let user=await Http._postAsyncData(this.singup,'auth/register');
-           // console.log("user",this.singup)
-           // console.log("user",user)
-           if(user.userId){
-               this.props.saveUser(user)
-               Actions.reset('drawer');
-           }else{
-               alert("error")
+           if(this.singup.password==this.singup.passwordRepeat) {
+               let user = await Http._postAsyncData(this.singup, 'auth/register');
+               // console.log("user",this.singup)
+               // console.log("user",user)
+               if (user.userId) {
+                   this.props.saveUser(user)
+                   Actions.reset('drawer');
+               } else {
+                   alert("خطایی رخ داد دوباره تلاش کنید")
+               }
+           }
+           else {
+               alert("رمز عبور با تکرار رمز عبور برابر نیست")
            }
 
         // console.log("user",user)

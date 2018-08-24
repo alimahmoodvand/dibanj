@@ -1,4 +1,4 @@
-import { ADD_BASKET,REMOVE_BASKET} from "../actions/types";
+import {ADD_BASKET, EMPTY_BASKET, REMOVE_BASKET} from "../actions/types";
 
 const initState={
     basket:[]
@@ -15,6 +15,8 @@ export default basket=(state=initState, action={})=>{
                 ...state,
                 basket: state.basket.filter(item => item !== action.product)
             };
+        case EMPTY_BASKET:
+            return initState;
         // case ADD_CLOUD:
         //     return {
         //         ...state,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
-import {Image, ScrollView, Text, TouchableOpacity, View} from "react-native";
+import {Image, ScrollView, Text, TouchableOpacity, View, WebView} from "react-native";
 import styles from './term.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -12,54 +12,90 @@ import Http from "../../services/http";
 import {Spinner} from "native-base";
 
 class Term extends Component{
+    _searchObject=(arr,mykey,myvalue)=>{
+        let resIndex=-1;
+        arr.map((item,index)=>{
+            if(item[mykey]==myvalue){
+                resIndex=index;
+            }
+        })
+        return resIndex;
+    };
     _getCourses=async()=>{
         let response = await Http._postAsyncData({userId:this.props.user.userId,token:this.props.user.token},'userCourses');
         if (Array.isArray(response)) {
-            this.courses=response;
+            // this.courses=response;
+            let crs = [];
+            // response.map((parent) => {
+            //     try {
+            //         if (!parent.ParentId) {
+            //             let index = this._searchObject(crs, 'ProductAndCourseId', parent.ProductAndCourseId);
+            //             if (index != -1) {
+            //                 if (parent.type == 1) {
+            //                     crs[index].practice = parent.userCoursesExamAndPracticeId
+            //                 }
+            //                 if (parent.type == 2) {
+            //                     crs[index].exam = parent.userCoursesExamAndPracticeId
+            //                 }
+            //                 if (this._searchObject(response, 'ParentId', parent.ProductAndCourseId) != -1) {
+            //                     crs[index].child = true
+            //                 }
+            //             } else {
+            //
+            //                 parent.exam= null
+            //                 parent.practice= null
+            //                 parent.child= null
+            //                 if (parent.type == 1) {
+            //                     parent.practice = parent.userCoursesExamAndPracticeId
+            //                 }
+            //                 if (parent.type == 2) {
+            //                     parent.exam = parent.userCoursesExamAndPracticeId
+            //                 }
+            //                 if (this._searchObject(response, 'ParentId', parent.ProductAndCourseId) != -1) {
+            //                     parent.child = true
+            //                 }
+            //                 crs.push(parent)
+            //             }
+            //         }
+            //     }catch (err){
+            //         console.log(err)
+            //     }
+            // })
+            this.courses = response;
+          //  console.log(this.courses,crs)
         }
         // console.log("userCourses",response,{userId:this.props.user.userId,token:this.props.user.token})
         this.setState({changeUI:this.state.changeUI+1,selectCatIndex:false})
-                response = await Http._postAsyncData({
-                    userId: this.props.user.userId,
-                    // courseId: 2,//this.courses[CourseIndex].ProductAndCourseId,
-                    token: this.props.user.token
-                }, 'userCourseAndPractice');
-        if (Array.isArray(response)) {
-            this.userPAC=response;
-        }
+
         // console.log(response)
     };
     courses=[];
     userPAC=[];
     curPAC=[];
     _selectCourse=async(CourseIndex)=> {
+        console.log(CourseIndex,this.courses[CourseIndex])
+
         if(CourseIndex!==false) {
-            this.curPAC=[];
-            this.userPAC.map((item,index)=>{
-                if(item.ParentId===this.courses[CourseIndex].ProductAndCourseId){
-                    this.curPAC.push(item)
-                }
-            })
+            response = await Http._postAsyncData({
+                userId: this.props.user.userId,
+                courseId: this.courses[CourseIndex].ProductAndCourseId,
+                token: this.props.user.token
+            }, 'userCourses');
+            if (Array.isArray(response)) {
+                this.curPAC=response;
+            }
         }
-        //     let response = await Http._postAsyncData({
-        //         userId: this.props.user.userId,
-        //         courseId: 2,//this.courses[CourseIndex].ProductAndCourseId,
-        //         token: this.props.user.token
-        //     }, 'userCourseAndPractice');
-        //     if (Array.isArray(response)) {
-        //         this.userPAC = response;
-        //     }else{
-        //         this.userPAC=[];
-        //     }
-        //     this.setState({selectCatIndex:CourseIndex},()=> {
-        //         console.log(this.state.selectCatIndex,this.userPAC.length)
+        this.setState({selectCatIndex: CourseIndex})
+        //     this.curPAC=[];
+        //     this.userPAC.map((item,index)=>{
+        //         if(item.ParentId===this.courses[CourseIndex].ProductAndCourseId){
+        //             this.curPAC.push(item)
+        //         }
         //     })
-        // }else
-        {
-            this.setState({selectCatIndex: CourseIndex}, () => {
-                // console.log(this.state.selectCatIndex,CourseIndex, this.userPAC.length)
-            })
-        }
+        // }
+        //     this.setState({selectCatIndex: CourseIndex}, () => {
+        //         console.log(this.state.selectCatIndex,this.courses[CourseIndex])
+        //     })
     }
     componentWillMount() {
         this._getCourses();
@@ -68,6 +104,8 @@ class Term extends Component{
     componentWillUnmount() {
     }
     render() {
+        const body={ProductAndCourseId:162,isSample:1}
+        const token=this.props.user.token;
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
@@ -107,24 +145,22 @@ class Term extends Component{
         return (
             <View onPress={()=>{}} style={styles.accordianHeader}>
                 {
-                    section.child&&
                         this.state.selectCatIndex !== index &&
                     <FIcon style={styles.filterIcon} name="angle-left" color="black" size={25}/>
                 }
                 {
-                    section.child&&
                     this.state.selectCatIndex===index&&
                     <FIcon style={styles.filterIcon} name="angle-down"  color="black" size={25}/>
                 }
                 {
                     section.practice&&
-                    <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:section.practice})}>
+                    <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:section.practice,ProductAndCourseId:section.ProductAndCourseId,EAPtype:2})}>
                         <Text>{"تمرین"}</Text>
                     </TouchableOpacity>
                 }
                 {
                     section.exam&&
-                    <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:section.exam})}>
+                    <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:section.exam,ProductAndCourseId:section.ProductAndCourseId,EAPtype:1})}>
                         <Text>{"آزمون"}</Text>
                     </TouchableOpacity>
                 }
@@ -135,7 +171,7 @@ class Term extends Component{
         );
     }
     _renderContent=(section)=> {
-        // console.log(section)
+        console.log(section,this.curPAC)
         if(this.curPAC.length>0) {
             return (
                 <View style={styles.accordianSubContent}>

@@ -16,6 +16,7 @@ export default styles = EStyleSheet.create({
     content:{
         flex:1,
         backgroundColor:'rgba(0,0,0,0)',
+        // marginBottom:100,
         // justifyContent:'center',
         // alignItems:'center',
     },
@@ -28,7 +29,7 @@ export default styles = EStyleSheet.create({
     },
     productsSection:{
         flex:1,
-        // flexDirection: 'row',
+        flexDirection: 'row',
         justifyContent:'center',
         alignItems:'center',
 
@@ -158,4 +159,11 @@ flexDirection:'row',
         color:'white',
         fontWeight:'bold'
     },
+    commentsSection:{
+        maxHeight:100,
+        width:'100%',
+        backgroundColor:'white',
+        marginBottom:20,
+    }
+
 });

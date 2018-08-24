@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container, Spinner} from "native-base";
 import {
-    Dimensions, FlatList, Image, RefreshControl, StyleSheet, Switch, Text, TouchableOpacity,
+    Dimensions, FlatList, Image, RefreshControl, ScrollView, StyleSheet, Switch, Text, TouchableOpacity,
     View
 } from "react-native";
 import styles from './absentia.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
 import Product from "../../components/product/product";
-// import SVGImage from 'react-native-remote-svg'
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {addProducts, decPage, incPage, saveProducts} from "../../redux/actions";
 import Http from "../../services/http";
@@ -18,9 +17,8 @@ import {connect} from "react-redux";
 const {height, width} = Dimensions.get('window');
 class Absentia extends Component {
     _getdata=async()=>{
-       // console.log({page:this.state.page,token:this.props.user.token})
             let response = await Http._postAsyncData({
-                page:this.state.page,
+                page:this.page,
                 type:this.props.proType,
                 subType:this.props.subType,
                 token:this.props.user.token
@@ -28,20 +26,20 @@ class Absentia extends Component {
             // console.log(response)
             if(Array.isArray(response)){
                 this.products=this.products.concat(response);
-                this.setState({page:this.state.page+1});
+                if(response.length>0)
+                this.page+=1;
+                if(this.products.length==0){
+                    this.showSpinner=false;
+                    alert(this.props.empty)
+                }else{
+                    this.showSpinner=true;
+                }
+                this.setState({updateUI:this.state.updateUI+1});
             }
-       //  let data=
-       //      {
-       //          type: "delete",
-       //          categoryId: 2,
-       //          userId: this.props.user.userId,
-       //          token: this.props.user.token
-       //      }
-       //  let response = await Http._postAsyncData(data,'userCategoryBookmarks');
-       //      console.log("categoryBookmark",response)
 
     }
     page=1;
+    showSpinner=true;
     products=[];
     getType="default";
     getItem={};
@@ -51,7 +49,7 @@ class Absentia extends Component {
             selected:{},
             ddlist:false,
             refreshing:false,
-            page:1,
+            updateUI:1,
             exist:false,
         })
         this.filterOptions={
@@ -74,7 +72,11 @@ class Absentia extends Component {
                     title:'پرفروش ترین'
                 },
             ],
-            cat:this.props.categories,
+            cat:this.props.categories.filter((item)=>{
+                if(item.parentId){
+                    return item;
+                }
+            }),
             filter:[
                 {
                     condition:'notStarted',
@@ -99,7 +101,6 @@ class Absentia extends Component {
     render() {
         // if(this.products.length==0)
         // this._getdata();
-        console.log()
         let icon=null;
         if(this.props.img==="absentia"){
             icon=require('../../assets/images/absentia.png')
@@ -129,7 +130,7 @@ class Absentia extends Component {
                         <MIcon style={styles.filterIcon} name="sort" onPress={() => this.setState({selectable:'filter',ddlist:true})} color="white"
                                size={25}/>
                         {
-                            this.props.store&&
+                            this.props.isstore&&
                             (<View style={styles.filterExist} >
                                 <Text style={styles.filterExistText}> محصولات موجود</Text>
                                 <Switch   value={ this.state.exist }
@@ -177,7 +178,16 @@ class Absentia extends Component {
                                     titleColor="#ddd"
                                 />
                             }
-                            ListEmptyComponent={()=><Spinner/>}
+                            ListEmptyComponent={()=>
+                            {
+                                if(this.showSpinner){
+                                  return(<Spinner/>);
+                                }
+                                else{
+                                    return(<View>  </View>)
+                                }
+
+                            }}
                             onEndReached={()=>{
                                 // if(this.products.length>0)
                                 if(this.state.selectable===''){
@@ -214,41 +224,50 @@ class Absentia extends Component {
               {
                   this.filterOptions[this.state.selectable].map((item,index)=>{
                       return(
-                          <Button key={index} title={index} onPress={()=>{
-                              this.products=[];
-                              this.setState({page:0});
-                              if(this.state.selectable==='sort'){
-                                  this._getAdvPro(item,'productsSort');
-                              }else if(this.state.selectable==='filter') {
-                                  this._getAdvPro(item,'productsFilter');
-                              }else if(this.state.selectable==='cat') {
-                                  this._getAdvPro(item,'category');
+                          <Button key={index} title={index} onPress={()=> {
+                              this.products = [];
+                              this.page = 1;
+                              if (this.state.selectable === 'sort') {
+                                  this._getAdvPro(item, 'productsSort');
+                              } else if (this.state.selectable === 'filter') {
+                                  this._getAdvPro(item, 'productsFilter');
+                              } else if (this.state.selectable === 'cat') {
+                                  this._getAdvPro(item, 'category');
                               }
-                                  this.setState({selected:item,ddlist:false})}
-                          } style={styles.ddlist}><Text style={{color:item===this.state.selected?'yellow':'black'}}>{item.title}</Text></Button>
+                          }
+                          } style={styles.ddlist}><Text style={{color:item===this.state.selected?'red':'black'}}>{item.title}</Text></Button>
                       );
                   })
               }
             <View style={styles.collapseContainer}>
                 <MIcon name="keyboard-arrow-up" onPress={() => this.setState({
                     ddlist:!this.state.ddlist
-                })} color="yellow"
+                })} color="red"
                        size={25}/>
             </View>
         </View>
       )
     }
     _getAdvPro=async(item,url)=>{
-        item.page=1;
+        item.page=this.page;
         item.token=this.props.user.token;
         item.type=1;
         item.subType=2;
         console.log(item,url)
         let response = await Http._postAsyncData(item,url);
-        console.log(response)
+        // console.log(response)
         if(Array.isArray(response)){
             this.products=this.products.concat(response);
-            this.setState({page:this.state.page+1});
+            if(this.products.length==0){
+                this.showSpinner=false;
+                alert(this.props.empty)
+            }else{
+                this.showSpinner=true;
+            }
+            if(response.length>0)
+            this.page+=1;
+
+            this.setState({updateUI:this.state.updateUI+1,selected:item,ddlist:false});
         }
     }
 }
