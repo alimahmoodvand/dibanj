@@ -19,19 +19,34 @@ class SingleProduct extends Component{
         );
     }
     _getPrices(prod){
+        let decStyle={color:'black'};
+        if(prod.DiscountPercent!=0||prod.PriceAfterDiscount!=0){
+            decStyle={textDecorationLine: 'line-through', textDecorationStyle: 'solid',color:'red', textDecorationColor: 'red'};
+            if(prod.DiscountPercent==0&&prod.PriceAfterDiscount!=0){
+                prod.PriceAfterDiscount=parseInt((prod.DiscountPercent/prod.price)*100);
+            }
+            else if(prod.DiscountPercent!=0&&prod.PriceAfterDiscount==0){
+                prod.DiscountPercent=prod.price*parseInt(prod.PriceAfterDiscount/100)
+            }
+        }
+        if(prod.PriceAfterDiscount==prod.price||(prod.PriceAfterDiscount==0&&prod.DiscountPercent==0)){
+            prod.PriceAfterDiscount=0;
+            decStyle={color:'black'}
+        }
+
         return(
             <View style={styles.prices}>
                 { prod.price>0&&
-                <Text style={{textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>
+                <Text style={[styles.detalsText,decStyle]}>
                     {prod.price}
                 </Text>
                 }
                 {prod.DiscountPercent > 0 &&
 
-                <Text>{prod.DiscountPercent}</Text>
+                <Text style={styles.detalsText}>{prod.DiscountPercent}</Text>
                 }
                 {prod.PriceAfterDiscount > 0 &&
-                <Text>{prod.PriceAfterDiscount}</Text>
+                <Text style={[styles.detalsText,{color:'green'}]}>{prod.PriceAfterDiscount}</Text>
                 }
             </View>
         );
@@ -53,33 +68,40 @@ class SingleProduct extends Component{
         if(prod.Description){
             prod.Description=prod.Description.replace(regex,'').replace(/(\&.*\;)/gi, '').replace(/^\s*$(?:\r\n?|\n)/gm,'')
         }
-        prod.Description=(prod.Description&&((prod.Description).length > maxlimit) ?
-            (((prod.Description).substring(0,maxlimit-3)) + '...') :
-            prod.Description );
+        // prod.Description=(prod.Description&&((prod.Description).length > maxlimit) ?
+        //     (((prod.Description).substring(0,maxlimit-3)) + '...') :
+        //     prod.Description );
         // console.log(prod)
         return(
             <View style={styles.main}>
-                <Button style={styles.buy} title={prod.id} onPress={()=>{
-                    if(this._findBasket()){
-                        alert("قبلا به سبد اضافه شده است")
-                    }
-                    else if(prod.canBuySeperatly===0){
-                        alert("این محصول جداگانه قابل خرید نیست ")
-                    }
-                    else{
-                        alert("به سبد خرید اضافه شد")
-                        this.props.addBasket(prod);
-                    }
-                }}>
-                <Text style={styles.proBtnText}>خرید</Text>
-                </Button>
+                {prod.canBuySeperatly!=0&&
+                    <Button style={styles.buy} title={prod.id} onPress={() => {
+                        if (this._findBasket()) {
+                            alert("قبلا به سبد اضافه شده است")
+                        }
+                        else if (prod.canBuySeperatly === 0) {
+                            alert("این محصول جداگانه قابل خرید نیست ")
+                        }
+                        else {
+                            alert("به سبد خرید اضافه شد")
+                            this.props.addBasket(prod);
+                        }
+                    }}>
+                        {prod.price == 0 &&
+                        <Text style={styles.proBtnText}>رایگان</Text>
+                        }
+                        {prod.price > 0 &&
+                        <Text style={styles.proBtnText}>خرید</Text>
+                        }
+                        </Button>
+                }
                 <View style={styles.content}>
                     <View style={styles.details}>
-                        <Text>{prod.Title}</Text>
-                        <Text>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'ندارد'}</Text>
-                        <Text>{prod.Duration}</Text>
-                        <Text>{prod.fullName}</Text>
-                        <Text>{prod.Description}</Text>
+                        <Text  style={[styles.detalsText]}>{prod.Title}</Text>
+                        <Text  style={[styles.detalsText]}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:''}</Text>
+                        <Text  style={[styles.detalsText]}>{prod.Duration}</Text>
+                        <Text  style={[styles.detalsText]}>{prod.fullName}</Text>
+                        <Text  style={[styles.detalsText]}>{prod.Description}</Text>
                         {/*<Text>{prod.Description}</Text>*/}
                     </View>
                     {this._getPrices(prod)}

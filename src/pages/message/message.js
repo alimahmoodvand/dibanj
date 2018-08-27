@@ -24,10 +24,9 @@ class Message extends Component{
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
                 <HeaderLayout back={true}/>
-
                 <Accordion
                     sections={this.props.messages}
-                    renderSectionTitle={this._renderSectionTitle}
+                    // renderSectionTitle={this._renderSectionTitle}
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                     onChange={(index)=>this._readMessage(index)}

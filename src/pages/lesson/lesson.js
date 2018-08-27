@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
-import {Button, Container} from "native-base";
-import {FlatList, Image, Picker, ScrollView, Text, TextInput, View, WebView} from "react-native";
+import {Button, Container, Spinner} from "native-base";
+import {FlatList, Image, Picker, ScrollView, Text, TextInput, View} from "react-native";
 import styles from './lesson.css'
 import {connect} from "react-redux";
 import HTML from 'react-native-render-html';
 import http from "../../services/http";
+import {Actions} from "react-native-router-flux";
+import MIcon from 'react-native-vector-icons/MaterialIcons';
+import WebView from 'react-native-android-fullscreen-webview-video';
 
 class Lesson extends Component{
+    handleMessage=(res)=>{
+        console.log(res)
+    }
     render() {
         let uri=http.baseurl+"videoRenderer/"+this.props.ProductAndCourseId+"/"+this.props.isSample
         console.log(uri);
@@ -16,11 +22,15 @@ class Lesson extends Component{
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
                 <HeaderLayout back={true}/>
                 <View style={styles.content}>
+                    <View style={styles.closeIcon}>
+                        <MIcon name="close" onPress={() => Actions.pop()} color="black" size={25}/>
+                    </View>
                     <ScrollView>
                         <WebView
-                            // automaticallyAdjustContentInsets={false}
                             source={{uri: uri}}
                             style={styles.contentRender}
+                                startInLoadingState={true}
+                            renderLoading={()=>{return <Spinner/>}}
                         />
                     </ScrollView>
                 </View>

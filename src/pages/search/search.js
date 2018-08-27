@@ -201,38 +201,43 @@ class Search extends Component{
             );
         })
     }
+    isSearching=false;
     _searchProduct=async()=>{
-        if(!this.searchParams.text.trim()){
-            this.setState({page:0});
-            alert("عبارتی وارد نشده است")
-        }else if(this.state.page>0) {
-            let catsId = [];
-            if (this.searchParams.cats.length > 0) {
-                this.searchParams.cats.map((item) => {
-                    catsId.push(item.categoryId);
-                })
-            }
-            let data = {
-                token: this.props.user.token,
-                search: this.searchParams.text,
-                categories: catsId,
-                type: this.options[this.state.selectedOptionIndex].type,
-                subType: this.options[this.state.selectedOptionIndex].subType,
-                page:this.state.page
-            }
-            // console.log(data)
-            let response = await Http._postAsyncData(data, 'search')
-            if(Array.isArray(response)){
-                this.products=this.products.concat(response);
-                // console.log(response)
-                if (this.products.length != 0) {
-                    this.showSpinner = true;
-                } else {
-                    this.showSpinner = false;
-                    alert('محصولی یافت نشد')
+        if(!this.isSearching) {
+            this.isSearching=true;
+            if (!this.searchParams.text.trim()) {
+                this.setState({page: 0});
+                alert("عبارتی وارد نشده است")
+            } else if (this.state.page > 0) {
+                let catsId = [];
+                if (this.searchParams.cats.length > 0) {
+                    this.searchParams.cats.map((item) => {
+                        catsId.push(item.categoryId);
+                    })
                 }
-                this.setState({page:this.state.page+1});
+                let data = {
+                    token: this.props.user.token,
+                    search: this.searchParams.text,
+                    categories: catsId,
+                    type: this.options[this.state.selectedOptionIndex].type,
+                    subType: this.options[this.state.selectedOptionIndex].subType,
+                    page: this.state.page
+                }
+                // console.log(data)
+                let response = await Http._postAsyncData(data, 'search')
+                if (Array.isArray(response)) {
+                    this.products = this.products.concat(response);
+                    // console.log(response)
+                    if (this.products.length != 0) {
+                        this.showSpinner = true;
+                    } else {
+                        this.showSpinner = false;
+                        alert('محصولی یافت نشد')
+                    }
+                    this.setState({page: this.state.page + 1});
+                }
             }
+            this.isSearching=false;
         }
         // this.onEndReachedCalledDuringMomentum=false;
 

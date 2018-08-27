@@ -61,6 +61,8 @@ export default styles = EStyleSheet.create({
     image:{
         // height:'100%',
         minHeight:'$productImage',
+        height:'$productImage',
+        width:'$productImage',
         flex:.35,
         overflow:'hidden',
         // borderBottomRightRadius:2,
@@ -70,24 +72,30 @@ export default styles = EStyleSheet.create({
         paddingRight:10,
         // paddingTop:15,
         flex:0.55,
+
         alignItems:'flex-end',
         justifyContent:'flex-start',
         // backgroundColor:'red'
     },
     prices:{
-        paddingLeft:10,
-        paddingTop:5,
-        width:'100%',
+        // marginLeft:10,
+        // marginRight:10,
+        paddingTop:15,
+        width:'90%',
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'space-between',
+        justifyContent:'space-around',
 
     },
     detalsText:{
         // color:'black',
         // fontSize:17,
+        width:'100%',
         margin:2,
-        direction:'rtl',
+        textAlign:'right',
+        // marginLeft:'$productBnt',
+        // direction:'rtl',
+
     },
     basket:{
         // paddingTop:5,

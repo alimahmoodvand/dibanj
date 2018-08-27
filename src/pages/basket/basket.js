@@ -6,36 +6,13 @@ import styles from './basket.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
 import BasketProduct from "../../components/basketproduct/basketproduct";
+import Location from "../../components/location/location";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {connect} from "react-redux";
 import {addBasket, emptyBasket, removeBasket} from "../../redux/actions";
 import Http from "../../services/http";
 
 class Basket extends Component{
-    componentWillMount(){
-        this.setState({
-            products:[
-                {teacher:"home",deadline:new Date()
-                    ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-                {teacher:"home",deadline:new Date()
-                    ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-                {teacher:"home",deadline:new Date()
-                    ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-                {teacher:"home",deadline:new Date()
-                    ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-                {teacher:"home",deadline:new Date()
-                    ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-                {teacher:"home",deadline:new Date()
-                    ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-                {teacher:"home",deadline:new Date()
-                    ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-                {teacher:"home",deadline:new Date()
-                    ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-                {teacher:"home",deadline:new Date()
-                    ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-            ]
-        })
-    }
     _renderItem = (item,index) => {
         item['id']=index;
         return( <BasketProduct prod={item}/>);
@@ -46,12 +23,20 @@ class Basket extends Component{
         offPrice:0,
         discountCode:0,
         discountId:0,
+        isModalVisible: false,
     };
+    componentWillUnmount(){
+        if(this.state.isModalVisible)
+            this._toggleModal();
+    }
+    _toggleModal = () =>
+        this.setState({isModalVisible: !this.state.isModalVisible});
     prices={};
+    address=null;
     render() {
         this.prices={price:0};
         this._sumBasketPrices()
-        console.log(this.prices)
+        // console.log(this.prices)
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
@@ -68,7 +53,8 @@ class Basket extends Component{
                     </View>
                     {(this.props.basket.basket.length > 0 )&&
                     <View style={styles.paymentSection}>
-                        {this.prices.price > 0 &&
+                        <Location/>
+                      {this.prices.price > 0 &&
                         <View style={styles.offSection}>
                             <View style={styles.offSwitch}>
                                 <Switch value={this.state.offcode}
@@ -179,7 +165,7 @@ class Basket extends Component{
         }else{
             alert("کد معتبر  نیست")
         }
-        console.log(response)
+        // console.log(response)
     }
 }
 const mapDispatchToProps=(dispatch)=> {

@@ -20,16 +20,24 @@ export default styles = EStyleSheet.create({
         marginLeft: 15,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        flexDirection: 'row',
-        alignItems: 'center',
+        // flexDirection: 'row',
+        // alignItems: 'center',
         justifyContent: 'center',
         // paddingRight:10,
         // paddingLeft:10,
     },
     contentRender:{
-        flex:1,
+        flex:0.9,
         // backgroundColor:'red',
         height:500
+    },
+    closeIcon:{
+        flex:0.1,
+        width:'100%',
+        // alignItems: 'center',
+        // justifyContent: 'center',
+        // backgroundColor:'blue'
+
     }
 
 });

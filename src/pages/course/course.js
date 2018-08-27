@@ -27,7 +27,7 @@ class Course extends Component{
                 this.setState({
                     position: this.state.position+1 === this.state.dataSource.length ? 0 : this.state.position + 1
                 });
-            }, 2000),
+            }, 4000),
             position: 1,
             interval: null,
             dataSource: [],
@@ -42,6 +42,7 @@ class Course extends Component{
     product={};
     childs=[];
     comments=[];
+    rating=-1;
     _findProduct=async()=>{
         // for(let i=0;i<this.props.products.products.length;i++){
         //     if(this.props.id===this.props.products.products[i].ProductAndCourseId){
@@ -98,7 +99,6 @@ class Course extends Component{
         item['id']=index;
        return(<WindowProduct   prod={item}/>);
     };
-
     _renderCommentItem= (item, index) => {
         item['id'] = index
         return (<CommentComp cmnt={item} userId={this.props.user.userId} deleteComment={this._deleteComment}/>)
@@ -215,6 +215,14 @@ class Course extends Component{
                                 {this._renderHeader()}
 
                                 <View style={styles.commentInputContainer}>
+                                    <Stars
+                                        isActive={true}
+                                        rateMax={5}
+                                        isHalfStarEnabled={true}
+                                        onStarPress={(rating) => {this.rating=rating}}
+                                        rate={1}
+                                        size={20}
+                                    />
                                     <TextInput
                                         style={styles.commentInput}
                                         multiline
@@ -230,14 +238,14 @@ class Course extends Component{
                                     </Button>
                                 </View>
                             </View>
-                            <ScrollView style={styles.commentsSection}>
+                            <View style={styles.commentsSection}>
                                 < FlatList
                                     data={this.comments}
                                     keyExtractor={(item,index)=>index.toString()}
                                     renderItem={({item,index})=>
                                         this._renderCommentItem(item,index)
                                     }/>
-                            </ScrollView>
+                            </View>
                         </View>
                     }
                     {/*<View style={styles.productsSection}>*/}
@@ -297,21 +305,31 @@ class Course extends Component{
         this.setState({comment:false})
     }
     sendComment=async()=> {
-        let data={
-            token:this.props.user.token,
-            UserId:this.props.user.userId,
-            ProductAndCourseId:this.props.id,
-            Comment:this.comment
-        }
-        let response=await Http._postAsyncData(data,'comment/insert');
-        if(Array.isArray(response)){
-            this.comments=response
-            this.comment="";
-            alert('نظر شما ثبت شد')
+        if(this.comment.trim()!="") {
+            if (this.rating > -1) {
+                let data = {
+                    token: this.props.user.token,
+                    UserId: this.props.user.userId,
+                    ProductAndCourseId: this.props.id,
+                    Comment: this.comment,
+                    Rate: this.rating,
+                }
+                let response = await Http._postAsyncData(data, 'comment/insert');
+                if (Array.isArray(response)) {
+                    this.comments = response
+                    this.comment = "";
+                    alert('نظر شما ثبت شد')
+                } else {
+                    alert('خطا دوباره تلاش کنید')
+                }
+                this.setState({comment: true})
+            } else {
+                alert('لطفا برای نظر دهی امتیاز را نیز مشخص کنید')
+            }
         }else{
-            alert('خطا دوباره تلاش کنید')
+            alert('لطفا نظر خود را وارد کنید')
         }
-        this.setState({comment:true})
+
     }
 }
 const mapDispatchToProps=(dispatch)=> {

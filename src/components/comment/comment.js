@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container} from "native-base";
-import {Image, ImageBackground, Text, View} from "react-native";
+import {Image, ImageBackground, Text, TouchableOpacity, View} from "react-native";
 import styles from './comment.css'
 import {Actions} from "react-native-router-flux";
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import Http from "../../services/http";
+import Stars from "react-native-stars-rating";
 
 export default class CommentComp extends Component{
     render(){
@@ -15,18 +16,35 @@ export default class CommentComp extends Component{
         return(
             <View >
                 <View>
-                    <Image source={{uri:cmnt.image}}/>
                     <View >
                         <View style={styles.commentTitle}>
-                            {userId==cmnt.UserId&&
-                            (<MIcon name="delete-forever" onPress={()=>{
-                                deleteComment(cmnt);
-                            }} color="red" size={25}/>)
-                            }
-                            <Text style={styles.comment}>{cmnt.persianCreatedAt}</Text>
-                            <Text> {cmnt.fullName}</Text>
+                            <View style={styles.infoContainer}>
+                                <TouchableOpacity onPress={() =>{Actions.user({userId:cmnt.userId})}} style={styles.nameContainer}>
+                                <Text style={styles.name}> {cmnt.fullName}</Text>
+                                </TouchableOpacity>
+                                <View style={styles.otherContainer}>
+                                    {userId==cmnt.UserId&&
+                                (<MIcon name="close" onPress={()=>{
+                                    deleteComment(cmnt);
+                                }} color="red" size={20}/>)
+                                }
+                                <Text style={styles.comment}>{cmnt.persianCreatedAt.split(' ')[0]}</Text>
+                                    <Stars
+                                        isActive={false}
+                                        rateMax={5}
+                                        isHalfStarEnabled={true}
+                                        onStarPress={(rating) => {}}
+                                        rate={cmnt.Rate}
+                                        size={20}
+                                    />
+
+                                </View>
+                            </View>
+                            <Image source={{uri:cmnt.imageUrl}} style={styles.userImage}/>
                         </View>
-                        <Text>{cmnt.Comment}</Text>
+                        <View style={styles.commentContainer}>
+                            <Text>{cmnt.Comment}</Text>
+                        </View>
                     </View>
                 </View>
             </View>

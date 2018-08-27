@@ -40,6 +40,7 @@ import Help from "./pages/help/help";
 import VerifyCode from "./pages/verifycode/verifycode";
 import Messages from "./pages/message/message";
 import Lesson from "./pages/lesson/lesson";
+import Answer from "./pages/answer/answer";
 EStyleSheet.build({
    $statusBarColor:'red',
     $mainColor:'rgb(255, 200, 0)',
@@ -199,6 +200,12 @@ export default class App extends Component{
                                          }}>
                                   </Scene>
                                   <Scene key="lesson" hideNavBar component={Lesson} title="lesson"
+                                         icon={({focused}) => {
+                                             return <MIcon name="home" color={(focused ? "#ffc800" : "white")}
+                                                           size={28}/>;
+                                         }}>
+                                  </Scene>
+                                  <Scene key="answer" hideNavBar component={Answer} title="answer"
                                          icon={({focused}) => {
                                              return <MIcon name="home" color={(focused ? "#ffc800" : "white")}
                                                            size={28}/>;

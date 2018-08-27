@@ -13,7 +13,7 @@ export default class HeaderLayout extends Component {
     _getBackArrow() {
         if(this.isback)
         return(
-        <MIcon name="chevron-left" onPress={() => Actions.pop()} color="white" size={40}/>);
+        <MIcon name="chevron-left" onPress={() => Actions.pop()} color="white" size={35}/>);
         return;
     };
     isback=false;
@@ -31,7 +31,7 @@ export default class HeaderLayout extends Component {
                         <Image source={require("../../assets/images/dibanzh.png")} style={styles.logo}/>
                     {/*</Text>*/}
                     </Body>
-                    <Right>
+                    <Right style={{backgroundColor: 'rgba(0,0,0,0)',flex:0,margin:0,padding:0}}>
                         <MIcon name="menu" onPress={() => Actions.drawerOpen()} color="white" size={30}/>
                     </Right>
 
@@ -50,16 +50,17 @@ const styles = StyleSheet.create({
         left:0
     },
     header:{
-        justifyContent:'flex-end',
-        alignItems:'flex-end',
-        marginRight:15,
+        justifyContent:'center',
+        alignItems:'flex-start',
+         // marginRight:15,
         overflow:'visible',
         // backgroundColor:'red',
-        // width:'100%'
+        width:'100%'
 },
     logo:{
-    width:60,
+    width:100,
     height:30,
+        marginLeft:10,
         overflow:'visible',
 
         // backgroundColor:'blue'
@@ -69,6 +70,8 @@ const styles = StyleSheet.create({
   }  ,
     main:{
         // backgroundColor:'green'
+        // flex: 1,
+        // flexDirection:'row',
         backgroundColor:'rgba(0,0,0,0)'
     }
 });

@@ -43,7 +43,7 @@ class Home extends Component {
     componentWillUnmount() {
         clearInterval(this.state.interval);
     }
-    render() {
+    render(){
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
@@ -102,8 +102,8 @@ class Home extends Component {
                         <TouchableOpacity style={[styles.circle, style.circle, {marginRight: three}]} onPress={() => Actions.absentia(
                             {
                                 isstore:true,
-                                subType:1,
-                                proType:1,
+                                subType:-1,
+                                proType:-1,
                                 img:"store",
                                 label:"فروشگاه",
                                 empty:'محصولی یافت نشد',

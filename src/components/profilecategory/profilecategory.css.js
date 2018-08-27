@@ -63,6 +63,7 @@ export default styles = EStyleSheet.create({
         backgroundColor:'$mainColor',
         borderRadius:5,
         borderColor:'white',
+
         borderWidth:1,
         flex:.45,
         justifyContent:'center',
@@ -72,8 +73,11 @@ export default styles = EStyleSheet.create({
         color:'white'
     },
     bookmarks:{
-        flexDirection:'row-reverse',
+        flexDirection:'row',
         // flex:1,
+        // width:'100%',
+        overflow:'visible',
+        // flex:0.1,
         marginTop:10,
     },
     bookmarkText:{

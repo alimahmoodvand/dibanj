@@ -114,6 +114,7 @@ flexDirection:'row',
         borderBottomWidth:1,
         borderBottomColor:'black',
         alignItems:'flex-end',
+        flexWrap:'wrap',
         paddingBottom:10,
     },
     bookmarkTitle:{
@@ -123,9 +124,9 @@ flexDirection:'row',
         padding:5,
     },
     bookmarks:{
-        flexDirection:'row',
+        flexDirection:'row-reverse',
         flex:1,
-
+        flexWrap:'wrap'
     },
     bookmarkText:{
         color:'#0092ff',

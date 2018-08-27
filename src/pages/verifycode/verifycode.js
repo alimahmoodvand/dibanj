@@ -13,12 +13,15 @@ import SmsListener from 'react-native-android-sms-listener'
      mobile;
      activationCode=null;
      listener=null;
+     autoread=false;
      componentWillMount(){
          this.listener=SmsListener.addListener(message => {
              let code=message.body.replace( /^\D+/g, '');
-             // console.log(message)
+             console.log(message)
              if(parseInt(code)){
                  this.activationCode=code
+                 this.autoread=true;
+
                  this.setState({
                      remining: this.state.remining === 0 ? this.state.remining : this.state.remining - 1
                  });
@@ -57,24 +60,37 @@ import SmsListener from 'react-native-android-sms-listener'
                             <Label style={styles.labelText}>تا {this.state.remining} ثانیه دیگر اعتبار دارد</Label>
                             <Label style={styles.labelText}>{mobile}</Label>
                         <Item fixedLabel>
-                            {this.activationCode==null&&
+                            {!this.autoread&&
                             <Input
                                 returnKeyType="go"
                                 maxLength={6}
                                 keyboardType="numeric"
-                                onChangeText={ (text) => this.activationCode = text }  />}
-                            {this.activationCode!=null&& <Input value={`${this.activationCode}`} returnKeyType="go"
-                                                                maxLength={6} keyboardType="numeric" onChangeText={ (text) => this.activationCode = text }  />}
+                                style={styles.inputText}
+                                onChangeText={ (text) => {
+                                    this.autoread=false;
+                                    this.activationCode = text
+                                } }  />}
+                            {this.autoread&&
+                            <Input
+                                value={`${this.activationCode}`}
+                                style={styles.inputText}
+                                returnKeyType="go"
+                                maxLength={6}
+                                keyboardType="numeric"
+                                onChangeText={ (text) => {
+                                    this.autoread=false;
+                                    this.activationCode = text
+                                } }/>}
                             <Label style={styles.labelText}>کد ورود</Label>
                         </Item>
                             <Button full style={styles.loginBtn} onPress={this._verifyCode}>
                                 <Text>ورود</Text>
                             </Button>
                     </Form>
-                    <Button bordered style={styles.loginBtn} onPress={()=>Actions.loginpage()}>
+                    <Button bordered style={[styles.loginBtn,{width:'50%',justifyContent:'center'}]} onPress={()=>Actions.loginpage()}>
                         <Text style={styles.labelText} >تغییر شماره</Text>
                     </Button>
-                    <Button bordered style={styles.loginBtn} onPress={()=>{this._sendCode}}>
+                    <Button bordered style={[styles.loginBtn,{width:'50%',justifyContent:'center'}]} onPress={()=>{this._sendCode}}>
                         <Text style={styles.labelText} >ارسال دوباره</Text>
                     </Button>
                 </View>

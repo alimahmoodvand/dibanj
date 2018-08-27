@@ -119,16 +119,23 @@ export default styles = EStyleSheet.create({
         color: '$grayColor'
     },
     circleYellow: {
-        marginRight:10,
+        marginRight:'$productBnt/1.5',
         width: '$productBnt/1.5',
         height: '$productBnt/1.5',
         borderRadius: '$productBnt/1.5',
         backgroundColor: '$mainColor',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     circleText: {
         color: 'white',
-        textAlign: 'center',
+        // backgroundColor:'red',
+        paddingRight:'$productBnt/12',
+        paddingBottom:'$productBnt/12',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // alignSelf: "center",
+        // textAlign: 'center',
+        // textAlignVertical: 'center',
     },
 });

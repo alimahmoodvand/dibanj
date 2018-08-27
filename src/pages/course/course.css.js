@@ -160,7 +160,7 @@ flexDirection:'row',
         fontWeight:'bold'
     },
     commentsSection:{
-        maxHeight:100,
+        // maxHeight:100,
         width:'100%',
         backgroundColor:'white',
         marginBottom:20,

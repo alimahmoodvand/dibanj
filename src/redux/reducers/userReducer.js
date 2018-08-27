@@ -20,11 +20,15 @@ export default user=(state=initState,action={})=>{
             if(user.image&&user.image.indexOf("http")==-1){
                 user.image="http://199.127.99.12:3001/"+user.image;
             }
+            if(!user.token){
+                user.token=state.token;
+            }
             return  user; /*{
                 userId:user.userId
             };*/
             break;
         case REMOVE_USER:
+            // console.log(state)
             return  initState; /*{
                 userId:user.userId
             };*/

@@ -12,38 +12,38 @@ import WindowProduct from "../../components/windowproduct/windowproduct";
 import Stars from "react-native-stars-rating";
 import {connect} from "react-redux";
 import Http from "../../services/http";
-const SECTIONS = [
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-    {title:"home",content:new Date()
-        ,image:{uri:"https://roocket.ir/public/image/2016/1/20/wordpress-cover-2.png"}},
-];
-
 class User extends Component{
     constructor(props) {
         super(props);
         this._renderItem = this._renderItem.bind(this);
+
         this.state = {
             updateUI:0,
         };
     }
     _getUserCats=async()=>{
-        let response = await Http._postAsyncData({userId:this.props.user.userId,token:this.props.user.token},'userCategoryBookmarks');
+        let response = await Http._postAsyncData({userId:this.props.userId,token:this.props.user.token},'userCategoryBookmarks');
         // console.log(response)
         if(Array.isArray(response)){
             this.userCats=response;
             this.setState({updateUI:this.state.updateUI++});
         }
     }
+    _getUserComments=async()=>{
+        let response = await Http._postAsyncData({userId:this.props.userId,token:this.props.user.token},'userComments');
+        // console.log(response)
+        if(Array.isArray(response)){
+            this.userComments=response[1]?response[1]:[];
+            this.user=response[0][0]?response[0][0]:null;
+            this.setState({updateUI:this.state.updateUI++});
+        }
+    }
     userCats=[];
+    userComments=[];
+    user=null;
     componentWillMount() {
         this._getUserCats();
+        this._getUserComments();
     }
 
     componentWillUnmount() {
@@ -66,16 +66,19 @@ class User extends Component{
                 <HeaderLayout back={true}/>
 
                 <ScrollView style={styles.content}>
+                    {this.user &&
                     <View style={styles.userInfo}>
-                        <View style={styles.userInfoContainer} >
-                            <Text style={styles.userInfoText}>{this.props.user.fullName}</Text>
-                            <Text style={styles.userInfoText}>{this.props.user.ostan}</Text>
-                            <Text style={styles.userInfoText}>{this.props.user.regdate}</Text>
+
+                        <View style={styles.userInfoContainer}>
+                            <Text style={styles.userInfoText}>{this.user.fullName}</Text>
+                            <Text style={styles.userInfoText}>{this.user.ostan}</Text>
+                            <Text style={styles.userInfoText}>{this.user.persianRegdate.split(' ')[0]}</Text>
                         </View>
                         <View style={styles.userImageContainer}>
-                            <Image style={styles.userImage} source={{uri:this.props.user.image}}/>
+                            <Image style={styles.userImage} source={{uri: this.user.imageUrl}}/>
                         </View>
                     </View>
+                    }
                     <View style={styles.courseInfo}>
                     <View style={styles.bookmarkContainer}>
                         <Text style={styles.bookmarkTitle}>
@@ -100,7 +103,7 @@ class User extends Component{
                             <View style={styles.ratingContainer}>
 
                                 {
-                                    SECTIONS.map((item,index)=>{
+                                    this.userComments.map((item,index)=>{
                                             return  this._renderComments(item,index);
                                         }
                                     )
@@ -155,7 +158,7 @@ class User extends Component{
         </View>
             <View style={styles.cemmentContainer}>
                 <Text style={styles.commentText}>
-                    {item.title} </Text>
+                    {item.comment} </Text>
             </View>
 
         </View>);

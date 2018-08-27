@@ -10,6 +10,40 @@ import {connect} from "react-redux";
 import {addBasket, removeBasket} from "../../redux/actions";
 
 class BasketProduct extends Component{
+    _getPrices=(prod)=>{
+        let decStyle={color:'black'};
+        if(prod.DiscountPercent!=0||prod.PriceAfterDiscount!=0){
+            // console.log(prod,decStyle,prod.PriceAfterDiscount,prod.price,prod.DiscountPercent)
+            decStyle={textDecorationLine: 'line-through', textDecorationStyle: 'solid',color:'red', textDecorationColor: 'red'};
+            if(prod.DiscountPercent==0&&prod.PriceAfterDiscount!=0){
+                prod.PriceAfterDiscount=parseInt((prod.DiscountPercent/prod.price)*100);
+            }
+            else if(prod.DiscountPercent!=0&&prod.PriceAfterDiscount==0){
+                prod.DiscountPercent=prod.price*parseInt(prod.PriceAfterDiscount/100)
+            }
+        }
+        // console.log(prod,decStyle,prod.PriceAfterDiscount,prod.price,prod.DiscountPercent)
+        if(prod.PriceAfterDiscount==prod.price||(prod.PriceAfterDiscount==0&&prod.DiscountPercent==0)){
+            prod.PriceAfterDiscount=0;
+            decStyle={color:'black'}
+        }
+        // console.log(prod,decStyle,prod.PriceAfterDiscount,prod.price,prod.DiscountPercent)
+        return(
+            <View style={styles.prices}>
+                { prod.price>0&&
+                <Text style={[styles.detalsText,decStyle]}>
+                    {prod.price}
+                </Text>
+                }
+                {prod.DiscountPercent > 0 &&
+                <Text style={styles.detalsText}>{prod.DiscountPercent+' %'}</Text>
+                }
+                {prod.PriceAfterDiscount > 0 &&
+                <Text style={[styles.detalsText,{color:'green'}]}>{prod.PriceAfterDiscount}</Text>
+                }
+            </View>
+        );
+    }
     render(){
         const {prod}=this.props
         prod.Thumbnail= prod.Thumbnail;
@@ -25,29 +59,16 @@ class BasketProduct extends Component{
             <View style={styles.main}>
 
                 <View style={styles.content}>
-                    <ImageBackground style={styles.image} source={{uri: prod.Thumbnail}}>
+                    <ImageBackground style={styles.image} source={{uri: prod.thumbnailUrl}}>
                     </ImageBackground>
                     <View style={styles.details}>
-                        <Text>{prod.Title}</Text>
-                        <Text>{prod.fullName}</Text>
-                        <Text>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'ندارد'}</Text>
+                        <Text style={styles.detalsText}>{prod.Title}</Text>
+                        <Text style={styles.detalsText}>{prod.fullName}</Text>
+                        <Text style={styles.detalsText}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:''}</Text>
                     </View>
                     <View style={styles.prices}>
                         <View style={styles.price}>
-
-                            { prod.price>0&&
-                            <Text style={{textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>
-                                {prod.price}
-                            </Text>
-                            }
-                            {prod.DiscountPercent > 0 &&
-                            <Text>{prod.DiscountPercent}</Text>
-                            }
-                            {prod.PriceAfterDiscount > 0 &&
-                            <Text style={styles.priceText}>
-                                {prod.PriceAfterDiscount}
-                            </Text>
-                            }
+                            {this._getPrices(prod)}
                         </View>
                         <View style={styles.delete}>
                             <MIcon name="delete-forever" onPress={()=>{

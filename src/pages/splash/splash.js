@@ -5,7 +5,7 @@ import {Image, StyleSheet, View} from "react-native";
 import {connect} from "react-redux";
 import {Actions} from "react-native-router-flux";
 import Http from "../../services/http";
-import {saveCategories,saveMessages} from "../../redux/actions";
+import {removeUser, saveCategories, saveMessages, saveUser} from "../../redux/actions";
 // import OneSignal from "react-native-onesignal";
 
  class Splash extends Component{
@@ -34,6 +34,7 @@ import {saveCategories,saveMessages} from "../../redux/actions";
     render(){
        if(this.props.rehydrated)
         {
+            // this.props.removeUser();
             if (this.props.user.token) {
 
                 Http._postDataPromise({token:this.props.user.token},'categories').then((response) => response.json())
@@ -41,9 +42,17 @@ import {saveCategories,saveMessages} from "../../redux/actions";
                         this.props.saveCategories(responseData)
                         Http._postDataPromise({token:this.props.user.token},'userMessages').then((response) => response.json())
                             .then((responseData) => {
-                                // console.log(responseData)
+                                console.log(responseData)
                                 this.props.saveMessages(responseData)
-                                Actions.reset('drawer')
+                                Http._postDataPromise({token:this.props.user.token,userId:this.props.user.userId},'getUser').then((response) => response.json())
+                                    .then((responseData) => {
+                                        // console.log(responseData)
+                                        this.props.saveUser(responseData)
+                                        Actions.reset('drawer')
+                                    }).catch((err)=>{
+                                    Actions.reset('drawer')
+                                })
+                                // Actions.reset('drawer')
                             }).catch((err)=>{
                             Actions.reset('drawer')
                         })
@@ -78,14 +87,14 @@ const styles=StyleSheet.create({
         left: 0
     },
     logo:{
-        width:150,
+        flex:1,
         height:75,
         // backgroundColor:'blue'
     },
     container:{
         flex:1,backgroundColor:'rgba(0,0,0,0)'
     },
-    content:{flex:1,backgroundColor:'rgba(0,0,0,0)',justifyContent:'center',alignItems:'center'}
+    content:{flex:1,backgroundColor:'rgba(0,0,0,0)',justifyContent:'center',alignItems:'center',flexWrap:'wrap',flexDirection:'row'}
 })
 
 
@@ -102,6 +111,12 @@ const mapDispatchToProps=(dispatch)=> {
         },
         saveMessages:(messages)=>{
             dispatch(saveMessages(messages))
+        },
+        saveUser:(messages)=>{
+            dispatch(saveUser(messages))
+        },
+        removeUser:()=>{
+            dispatch(removeUser())
         }
     }
 }

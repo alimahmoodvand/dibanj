@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container} from "native-base";
-import {Image, ImageBackground, Text, View, WebView} from "react-native";
+import {Image, ImageBackground, Text, TouchableOpacity, View, WebView} from "react-native";
 import styles from './product.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -19,20 +19,37 @@ class Product extends Component{
             <Image style={styles.image} source={require('./../../assets/images/bg.jpg')}/>
         );
     }
-    _getPrices(prod){
+    _getPrices=(prod)=>{
+        let decStyle={color:'black',textAlign:'right'};
+        if(prod.DiscountPercent!=0||prod.PriceAfterDiscount!=0){
+            // console.log(prod,decStyle,prod.PriceAfterDiscount,prod.price,prod.DiscountPercent)
+            decStyle={textDecorationLine: 'line-through', textDecorationStyle: 'solid',color:'red', textDecorationColor: 'red'};
+            if(prod.DiscountPercent==0&&prod.PriceAfterDiscount!=0){
+                prod.PriceAfterDiscount=parseInt((prod.DiscountPercent/prod.price)*100);
+            }
+            else if(prod.DiscountPercent!=0&&prod.PriceAfterDiscount==0){
+                prod.DiscountPercent=prod.price*parseInt(prod.PriceAfterDiscount/100)
+            }
+        }
+        // console.log(prod,decStyle,prod.PriceAfterDiscount,prod.price,prod.DiscountPercent)
+        if(prod.PriceAfterDiscount==prod.price||(prod.PriceAfterDiscount==0&&prod.DiscountPercent==0)){
+            prod.PriceAfterDiscount=0;
+            decStyle={color:'black'}
+        }
+        // console.log(prod,decStyle,prod.PriceAfterDiscount,prod.price,prod.DiscountPercent)
+        // decStyle.backgroundColor='red';
         return(
             <View style={styles.prices}>
                 { prod.price>0&&
-                    <Text style={{textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>
+                    <Text style={[decStyle]}>
                         {prod.price}
                     </Text>
                 }
                 {prod.DiscountPercent > 0 &&
-
-                <Text>{prod.DiscountPercent}</Text>
+                    <Text >{prod.DiscountPercent+'%'}</Text>
                 }
-                {prod.PriceAfterDiscount > 0 &&
-                <Text>{prod.PriceAfterDiscount}</Text>
+                {prod.PriceAfterDiscount > 0&&
+                <Text style={[{color:'green'}]}>{prod.PriceAfterDiscount}</Text>
                 }
             </View>
         );
@@ -59,40 +76,41 @@ class Product extends Component{
         if(prod.Duration&&prod.Duration.trim()!==''){
             duration=true;
         }
-        // console.log(prod,(prod.Duration&&prod.Duration.trim()!==''),prod.Duration,prod.Duration.trim()!=='',duration)
-        // prod.Description=(((prod.Description).length > maxlimit) ?
-        //     (((prod.Description).substring(0,maxlimit-3)) + '...') :
-        //     prod.Description );
+        let overlay=<Image style={styles.image} source={{uri: prod.thumbnailUrl}}/>;
+        if(prod.subType==2&&prod.remainCount==0){
+             overlay=<Image style={styles.image} source={require('../../assets/images/finish.png')}/>;
+        }
+        else if(prod.isSpecial==1){
+             overlay=<Image style={styles.image} source={require('../../assets/images/special.png')}/>;
+        }else if(prod.PriceAfterDiscount==0){
+             overlay=<Image style={styles.image} source={require('../../assets/images/free.png')}/>;
+        }
         return(
             <View style={styles.main}>
-                {/*<Button style={styles.buy} title={prod.id} onPress={()=>{
-                    console.log(prod)
-                    Actions.course(prod)
-
-                }}>
-                <Text style={styles.proBtnText}>جزئیات</Text>
-                </Button>*/}
                 <Button style={styles.buy} title={prod.id} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
                     <Text style={styles.proBtnText}>جزئیات</Text>
                 </Button>
                 <View style={styles.content}>
                     <View style={styles.container}>
                     <View style={styles.details}>
-                        <Text style={styles.detalsText}>{prod.Title}</Text>
-                        <Text style={styles.detalsText} >{prod.fullName}</Text>
+                        <TouchableOpacity onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                        <Text style={[styles.detalsText,{fontWeight:'bold'}]}>{prod.Title}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=>Actions.user({userId:prod.MasterId})}>
+                            <Text style={styles.detalsText} >{prod.fullName}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
                         {duration&&
                         <Text style={styles.detalsText}>{'مدت دوره:'+prod.Duration}</Text>
                         }
-                        {duration==false&&
-                        <Text style={styles.detalsText}>{prod.Description}</Text>
-                        }
-
-                        <Text style={styles.detalsText}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'ندارد'}</Text>
+                        <Text style={[styles.detalsText]}>{(prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'')}</Text>
                         {this._getPrices(prod)}
+                        </TouchableOpacity>
                     </View>
-                    <ImageBackground style={styles.image} source={{uri: prod.thumbnailUrl}}>
-                    <Image style={styles.image} source={{uri: prod.thumbnailUrl}}/>
-                </ImageBackground>
+
+                    <TouchableOpacity style={styles.image}  onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                    <ImageBackground style={styles.image} source={{uri: prod.thumbnailUrl}}>{overlay}</ImageBackground>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.basket}>
                         {prod.canBuySeperatly != 0 &&

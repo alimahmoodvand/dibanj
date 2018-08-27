@@ -44,7 +44,7 @@ import styles from "./singup.css";
                         {/*</Item>*/}
 
                         <Item fixedLabel>
-                            <Input onChangeText={ (text) => this.singup.username = text }  />
+                            <Input style={styles.inputText} onChangeText={ (text) => this.singup.username = text }  />
                             <Label style={styles.labelText}>نام کاربری</Label>
                         </Item>
 
@@ -53,14 +53,12 @@ import styles from "./singup.css";
                             {/*<Label style={styles.labelText}>ایمیل</Label>*/}
                         {/*</Item>*/}
                         <Item fixedLabel>
-                            <Input onChangeText={ (text) => this.singup.password = text }  />
+                            <Input style={styles.inputText} onChangeText={ (text) => this.singup.password = text }  />
                                                 <Label style={styles.labelText}>رمزکاربری</Label>
-
                         </Item>
                         <Item fixedLabel>
-                            <Input onChangeText={ (text) => this.singup.passwordRepeat = text }  />
+                            <Input style={styles.inputText} onChangeText={ (text) => this.singup.passwordRepeat = text }  />
                                                 <Label style={styles.labelText}>تکرار رمز </Label>
-
                         </Item>
 
                         {/*<Item fixedLabel>*/}

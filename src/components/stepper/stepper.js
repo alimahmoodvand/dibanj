@@ -35,7 +35,7 @@ export default class Stepper extends Component {
                 <Text>{item.exam?"آزمون":""}</Text>
             </TouchableOpacity>
                 <TouchableOpacity style={styles.title} >
-                    <Text>{(index+1).toString()+"جلسه "}</Text>
+                    <Text>{item.Title}</Text>
                 </TouchableOpacity>
                 <View style={styles.circles}>
                     {this._renderCircle(index, 2)}

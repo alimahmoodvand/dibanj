@@ -67,6 +67,16 @@ export default styles = EStyleSheet.create({
         justifyContent:'center',
 
     },
+    detalsText:{
+        // color:'black',
+        // fontSize:17,
+
+        margin:2,
+        textAlign:'right',
+        // marginLeft:'$productBnt',
+        // direction:'rtl',
+
+    },
     price:{
         flex:0.8,
         marginLeft:30,

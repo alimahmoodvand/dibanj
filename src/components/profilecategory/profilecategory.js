@@ -47,11 +47,13 @@ var categories=null;
        // console.log(field)
         return (
             <View style={styles.container}>
+                <TouchableOpacity onPress={() => this._toggleModal()}>
                 <View style={styles.textContainer}>
-                    <MIcon onPress={() => this._toggleModal()} name="add" size={20} color="yellow" style={styles.addIcon}/>
+                    <MIcon  name="add" size={20} color="red" style={styles.addIcon}/>
                     <Text  style={styles.fieldText}>موضوعات مورد علاقه</Text>
                 </View>
-                <View style={styles.bookmarks} >
+                <View>
+                    <View style={styles.selectedCatContainer} >
                     {
                         this.userCats.map((item,index)=>{
                             return(<Text key={index} style={styles.bookmarkText}>
@@ -60,6 +62,8 @@ var categories=null;
                         })
                     }
                 </View>
+                </View>
+                </TouchableOpacity>
                 <Modal
                     onBackButtonPress={this._toggleModal}
                     onBackdropPress={this._toggleModal}
@@ -174,9 +178,9 @@ var categories=null;
             <View style={[styles.tabBtnContainer]}>
                 {(this.state.index === item.categoryId) &&
                 (
-                    <Button style={[styles.tabBtn, {borderBottomColor: 'yellow', borderBottomWidth: 3}]}
+                    <Button style={[styles.tabBtn, {borderBottomColor: 'red', borderBottomWidth: 3}]}
                             onPress={() =>{this.setState({index:item.categoryId});}}>
-                        <Text style={{color: 'yellow' }}>{item.title}</Text></Button>
+                        <Text style={{color: 'red' }}>{item.title}</Text></Button>
                 )}
                 {(this.state.index !== item.categoryId) &&
                     (<Button style={[styles.tabBtn, {borderBottomColor: 'black', borderBottomWidth: 3}]}
@@ -189,17 +193,21 @@ var categories=null;
 
      _toggleCat=(target)=> {
         let isMarked=false;
-         this.userCats.map((item,index)=>{
-             // console.log(item.categoryId,categoryId,item.categoryId===categoryId)
-             if(item.categoryId===target.categoryId){
-                 isMarked= true;
-                 this.userCats.splice(index,1);
-             }
-         })
-         if(!isMarked){
-             this.userCats.push(target)
-         }
-         this.setState({updateUI:this.state.updateUI++});
+        if(this.userCats.length<=50) {
+            this.userCats.map((item, index) => {
+                // console.log(item.categoryId,categoryId,item.categoryId===categoryId)
+                if (item.categoryId === target.categoryId) {
+                    isMarked = true;
+                    this.userCats.splice(index, 1);
+                }
+            })
+            if (!isMarked) {
+                this.userCats.push(target)
+            }
+            this.setState({updateUI: this.state.updateUI++});
+        }else{
+            alert('تعداد موضوعات بیشتر از حد مجاز است')
+        }
      }
 
      _sendUserCats=async()=> {

@@ -13,83 +13,45 @@ export default styles = EStyleSheet.create({
         flex:0.8,
         padding:10,
         // flexDirection:'row',
-        backgroundColor: 'white',
         overflow:'hidden',
+        backgroundColor:'#c3c3c3',
+        borderBottomColor:'black',
+        borderBottomWidth:1,
+        marginBottom:15,
         // flexDirection:'row-reverse',
-    },
-    buy: {
-        position:'absolute',
-        top:'10%',
-        left:0,
-        backgroundColor: '$mainColor',
-        height: '$productBntRaduis',
-        width: '$productBnt',
-        borderBottomRightRadius: '$productBntRaduis',
-        borderTopRightRadius: '$productBntRaduis',
-        justifyContent:'center',
-        flexDirection:'row',
-        borderWidth:2,
-        borderColor:'white',
-        zIndex:100,
-    },
-    proBtnText:{
-        color:'white',
-        fontSize:15,
-        textAlign:'center'
-    },
-    sample: {
-        position:'absolute',
-        top:'10',
-        right:0,
-        backgroundColor: '$mainColor',
-        height: '$productBntRaduis',
-        width: '$productBnt',
-        borderBottomLeftRadius: '$productBntRaduis',
-        borderTopLeftRadius: '$productBntRaduis',
-        justifyContent:'center',
-        flexDirection:'row',
-        borderWidth:2,
-        borderColor:'white',
-    },
-    image:{
-        // width:'100%',
-        // flex:0.5,
-        // width:'50%',
-
-        height:'$productImage',
-        width:'$productImage',
-        overflow:'hidden',
-        borderBottomRightRadius:2,
-        borderTopRightRadius:2,
-    },
-    details:{
-        paddingRight:10,
-        paddingTop:5,
-        flex:1,
-        alignItems:'flex-end',
-        justifyContent:'flex-start'
-    },
-    prices:{
-        paddingLeft:10,
-        paddingTop:5,
-        flex:0.5,
-        alignItems:'center',
-        justifyContent:'center',
-
-    },
-    windowHeader:{
-        width:'50%',
-        backgroundColor:'$mainColor',
-    },
-    detailsText:{
-        // width:'50%',
-        // flex:0.5,
-        width:'$productImage',
     },
     commentTitle:{
         flexDirection:'row',
-        justifyContent:'space-around',
+        justifyContent:'flex-end',
         alignItems:'center',
-        backgroundColor:'$grayColor'
+        paddingRight:10,
+        paddingLeft:10,
+        marginBottom:2,
+    },
+    userImage:{
+        width:50,
+        height:50,
+    },
+    infoContainer:{
+
+    },
+    nameContainer:{
+        alignItems:'flex-end',
+        flex:0.5
+    },
+    otherContainer:{
+        flex:0.5,
+        flexDirection:'row'
+    },
+    commentContainer:{
+        paddingRight:10,
+        paddingLeft:60,
+        paddingBottom:15,
+        borderBottomColor:'#929292',
+        borderBottomWidth:0.2,
+        alignItems:'flex-end'
+    },
+    name:{
+        fontWeight:'bold'
     }
 });

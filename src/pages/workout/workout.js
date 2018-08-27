@@ -16,7 +16,7 @@ class Workout extends Component{
             userId: this.props.user.userId,
             type: this.props.examType,
             token: this.props.user.token
-        }, 'userExamAndPractices');
+        }, 'userCourseAndPractice');
         if (Array.isArray(response)) {
             this.practices = response;
         }

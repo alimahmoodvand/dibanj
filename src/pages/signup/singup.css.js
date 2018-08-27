@@ -34,5 +34,8 @@ export default styles = EStyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         flexDirection:'row'
+    },
+    inputText:{
+    color:'$mainColor'
     }
 })

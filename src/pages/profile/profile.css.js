@@ -64,5 +64,71 @@ export default styles = EStyleSheet.create({
         flex:1,
         backgroundColor:'white'
     },
+    modal: {
 
+        justifyContent: "flex-end",
+        margin: 0,
+    },
+    modalContainer:{
+        borderWidth: 1,
+        padding:10,
+        backgroundColor:'white',
+        borderColor: 'black'
+    },
+    modalButton: {
+        margin: 10,
+        // backgroundColor:'blue',
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
+    modalButtonCancel:{
+        backgroundColor:'white',
+        // borderRadius:5,
+        borderColor:'$mainColor',
+        borderWidth:1,
+        flex:.45,
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    modalButtonCancelText:{
+        color:'$mainColor'
+    },
+    modalButtonVerify:{
+        backgroundColor:'$mainColor',
+        // borderRadius:5,
+        borderColor:'white',
+        borderWidth:1,
+        flex:.45,
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    modalButtonVerifyText:{
+        color:'white'
+    },
+    inputContainer:{
+        // flex:.7,
+        // backgroundColor:'blue',
+        flexDirection:'row',
+        justifyContent:'flex-end',
+        alignItems:'center',
+        padding:2,
+    },
+    fieldText:{
+        fontWeight:'bold',
+        fontSize:15,
+        marginLeft:4,
+    },
+    inputText:{
+        // borderWidth:1,
+        // borderColor:'black',
+        padding:2,
+        flex:1,
+        // borderRadius:5,
+        // marginBottom:5,
+        // marginTop:5,
+    },loginBtn:{
+        margin:15,
+        backgroundColor:'$mainColor'
+    },
 });

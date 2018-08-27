@@ -74,15 +74,14 @@ class ProfileFields extends Component {
     }
     _updateUser=async()=>{
         if(this.textValue==''){
-            alert("field empty")
+            alert("فیلد خالی است")
         }
         else{
             let user=this.props.user;
             user[this.field.enKey]=this.textValue
             this.field.value=this.textValue;
             let token=this.props.user.token.toString();
-            await Http._postAsyncData(user,'user/update')
-            user.token=token;
+            user=await Http._postAsyncData(user,'user/update')
             this.props.saveUser(user);
             this._toggleModal();
         }

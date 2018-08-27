@@ -27,14 +27,14 @@ import styles from "./login.css";
 
                         <Label style={styles.labelText}>ورود</Label>
                         <Item fixedLabel>
-                            <Input keyboardType="numeric" onChangeText={ (text) => this.mobile = text }  />
+                            <Input style={styles.inputText} keyboardType="numeric" onChangeText={ (text) => this.mobile = text }  />
                             <Label style={styles.labelText}>شماره تلفن</Label>
                         </Item>
                         <Button  full style={styles.loginBtn} onPress={this._sendCode}>
                             <Text>ادامه</Text>
                         </Button>
                     </Form>
-                    <Button bordered style={styles.loginBtn} onPress={()=>Actions.signuppage()}>
+                    <Button bordered style={[styles.loginBtn,{width:'50%',justifyContent:'center'}]} onPress={()=>Actions.signuppage()}>
                         <Text style={styles.labelText} >ثبت نام</Text>
                     </Button>
                 </View>
