@@ -89,7 +89,7 @@ flexDirection:'row',
     },
     userInfo:{
         flexDirection:'row',
-        flex:1,
+        // flex:1,
         marginBottom:20,
     },
     userImageContainer:{
@@ -138,15 +138,18 @@ flexDirection:'row',
         backgroundColor:'white',
     },
     commentsContainer:{
-        flex:1,
+        // flex:1,
         padding:5,
         borderBottomWidth:1,
         borderBottomColor:'black',
+
+
     },
     commentsTitle:{
+        backgroundColor:'white',
         alignItems:'flex-end',
-        flex:1,
-
+        width:'100%',
+        padding:10,
     },
     commentsTitleText:{
         color:'black',
@@ -171,5 +174,9 @@ flexDirection:'row',
     rateContainer:{
         flex:.5,
         alignItems:'flex-start'
+    },
+    masterProduct:{
+        flex:1,
+        // backgroundColor:'red'
     }
 });

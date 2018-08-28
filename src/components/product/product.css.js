@@ -68,11 +68,15 @@ export default styles = EStyleSheet.create({
         // borderBottomRightRadius:2,
         // borderTopRightRadius:2,
     },
+    imageLabel:{
+        height:'40%',
+        width:'40%',
+        // backgroundColor:'#c3c3c377'
+    },
     details:{
         paddingRight:10,
         // paddingTop:15,
         flex:0.55,
-
         alignItems:'flex-end',
         justifyContent:'flex-start',
         // backgroundColor:'red'
@@ -81,7 +85,7 @@ export default styles = EStyleSheet.create({
         // marginLeft:10,
         // marginRight:10,
         paddingTop:15,
-        width:'90%',
+        width:'100%',
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-around',
@@ -90,7 +94,7 @@ export default styles = EStyleSheet.create({
     detalsText:{
         // color:'black',
         // fontSize:17,
-        width:'100%',
+        width:'90%',
         margin:2,
         textAlign:'right',
         // marginLeft:'$productBnt',

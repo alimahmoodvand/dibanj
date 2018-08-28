@@ -53,6 +53,11 @@ export default styles = EStyleSheet.create({
         borderBottomRightRadius:2,
         borderTopRightRadius:2,
     },
+    imageLabel:{
+        height:'40%',
+        width:'40%',
+        // backgroundColor:'#c3c3c355'
+    },
     details:{
         paddingRight:10,
         paddingTop:5,

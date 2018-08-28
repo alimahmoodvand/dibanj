@@ -19,7 +19,7 @@ export default class CommentComp extends Component{
                     <View >
                         <View style={styles.commentTitle}>
                             <View style={styles.infoContainer}>
-                                <TouchableOpacity onPress={() =>{Actions.user({userId:cmnt.userId})}} style={styles.nameContainer}>
+                                <TouchableOpacity onPress={() =>{Actions.user({userId:cmnt.userId,isUser:true})}} style={styles.nameContainer}>
                                 <Text style={styles.name}> {cmnt.fullName}</Text>
                                 </TouchableOpacity>
                                 <View style={styles.otherContainer}>
@@ -40,7 +40,9 @@ export default class CommentComp extends Component{
 
                                 </View>
                             </View>
+                            <TouchableOpacity onPress={() =>{Actions.user({userId:cmnt.userId,isUser:true})}} style={styles.userImage}>
                             <Image source={{uri:cmnt.imageUrl}} style={styles.userImage}/>
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.commentContainer}>
                             <Text>{cmnt.Comment}</Text>

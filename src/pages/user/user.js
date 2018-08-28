@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
-import {Button, Container} from "native-base";
-import {FlatList, Image, ScrollView, SectionList, Slider, Switch, Text, View} from "react-native";
+import {Button, Container, Spinner} from "native-base";
+import {FlatList, Image, RefreshControl, ScrollView, SectionList, Slider, Switch, Text, View} from "react-native";
 import styles from './user.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -17,10 +17,13 @@ class User extends Component{
         super(props);
         this._renderItem = this._renderItem.bind(this);
 
-        this.state = {
-            updateUI:0,
-        };
     }
+    state = {
+        updateUI:0,
+        refreshing:false,
+        showSpinner:true,
+    };
+    page=1;
     _getUserCats=async()=>{
         let response = await Http._postAsyncData({userId:this.props.userId,token:this.props.user.token},'userCategoryBookmarks');
         // console.log(response)
@@ -38,14 +41,44 @@ class User extends Component{
             this.setState({updateUI:this.state.updateUI++});
         }
     }
+    pending=false;
+    _getMasterProduct=async()=>{
+        if(!this.pending) {
+            this.pending=true;
+            let response = await Http._postAsyncData({
+                userId: this.props.userId,
+                token: this.props.user.token,
+                page: this.page
+            }, 'masterProduct');
+            if (Array.isArray(response)) {
+                this.masterProduct = this.masterProduct.concat(response[1] ? response[1] : []);
+                this.user = response[0][0] ? response[0][0] : null;
+                if (this.masterProduct.length == 0) {
+                    this.showSpinner = false;
+                } else {
+                    this.showSpinner = true;
+                }
+                if (response && response[1] && response[1].length > 0)
+                    this.page = this.page + 1;
+                this.setState({updateUI: this.state.updateUI++});
+            }
+            this.pending=false;
+        }
+        // console.log(this.page,this.state)
+    }
     userCats=[];
     userComments=[];
+    masterProduct=[];
     user=null;
     componentWillMount() {
-        this._getUserCats();
-        this._getUserComments();
+        const {isUser}=this.props;
+        if(isUser) {
+            this._getUserCats();
+            this._getUserComments();
+        }else{
+            this._getMasterProduct();
+        }
     }
-
     componentWillUnmount() {
         clearInterval(this.state.interval);
     }
@@ -58,17 +91,16 @@ class User extends Component{
        return(<WindowProduct   prod={item}/>);
     };
     render() {
-
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
                 <HeaderLayout back={true}/>
 
-                <ScrollView style={styles.content}>
+                <View style={styles.content}>
+                    {/*<View style={styles.userInfo}*/}
                     {this.user &&
                     <View style={styles.userInfo}>
-
                         <View style={styles.userInfoContainer}>
                             <Text style={styles.userInfoText}>{this.user.fullName}</Text>
                             <Text style={styles.userInfoText}>{this.user.ostan}</Text>
@@ -79,58 +111,114 @@ class User extends Component{
                         </View>
                     </View>
                     }
-                    <View style={styles.courseInfo}>
-                    <View style={styles.bookmarkContainer}>
-                        <Text style={styles.bookmarkTitle}>
-                            موضوعات مورد علاقه
-                        </Text>
-                        <View style={styles.bookmarks} >
-                            {
-                                this.userCats.map((item,index)=>{
-                                    return( <Text key={index} style={styles.bookmarkText}>
-                                            #{item.title}
-                                        </Text>)
-                                })
-                            }
-                        </View>
-                    </View>
-                        <View style={styles.commentsContainer} >
-                            <View style={styles.commentsTitle}>
-                                <Text style={styles.commentsTitleText}>
-                                    نظرات اساتید
+                {/*</View>*/}
+                    {(this.userCats.length + this.userComments.length) > 0 &&
+
+                    <ScrollView>
+                        <View style={styles.courseInfo}>
+                            {this.userCats.length > 0 &&
+                            <View style={styles.bookmarkContainer}>
+                                <Text style={styles.bookmarkTitle}>
+                                    موضوعات مورد علاقه
                                 </Text>
+                                <View style={styles.bookmarks}>
+                                    {
+                                        this.userCats.map((item, index) => {
+                                            return (<Text key={index} style={styles.bookmarkText}>
+                                                #{item.title}
+                                            </Text>)
+                                        })
+                                    }
+                                </View>
                             </View>
-                            <View style={styles.ratingContainer}>
+                            }
+                            {this.userComments.length > 0 &&
+                            <View style={styles.commentsContainer}>
+                                <View style={styles.commentsTitle}>
+                                    <Text style={styles.commentsTitleText}>
+                                        نظرات اساتید
+                                    </Text>
+                                </View>
+                                <View style={styles.ratingContainer}>
 
-                                {
-                                    this.userComments.map((item,index)=>{
-                                            return  this._renderComments(item,index);
-                                        }
-                                    )
+                                    {
+                                        this.userComments.map((item, index) => {
+                                                return this._renderComments(item, index);
+                                            }
+                                        )
 
-                                }
+                                    }
+                                </View>
+                            </View>
+                            }
+                            <View style={styles.productsSection}>
+                                <View style={styles.products}>
+                                    {/*<FlatList*/}
+                                    {/*numColumns={2}*/}
+                                    {/*ListHeaderComponent={this._renderHeader}*/}
+                                    {/*data={this.state.products}*/}
+                                    {/*keyExtractor={(item,index)=>index.toString()}*/}
+                                    {/*renderItem={({item,index})=>*/}
+                                    {/*this._renderWindowItem(item,index)*/}
+                                    {/*}*/}
+                                    {/*/>*/}
+                                </View>
                             </View>
                         </View>
-                    <View style={styles.productsSection}>
-                    <View style={styles.products}>
-                        {/*<FlatList*/}
-                            {/*numColumns={2}*/}
-                            {/*ListHeaderComponent={this._renderHeader}*/}
-                            {/*data={this.state.products}*/}
-                            {/*keyExtractor={(item,index)=>index.toString()}*/}
-                            {/*renderItem={({item,index})=>*/}
-                                {/*this._renderWindowItem(item,index)*/}
-                            {/*}*/}
-                        {/*/>*/}
-                    </View>
-                    </View>
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                    }
+                    {this.masterProduct.length > 0 &&
+
+                    <View style={styles.masterProduct}>
+                        <FlatList
+                        data={this.masterProduct}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({item, index}) =>
+                        this._renderItem(item, index)
+                        }
+                        refreshControl={
+                        <RefreshControl
+                        onRefresh={this._pullRefresh}
+                        refreshing={this.state.refreshing}
+                        title="Pull to refresh"
+                        tintColor="#ccc"
+                        titleColor="#ddd"
+                        />
+                    }
+                        ListEmptyComponent={()=>
+                    {
+
+                        if(this.showSpinner){
+                        return(<Spinner/>);
+                    }
+                        else{
+                        return(<View>  </View>)
+                    }
+
+                    }}
+                        onEndReached={()=>{
+                        console.log("onEndReached")
+                        this._getMasterProduct();
+                    }}
+                        onEndReachedThreshold={0.1}
+                        />
+                        </View>
+                    }
+                </View>
 
             </View>
         );
     }
-    _renderHeader() {
+    _pullRefresh=async()=>{
+        this.setState({
+            refreshing:true
+        });
+        await this._getMasterProduct();
+        this.setState({
+            refreshing:false
+        });
+    }
+    _renderHeader=()=> {
         return (
             <View style={styles.windowContainer}>
                 <View style={styles.windowHeaderSection}>
@@ -147,7 +235,6 @@ class User extends Component{
         return(<View key={index} style={styles.comments}>
             <View style={styles.rateContainer}>
             <Stars
-                isActive={true}
                 rateMax={5}
                 isActive={false}
                 isHalfStarEnabled={true}
@@ -166,6 +253,11 @@ class User extends Component{
 
     _renderCats=()=> {
 
+    }
+
+    _renderMasterProduct=(item, index)=> {
+            item['id']=index;
+            return( <Product prod={item}/>);
     }
 }
 const mapStateToProps=state=>{

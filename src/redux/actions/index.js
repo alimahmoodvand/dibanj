@@ -1,5 +1,6 @@
 import {
     ADD_BASKET, ADD_BOOKMARK, ADD_CLOUD, ADD_PRODUCTS, COURSE_ABS, DEC_PAGE, EMPTY_BASKET, EMPTY_FAVORITES, INC_PAGE,
+    INIT_BOOKMARK,
     REMOVE_BASKET,
     REMOVE_BOOKMARK,
     REMOVE_CLOUD,
@@ -30,6 +31,10 @@ export const decPage=()=>({
 export const addBookmark=(product)=>({
     type:ADD_BOOKMARK,
     product
+})
+export const initBookmark=(products)=>({
+    type:INIT_BOOKMARK,
+    products
 })
 export const removeBookmark=(product)=>({
     type:REMOVE_BOOKMARK,

@@ -249,7 +249,7 @@ class Profile extends Component {
                 }
             }
             else {
-                alert('لطفا همه موارد را پر کنید')
+                alert('کد پستی را 10 رقمی وارد کنید')
             }
         }else{
             alert('لطفا همه موارد را پر کنید')

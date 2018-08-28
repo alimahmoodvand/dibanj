@@ -16,18 +16,8 @@ class Bookmark extends Component{
     _renderItem = (item, index) => {
         item['id'] = index;
         return (
-            <View>
-            <MIcon name="delete-forever" onPress={()=>{
-                let data={
-                    token:this.props.user.token,
-                    UserId:this.props.user.userId,
-                    ProductAndCourseId:item.ProductAndCourseId,
-                };
-                data.type="delete";
-                this.props.removeBookmark(item)
-                Http._postAsyncData(data,'bookmark')
-            }} color="red" size={25}/>
-            <Product prod={item}/>
+            <View >
+            <Product bookmark={true} prod={item}/>
             </View>
     );
     };

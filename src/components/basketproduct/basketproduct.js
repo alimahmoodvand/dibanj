@@ -55,11 +55,22 @@ class BasketProduct extends Component{
         prod.Description=(prod.Description&&((prod.Description).length > maxlimit) ?
             (((prod.Description).substring(0,maxlimit-3)) + '...') :
             prod.Description );
+        let overlay=<Image style={styles.image} source={{uri: prod.thumbnailUrl}}/>;
+
+        if(prod.subType==2&&prod.remainCount==0){
+            overlay=<Image style={styles.imageLabel} source={require('../../assets/images/finish.png')}/>;
+        }else if(prod.PriceAfterDiscount==0){
+            overlay=<Image style={styles.imageLabel} source={require('../../assets/images/free.png')}/>;
+        }
+        else if(prod.isSpecial==1){
+            overlay=<Image style={styles.imageLabel} source={require('../../assets/images/special.png')}/>;
+        }
         return(
             <View style={styles.main}>
 
                 <View style={styles.content}>
                     <ImageBackground style={styles.image} source={{uri: prod.thumbnailUrl}}>
+                        {overlay}
                     </ImageBackground>
                     <View style={styles.details}>
                         <Text style={styles.detalsText}>{prod.Title}</Text>

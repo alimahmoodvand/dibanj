@@ -4,6 +4,8 @@ export const COURSE_ABS='COURSE_ABS';
 export const GET_STORE='GET_STORE';
 export const ADD_BOOKMARK='ADD_BOOKMARK';
 export const REMOVE_BOOKMARK='REMOVE_BOOKMARK';
+export const INIT_BOOKMARK='INIT_BOOKMARK';
+
 export const ADD_CLOUD='ADD_CLOUD';
 export const REMOVE_CLOUD='REMOVE_CLOUD';
 export const EMPTY_FAVORITES='REMOVE_CLOUD';

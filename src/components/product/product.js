@@ -7,10 +7,11 @@ import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {connect} from "react-redux";
-import {addBasket, saveProducts} from "../../redux/actions";
+import {addBasket, removeBookmark, saveProducts} from "../../redux/actions";
 
 import HTML from 'react-native-render-html';
 import Modal from "react-native-modal";
+import Http from "../../services/http";
 
 
 class Product extends Component{
@@ -63,7 +64,7 @@ class Product extends Component{
         return false;
     }
     render(){
-        const {prod}=this.props
+        const {prod,bookmark}=this.props
         let maxlimit=50;
         let regex = /(<([^>]+)>)/ig
         if(prod.Description){
@@ -77,16 +78,37 @@ class Product extends Component{
             duration=true;
         }
         let overlay=<Image style={styles.image} source={{uri: prod.thumbnailUrl}}/>;
+
         if(prod.subType==2&&prod.remainCount==0){
-             overlay=<Image style={styles.image} source={require('../../assets/images/finish.png')}/>;
+             overlay=<Image style={styles.imageLabel} source={require('../../assets/images/finish.png')}/>;
+        }else if(prod.PriceAfterDiscount==0){
+            overlay=<Image style={styles.imageLabel} source={require('../../assets/images/free.png')}/>;
         }
         else if(prod.isSpecial==1){
              overlay=<Image style={styles.image} source={require('../../assets/images/special.png')}/>;
-        }else if(prod.PriceAfterDiscount==0){
-             overlay=<Image style={styles.image} source={require('../../assets/images/free.png')}/>;
         }
         return(
             <View style={styles.main}>
+                {bookmark &&
+                <MIcon style={{
+                    // backgroundColor:'yellow',
+                    position: 'absolute',
+                    top: 0,
+                    left: '13%',
+                    zIndex: 101,
+                    // width:'100%',
+
+                }} name="delete-forever" onPress={() => {
+                    let data = {
+                        token: this.props.user.token,
+                        UserId: this.props.user.userId,
+                        ProductAndCourseId: item.ProductAndCourseId,
+                    };
+                    data.type = "delete";
+                    this.props.removeBookmark(item)
+                    Http._postAsyncData(data, 'bookmark')
+                }} color="red" size={25}/>
+                }
                 <Button style={styles.buy} title={prod.id} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
                     <Text style={styles.proBtnText}>جزئیات</Text>
                 </Button>
@@ -99,12 +121,16 @@ class Product extends Component{
                         <TouchableOpacity onPress={()=>Actions.user({userId:prod.MasterId})}>
                             <Text style={styles.detalsText} >{prod.fullName}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
                         {duration&&
+                        <TouchableOpacity onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
                         <Text style={styles.detalsText}>{'مدت دوره:'+prod.Duration}</Text>
+                        </TouchableOpacity>
                         }
+                        <TouchableOpacity onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
                         <Text style={[styles.detalsText]}>{(prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'')}</Text>
-                        {this._getPrices(prod)}
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                            {this._getPrices(prod)}
                         </TouchableOpacity>
                     </View>
 
@@ -150,7 +176,9 @@ const mapDispatchToProps=(dispatch)=> {
         addBasket:(product)=>{
             dispatch(addBasket(product));
         },
-
+        removeBookmark:(product)=>{
+            dispatch(removeBookmark(product));
+        },
     }
 }
 const mapStateToProps=state=>{

@@ -14,7 +14,7 @@ export default styles = ExStyleSheet.create({
     },
     content:{
         flex:1,
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         marginRight:15,
         marginTop:15,
         marginLeft:15,
@@ -29,6 +29,7 @@ export default styles = ExStyleSheet.create({
         marginRight:10,
         borderBottomWidth:2,
         borderBottomColor:'black',
+
     },
     searchIcon: {
         flex: 0.1,
@@ -36,7 +37,7 @@ export default styles = ExStyleSheet.create({
         alignItems:'center',
     },
     input: {
-        flex: 0.6,
+        flex: 0.7,
         paddingTop: 10,
         paddingRight: 10,
         paddingBottom: 10,
@@ -47,7 +48,7 @@ export default styles = ExStyleSheet.create({
         color: '#424242',
     },
     filterSection:{
-        marginTop:15,
+        marginTop:5,
 
     },
     filterHeader:{
@@ -59,27 +60,47 @@ export default styles = ExStyleSheet.create({
     filterOptions:{
         // paddingRight: 10,
         // paddingBottom: 10,
-        margin:10,
+        flexWrap:'wrap',
+        marginBottom:10,
     },
     filterOption:{
-        paddingTop:10,
-        paddingBottom:10,
+        // paddingTop:10,
+        // paddingBottom:10,
+        // flexWrap:'wrap',
+        // borderColor:'black',
+        // borderWidth:5,
+        // flexDirection:'row',
+        // paddingRight:0,
+        // paddingLeft:0,
+        // width:'20%',
+        // fontSize:10,
+        // flex:1,
+        // backgroundColor:'red'
     },
     serachBtnSection:{
-        flex:0.3,
+        flex:0.2,
         // flexDirection:'row',
-        // alignItems:'center',
-        // justifyContent:'center'
+        alignItems:'center',
+        justifyContent:'center'
     },
     btnSearch:{
+
         backgroundColor:'rgb(255, 200, 0)',
         // paddingLeft:30,
         // paddingRight:30,
-        marginBottom:5,
-        marginTop:5,
+        // marginBottom:5,
+        // flex:0,
+        // marginTop:5,
+        alignItems:'center',
+        justifyContent:'center',
+        paddingRight:10,
+        paddingLeft:10,
+        paddingBottom:5,
+        paddingTop:5,
     },
     btnSearchText:{
-        color:'white'
+        color:'white',
+        fontSize:14,
     },
     accordianContent:{
         // flexDirection:'row',
@@ -179,6 +200,13 @@ export default styles = ExStyleSheet.create({
         fontSize:18,
 
     },
+    categoryToggle: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: 'white',
+        padding: 10,
+        margin: 5,
+    },
     modal: {
 
         justifyContent: "flex-end",
@@ -201,5 +229,10 @@ export default styles = ExStyleSheet.create({
         alignItems:'center',
         flexDirection:'row',
         justifyContent:'center',
+    },
+    products:{
+        flex:1,
+        width:'100%',
+        backgroundColor:'rgba(0,0,0,0)'
     }
 });

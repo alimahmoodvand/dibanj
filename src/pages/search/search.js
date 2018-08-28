@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container, Spinner} from "native-base";
-import {FlatList, Image, Picker, RefreshControl, ScrollView, Text, TextInput, View} from "react-native";
+import {
+    FlatList, Image, Picker, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity,
+    View
+} from "react-native";
 import styles from './search.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -77,9 +80,10 @@ class Search extends Component{
 
                 <HeaderLayout back={true}/>
                 <View style={styles.content}>
+                    <View style={{backgroundColor:'white'}}>
                     <View style={styles.searchSection}>
                         <View style={styles.serachBtnSection}>
-                            <Button  block  style={styles.btnSearch} title={0} onPress={()=>{
+                            <Button key={0} small   style={styles.btnSearch} title={0} onPress={()=>{
                                 this.products=[];
                                 this.setState({page:1},()=>{
                                     this._searchProduct()
@@ -119,8 +123,9 @@ class Search extends Component{
                    </View>
                     <View style={styles.categorySection}>
                         {/*<View style={styles.categoryBtnContainer}>*/}
-                            <Button style={styles.categoryBtn} title={0} onPress={()=>this._toggleModal()}>
-                            <Text  style={styles.serachOptionText} >نمایش دسته ها</Text>
+                            <Button style={styles.categoryToggle} small title={0} onPress={()=>this._toggleModal()}>
+                                <MIcon  name="arrow-drop-down" size={20} color="black"/>
+                            <Text >نمایش دسته ها</Text>
                         </Button>
                         {/*</View>*/}
 
@@ -149,14 +154,15 @@ class Search extends Component{
                         />
                     </ScrollView>
                     </Modal>
-
                     <View style={styles.serachOptions}>
                         {this._renderCatButton()}
 
                     </View>
-                    {
+                    </View>
+                <View style={styles.products}>
+
+                {
                         this.state.page>0&&
-                        <View style={styles.products}>
                             <FlatList
                                 data={this.products}
                                 keyExtractor={(item, index) => index.toString()}
@@ -178,8 +184,9 @@ class Search extends Component{
                                 removeClippedSubviews={true}
                                 onEndReachedThreshold = {0.1}
                             />
-                        </View>
                     }
+                    </View>
+
                 </View>
             </View>
         );

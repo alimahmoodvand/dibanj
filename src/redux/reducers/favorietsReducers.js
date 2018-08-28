@@ -1,4 +1,4 @@
-import {ADD_BOOKMARK, ADD_CLOUD, EMPTY_FAVORITES, REMOVE_BOOKMARK, REMOVE_CLOUD} from "../actions/types";
+import {ADD_BOOKMARK, ADD_CLOUD, EMPTY_FAVORITES, INIT_BOOKMARK, REMOVE_BOOKMARK, REMOVE_CLOUD} from "../actions/types";
 
 const initState={
     bookmarks:[],
@@ -15,6 +15,11 @@ export default favoriets=(state=initState, action={})=>{
             return {
                 ...state,
                 bookmarks: state.bookmarks.filter(item => item !== action.product)
+            };
+        case INIT_BOOKMARK:
+            return {
+                ...state,
+                bookmarks: action.products
             };
         case ADD_CLOUD:
             return {

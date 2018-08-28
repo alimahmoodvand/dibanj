@@ -12,10 +12,11 @@ import {EMPTY_FAVORITES} from "../../redux/actions/types";
 import {DocumentPicker, DocumentPickerUtil} from "react-native-document-picker";
 import Http from "../../services/http";
 
+
 class DrawerLayout extends Component{
     render(){
         return <Container style={{backgroundColor: 'gray'}}>
-            <View>
+            <View style={{flexDirection:'row'}}>
                 <TouchableOpacity style={[styles.proImageContainer, {backgroundColor: 'gray'}]} onPress={() => {
                     // Actions.user({userId:1017})
                     DocumentPicker.show({
@@ -43,21 +44,26 @@ class DrawerLayout extends Component{
                     });
 
                 }}>
-                    <ImageBackground source={{uri: this.props.user.imageUrl}} resizeMode='contain'
-                                     imageStyle={styles.proImage}
-                                     style={[styles.proImageBG, {backgroundColor: 'gray'}]}>
-                        <Text style={styles.proImageText}>{this.props.user.fullName}</Text>
-                        <Text style={styles.proImageText}>{this.props.user.userName}</Text>
-                    </ImageBackground>
+                    {/*<ImageBackground source={{uri: this.props.user.imageUrl}} resizeMode='contain'*/}
+                                     {/*imageStyle={styles.proImage}*/}
+                                     {/*style={[styles.proImageBG, {backgroundColor: 'gray'}]}>*/}
+                        {/*<Text style={styles.proImageText}>{this.props.user.fullName}</Text>*/}
+                        {/*<Text style={styles.proImageText}>{this.props.user.userName}</Text>*/}
+                    {/*</ImageBackground>*/}
+                    <View style={styles.userInfo}>
+                        <View style={styles.userImageContainer}>
+                             <Image style={styles.userImage} source={{uri: this.props.user.imageUrl}}/>
+                        </View>
+                        <View style={styles.userInfoContainer}>
+                            <Text style={styles.userInfoText}>{this.props.user.fullName}</Text>
+                            {/*<Text style={styles.userInfoText}>{this.props.user.ostan}</Text>*/}
+                        </View>
+                    </View>
                 </TouchableOpacity>
             </View>
             <Button block style={styles.drawerBtn} onPress={() => Actions.profile()}>
                 <Text style={styles.proImageText}>اطلاعات کاربری</Text>
             </Button>
-
-            {/*<Button block style={styles.drawerBtn} onPress={()=>Actions.user()}>*/}
-            {/*<Text style={styles.proImageText}>پنل کاربری</Text>*/}
-            {/*</Button>*/}
             <Button block style={styles.drawerBtn} onPress={() => {
                 Actions.bookmark()
             }}>
@@ -103,8 +109,9 @@ class DrawerLayout extends Component{
 
 const styles = EStyleSheet.create({
     proImageContainer:{
-        width:300,
-        height:100,
+        flex:1,
+        // width:300,
+        // height:100,
         // flexDirection:'row',
     },
     proImageBG:{
@@ -128,7 +135,32 @@ const styles = EStyleSheet.create({
     proImageText:{
         color:'white',
         fontSize:17,
-    }
+    },
+    userInfo:{
+        flexDirection:'row-reverse',
+        justifyContent:'flex-start',
+        alignItems:'center',
+        // flex:1,
+        // marginBottom:20,
+    },
+    userImageContainer:{
+        // flex:0.4,
+    },
+    userImage:{
+        width:'$productBntRaduis',
+        height:'$productBntRaduis',
+        borderRadius:'$productBntRaduis',
+    },
+    userInfoContainer:{
+        // paddingRight:20,
+        // flex:0.6,
+
+    },
+    userInfoText:{
+        color:'white',
+        textAlign:'right',
+        fontSize:15,
+    },
 })
 
 

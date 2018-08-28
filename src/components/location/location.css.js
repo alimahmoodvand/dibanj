@@ -11,7 +11,8 @@ export default styles = EStyleSheet.create({
         paddingBottom:5,
     },
     textContainer:{
-        flex:.9,
+        // flex:.9,
+        width:'100%',
         // backgroundColor:'blue',
         // flexDirection:'row',
         justifyContent:'flex-end',
@@ -29,6 +30,7 @@ export default styles = EStyleSheet.create({
         alignItems:'center',
         flexWrap:'wrap',
         padding:5,
+
     },
     inputContainer:{
         // flex:.7,
@@ -71,6 +73,7 @@ export default styles = EStyleSheet.create({
     },
     modalButton: {
         margin: 10,
+
         // backgroundColor:'blue',
         flexDirection: 'row-reverse',
         justifyContent: 'space-around',
@@ -94,6 +97,7 @@ export default styles = EStyleSheet.create({
         borderColor:'white',
         borderWidth:1,
         flex:.45,
+        marginBottom:20,
         justifyContent:'center',
         alignItems:'center',
     },
@@ -110,7 +114,7 @@ export default styles = EStyleSheet.create({
 
     },
     offSectionText:{
-        flex:.5,
+        flex:0.9,
         marginRight:10,
         alignItems:'flex-end',
         justifyContent:'center',
@@ -118,7 +122,7 @@ export default styles = EStyleSheet.create({
     offText:{
     },
     offSwitch:{
-        flex:.5,
+        flex:0.1,
         alignItems:'flex-start',
         justifyContent:'center',
     },

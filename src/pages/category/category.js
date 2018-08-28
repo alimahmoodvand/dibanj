@@ -136,11 +136,11 @@ class Category extends Component{
             let response = await Http._postAsyncData(data, 'category');
             if (Array.isArray(response)) {
                 this.products = this.products.concat(response);
-                this.setState({page: this.state.page + 1});
+                this.setState({page: this.state.page + 1,selectCatIndex:false});
             }
             if (this.products.length == 0) {
                 alert('محصولی یافت نشد')
-                this.setState({page: 0})
+                this.setState({page: 0,selectCatIndex:false})
             }
         }
     }

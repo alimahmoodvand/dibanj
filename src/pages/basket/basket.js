@@ -53,7 +53,7 @@ class Basket extends Component{
                     </View>
                     {(this.props.basket.basket.length > 0 )&&
                     <View style={styles.paymentSection}>
-                        <Location/>
+                        <Location setAddress={this._setAddress}/>
                       {this.prices.price > 0 &&
                         <View style={styles.offSection}>
                             <View style={styles.offSwitch}>
@@ -103,10 +103,14 @@ class Basket extends Component{
             </View>
         );
     }
+    _setAddress=(add)=>{
+        this.address=add;
+    }
     _sumBasketPrices=()=> {
         let price=0
         this.props.basket.basket.map((item,index)=>{
             price+=item.PriceAfterDiscount;
+
         })
         if(this.state.offPercent!==0&&this.state.offcode){
            this.prices.price= price;
@@ -130,20 +134,24 @@ class Basket extends Component{
     }
 
     buyBasket=async()=> {
-        let data={
-            token:this.props.user.token,
-            UserId:this.props.user.userId,
-            products:this.props.basket.basket,
-            discountCode:this.state.offcode?this.state.discountCode:0,
-            discountId:this.state.offcode?this.state.discountId:0,
-        }
-        let response=await Http._postAsyncData(data,'order');
-        if(response.message&&response.message.indexOf('successful')!=-1){
-            this.props.emptyBasket()
-            alert("خرید با موفقیت انجام شد")
-            Actions.reset();
-        }else{
-            alert("خطا دوباره تلاش کنید")
+        if(this.address) {
+            let data = {
+                token: this.props.user.token,
+                UserId: this.props.user.userId,
+                products: this.props.basket.basket,
+                discountCode: this.state.offcode ? this.state.discountCode : 0,
+                discountId: this.state.offcode ? this.state.discountId : 0,
+            }
+            let response = await Http._postAsyncData(data, 'order');
+            if (response.message && response.message.indexOf('successful') != -1) {
+                this.props.emptyBasket()
+                alert("خرید با موفقیت انجام شد")
+                Actions.reset();
+            } else {
+                alert("خطا دوباره تلاش کنید")
+            }
+        } else {
+            alert("لطفا یک آدرس انتخاب کنید")
         }
         // console.log(response,data)
     }
