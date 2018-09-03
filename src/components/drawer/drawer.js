@@ -11,38 +11,68 @@ import {Image, ImageBackground, TouchableOpacity, View} from "react-native";
 import {EMPTY_FAVORITES} from "../../redux/actions/types";
 import {DocumentPicker, DocumentPickerUtil} from "react-native-document-picker";
 import Http from "../../services/http";
-
+import ImagePicker from 'react-native-image-crop-picker';
 
 class DrawerLayout extends Component{
+    state={
+        updateUI:0
+    }
     render(){
+        // console.log("mmmmm",this.props.user)
         return <Container style={{backgroundColor: 'gray'}}>
             <View style={{flexDirection:'row'}}>
                 <TouchableOpacity style={[styles.proImageContainer, {backgroundColor: 'gray'}]} onPress={() => {
                     // Actions.user({userId:1017})
-                    DocumentPicker.show({
-                        filetype: [DocumentPickerUtil.images()],
-                    }, (error, res) => {
-                        // Android
-                        // console.log(res);
-                        if (res) {
-                            Http._postFilePromise({
-                                token: this.props.user.token,
-                                userId: this.props.user.userId
-                            }, [res], 'userImage')
-                                .then((response) => response.json()).then(response => {
-                                console.log(response)
-                                let user = this.props.user;
-                                user.imageUrl = response.image;
-                                user.image = response.image;
-                                this.props.saveUser(user);
-                                this.setState({updateUI: this.state.updateUI++});
-                            }).catch(err => {
-                                console.log(err)
-                            })
-                        }
+                    // DocumentPicker.show({
+                    //     filetype: [DocumentPickerUtil.images()],
+                    // }, (error, res) => {
+                    //     // Android
+                    //     // console.log(res);
+                    //     if (res) {
+                    //         Http._postFilePromise({
+                    //             token: this.props.user.token,
+                    //             userId: this.props.user.userId
+                    //         }, [res], 'userImage')
+                    //             .then((response) => response.json()).then(response => {
+                    //             console.log(response)
+                    //             let user = this.props.user;
+                    //             user.imageUrl = response.image;
+                    //             user.image = response.image;
+                    //             this.props.saveUser(user);
+                    //             this.setState({updateUI: this.state.updateUI++});
+                    //         }).catch(err => {
+                    //             console.log(err)
+                    //         })
+                    //     }
+                    //
+                    // });
+                    ImagePicker.openPicker({
+                        width: 300,
+                        height: 300,
+                        cropping: true
+                    }).then(image => {
+                        let path=image.path.split('/');
+                        image.type=image.mime;
+                        image.uri=image.path;
+                        image.fileName=path[path.length-1];
+                                Http._postFilePromise({
+                                    token: this.props.user.token,
+                                    userId: this.props.user.userId
+                                }, [image], 'userImage')
+                                    .then((response) => response.json()).then(response => {
+                                    console.log(response)
+                                    let user = this.props.user;
+                                    user.imageUrl = response.image;
+                                    user.image = response.image;
+                                    this.props.saveUser(user);
+                                    this.setState({updateUI: this.state.updateUI++});
+                                }).catch(err => {
+                                    // alert('error')
+                                    // console.log(err)
+                                })
 
+                        // console.log(image);
                     });
-
                 }}>
                     {/*<ImageBackground source={{uri: this.props.user.imageUrl}} resizeMode='contain'*/}
                                      {/*imageStyle={styles.proImage}*/}
@@ -145,6 +175,7 @@ const styles = EStyleSheet.create({
     },
     userImageContainer:{
         // flex:0.4,
+        marginLeft:5,
     },
     userImage:{
         width:'$productBntRaduis',

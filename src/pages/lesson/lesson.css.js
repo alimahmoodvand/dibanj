@@ -13,7 +13,7 @@ export default styles = EStyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0)'
     },
     content: {
-        flex: 1,
+        flex: 0.60,
         backgroundColor: '#fff',
         marginRight: 15,
         marginTop: 15,
@@ -29,15 +29,37 @@ export default styles = EStyleSheet.create({
     contentRender:{
         flex:0.9,
         // backgroundColor:'red',
-        height:500
+        minHeight:500,
+        // borderWidth:4,
+        // borderColor:'black',
+        // borderStyle:'solid',
+        // borderRadius:5,
+        // backgroundColor:'red',
     },
     closeIcon:{
         flex:0.1,
-        width:'100%',
-        // alignItems: 'center',
-        // justifyContent: 'center',
+        // width:'100%',
+        flexDirection:'row',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
         // backgroundColor:'blue'
 
+    },logo:{
+        flex:0.7,
+        height:35,
+        // marginTop:12,
+    },
+    logoContainer:{
+        alignItems:'center',
+        // justifyContent:'',
+        flexDirection:'row',
+        // marginTop:12,
+        marginBottom:12,
+    },
+    logoCenter:{
+        flex:0.9,
+        alignItems:'center',
+        justifyContent:'center',
+        flexDirection:'row',
     }
-
 });

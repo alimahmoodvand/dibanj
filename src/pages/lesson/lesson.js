@@ -4,7 +4,7 @@ import {Button, Container, Spinner} from "native-base";
 import {FlatList, Image, Picker, ScrollView, Text, TextInput, View} from "react-native";
 import styles from './lesson.css'
 import {connect} from "react-redux";
-import HTML from 'react-native-render-html';
+//import HTML from 'react-native-render-html';
 import http from "../../services/http";
 import {Actions} from "react-native-router-flux";
 import MIcon from 'react-native-vector-icons/MaterialIcons';
@@ -15,16 +15,22 @@ class Lesson extends Component{
         console.log(res)
     }
     render() {
-        let uri=http.baseurl+"videoRenderer/"+this.props.ProductAndCourseId+"/"+this.props.isSample
-        console.log(uri);
+        let uri=http.baseurl+"videoRenderer/"+this.props.ProductAndCourseId+"/"+this.props.isSample;
+        // console.log(uri);
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
-                <HeaderLayout back={true}/>
+                <HeaderLayout back={false}/>
                 <View style={styles.content}>
-                    <View style={styles.closeIcon}>
-                        <MIcon name="close" onPress={() => Actions.pop()} color="black" size={25}/>
+                    <View style={styles.logoContainer}>
+                        <View style={styles.closeIcon}>
+                            <MIcon name="close"  onPress={() => Actions.pop()} color="#ffa700" size={25}/>
+                        </View>
+                        <View style={styles.logoCenter}>
+                            <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
+                        </View>
                     </View>
+
                     <ScrollView>
                         <WebView
                             source={{uri: uri}}

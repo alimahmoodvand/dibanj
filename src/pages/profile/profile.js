@@ -17,6 +17,7 @@ import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {connect} from "react-redux";
 import {addBasket, saveUser} from "../../redux/actions";
 import Http from "../../services/http";
+import ImagePicker from "react-native-image-crop-picker";
 class Profile extends Component {
     componentWillMount(){
         this.uri=this.props.user.image;
@@ -64,28 +65,55 @@ class Profile extends Component {
                             </Image>
                             <View style={styles.profileTakePic}>
                                 <MIcon name="photo-camera" onPress={() => {
-                                    DocumentPicker.show({
-                                        filetype: [DocumentPickerUtil.images()],
-                                    },(error,res) => {
-                                        // Android
-                                        // console.log(res);
-                                        if(res) {
-                                            Http._postFilePromise({
-                                                token: this.props.user.token,
-                                                userId: this.props.user.userId
-                                            }, [res], 'userImage')
-                                                .then((response) => response.json()).then(response => {
-                                                // console.log(response)
-                                                let user = this.props.user;
-                                                user.imageUrl = response.image;
-                                                user.image = response.image;
-                                                this.props.saveUser(user);
-                                                this.setState({updateUI: this.state.updateUI++});
-                                            }).catch(err => {
-                                                console.log(err)
-                                            })
-                                        }
+                                    // DocumentPicker.show({
+                                    //     filetype: [DocumentPickerUtil.images()],
+                                    // },(error,res) => {
+                                    //     // Android
+                                    //     // console.log(res);
+                                    //     if(res) {
+                                    //         Http._postFilePromise({
+                                    //             token: this.props.user.token,
+                                    //             userId: this.props.user.userId
+                                    //         }, [res], 'userImage')
+                                    //             .then((response) => response.json()).then(response => {
+                                    //             // console.log(response)
+                                    //             let user = this.props.user;
+                                    //             user.imageUrl = response.image;
+                                    //             user.image = response.image;
+                                    //             this.props.saveUser(user);
+                                    //             this.setState({updateUI: this.state.updateUI++});
+                                    //         }).catch(err => {
+                                    //             console.log(err)
+                                    //         })
+                                    //     }
+                                    //
+                                    // });
+                                    ImagePicker.openPicker({
+                                        width: 300,
+                                        height: 300,
+                                        cropping: true
+                                    }).then(image => {
+                                        let path=image.path.split('/');
+                                        image.type=image.mime;
+                                        image.uri=image.path;
+                                        image.fileName=path[path.length-1];
+                                        Http._postFilePromise({
+                                            token: this.props.user.token,
+                                            userId: this.props.user.userId
+                                        }, [image], 'userImage')
+                                            .then((response) => response.json()).then(response => {
+                                            console.log(response)
+                                            let user = this.props.user;
+                                            user.imageUrl = response.image;
+                                            user.image = response.image;
+                                            this.props.saveUser(user);
+                                            this.setState({updateUI: this.state.updateUI++});
+                                        }).catch(err => {
+                                            // alert('error')
+                                            // console.log(err)
+                                        })
 
+                                        // console.log(image);
                                     });
                                 }} color="red" size={25}/>
                             </View>

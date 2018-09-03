@@ -23,19 +23,21 @@ import styles from "./singup.css";
      };
     render(){
         // console.log(this.props)
-        this.singup.mobile=this.props.user.mobile;
-        this.singup.userId=this.props.user.userId;
+        this.singup.mobile=this.props.mobile;
+        this.singup.userId=this.props.userId;
         return(
             <View style={styles.main}>
 
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
                 <View style={styles.container}>
-                    <View style={styles.logoContainer}>
-                        <Image source={require("../../assets/images/dibanzh.png")} style={styles.logo}/>
-                    </View>
+
                     <ScrollView>
+
                     <Form style={styles.signupForm}>
+                        <View style={styles.logoContainer}>
+                        <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
+                    </View>
                         <Label style={styles.labelText}> لطفا برای خود نام کاربری و رمز عبور انتخاب کنید. </Label>
 
                         {/*<Item fixedLabel>*/}
@@ -48,16 +50,16 @@ import styles from "./singup.css";
                             <Label style={styles.labelText}>نام کاربری</Label>
                         </Item>
 
-                        {/*<Item fixedLabel>*/}
-                            {/*<Input onChangeText={ (text) => this.singup.email = text }  />*/}
-                            {/*<Label style={styles.labelText}>ایمیل</Label>*/}
-                        {/*</Item>*/}
                         <Item fixedLabel>
-                            <Input style={styles.inputText} onChangeText={ (text) => this.singup.password = text }  />
+                            <Input style={styles.inputText} keyboardType="email-address"  onChangeText={ (text) => this.singup.email = text }  />
+                            <Label style={styles.labelText}>ایمیل</Label>
+                        </Item>
+                        <Item fixedLabel>
+                            <Input style={styles.inputText} secureTextEntry={true} onChangeText={ (text) => this.singup.password = text }  />
                                                 <Label style={styles.labelText}>رمزکاربری</Label>
                         </Item>
                         <Item fixedLabel>
-                            <Input style={styles.inputText} onChangeText={ (text) => this.singup.passwordRepeat = text }  />
+                            <Input style={styles.inputText} secureTextEntry={true} onChangeText={ (text) => this.singup.passwordRepeat = text }  />
                                                 <Label style={styles.labelText}>تکرار رمز </Label>
                         </Item>
 
@@ -83,7 +85,7 @@ import styles from "./singup.css";
                             {/*<Label style={styles.labelText}>آدرس</Label>*/}
                         {/*</Item>*/}
                         <Button full style={styles.loginBtn} onPress={this._loginCheck}>
-                            <Text>ثبت نام</Text>
+                            <Text style={styles.btnText}>ثبت نام</Text>
                         </Button>
                     </Form>
                     {/*<Button bordered style={styles.loginBtn} onPress={()=>Actions.loginpage()}>*/}

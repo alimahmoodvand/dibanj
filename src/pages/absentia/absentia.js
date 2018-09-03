@@ -73,7 +73,7 @@ class Absentia extends Component {
                 },
             ],
             cat:this.props.categories.filter((item)=>{
-                if(item.parentId){
+                if(!item.parentId){
                     return item;
                 }
             }),
@@ -184,7 +184,7 @@ class Absentia extends Component {
                                   return(<Spinner/>);
                                 }
                                 else{
-                                    return(<View>  </View>)
+                                    return(<Text>  </Text>)
                                 }
 
                             }}
@@ -253,9 +253,11 @@ class Absentia extends Component {
         item.token=this.props.user.token;
         item.type=1;
         item.subType=2;
-        console.log(item,url)
+        this.showSpinner=true;
+        this.setState({updateUI:this.state.updateUI+1,selected:item,ddlist:false});
+        // console.log(item,url)
         let response = await Http._postAsyncData(item,url);
-        // console.log(response)
+        console.log(this.products.length)
         if(Array.isArray(response)){
             this.products=this.products.concat(response);
             if(this.products.length==0){
@@ -266,7 +268,7 @@ class Absentia extends Component {
             }
             if(response.length>0)
             this.page+=1;
-
+            console.log(this.products.length)
             this.setState({updateUI:this.state.updateUI+1,selected:item,ddlist:false});
         }
     }

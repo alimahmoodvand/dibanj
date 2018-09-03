@@ -1,5 +1,8 @@
 
-
+plugins {
+    id 'com.onesignal.androidsdk.onesignal-gradle-plugin' version '0.8.1'
+}
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 
 apply plugin: "com.android.application"
 
@@ -97,18 +100,22 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
-
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.dibanj"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        vectorDrawables.useSupportLibrary = true
+        manifestPlaceholders = [onesignal_app_id               : "e94451ba-6763-4455-8a28-72dfa1796219",
+                                        // Project number pulled from dashboard, local value is ignored.
+                                        onesignal_google_project_number: "574977032761"]
+
     }
     splits {
         abi {
@@ -151,12 +158,14 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-crop-picker')
+    compile 'co.ronash.android:pushe-base:1.3.1'
     compile project(':react-native-android-fullscreen-webview-video')
     compile project(':react-native-android-sms-listener')
     compile project(':react-native-document-picker')
-    compile fileTree(dir: "libs", include: ["*.jar"])
-    compile "com.android.support:appcompat-v7:23.0.1"
-    compile "com.facebook.react:react-native:+"  // From node_modules
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.facebook.react:react-native:+'
+    // From node_modules
 }
 
 // Run this once to be able to run the application with BUCK

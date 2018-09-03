@@ -12,7 +12,7 @@ export default styles = EStyleSheet.create({
         overflow:'visible',
         flexDirection:'row-reverse',
         borderRadius:5,
-        height:200,
+        minHeight:200,
 
     },
     buy: {
@@ -60,8 +60,9 @@ export default styles = EStyleSheet.create({
          paddingRight: '$productBnt',
         paddingTop:5,
         flex:0.5,
-        alignItems:'flex-end',
-        justifyContent:'flex-start'
+
+        // alignItems:'flex-end',
+        // justifyContent:'flex-start'
     },
     prices:{
         paddingLeft:'$productBnt',

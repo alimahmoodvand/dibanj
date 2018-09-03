@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
-import {Button, Container, Form, Input, Item, Label, Text} from "native-base";
+import {Button, Container, Form, Input, Item, Label, Text,PermissionsAndroid } from "native-base";
 import {Image, StyleSheet, View} from "react-native";
 import {saveUser} from "../../redux/actions";
 import {connect} from "react-redux";
@@ -10,6 +10,7 @@ import styles from "./login.css";
 
  class Login extends Component{
       mobile=""
+
     render(){
         // console.log(this.props)
 
@@ -20,7 +21,7 @@ import styles from "./login.css";
 
                 <View style={styles.container}>
                     <View style={styles.logoContainer}>
-                        <Image source={require("../../assets/images/dibanzh.png")} style={styles.logo}/>
+                        <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
                     </View>
 
                     <Form>
@@ -31,12 +32,12 @@ import styles from "./login.css";
                             <Label style={styles.labelText}>شماره تلفن</Label>
                         </Item>
                         <Button  full style={styles.loginBtn} onPress={this._sendCode}>
-                            <Text>ادامه</Text>
+                            <Text style={styles.btnText}>ادامه</Text>
                         </Button>
                     </Form>
-                    <Button bordered style={[styles.loginBtn,{width:'50%',justifyContent:'center'}]} onPress={()=>Actions.signuppage()}>
-                        <Text style={styles.labelText} >ثبت نام</Text>
-                    </Button>
+                    {/*<Button bordered style={[styles.loginBtn,{width:'50%',justifyContent:'center'}]} onPress={()=>Actions.signuppage()}>*/}
+                        {/*<Text style={styles.btnText} >ثبت نام</Text>*/}
+                    {/*</Button>*/}
                 </View>
             </View>
         );

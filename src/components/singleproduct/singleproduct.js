@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container} from "native-base";
-import {Image, ImageBackground, Text, View} from "react-native";
+import {Image, ImageBackground, ScrollView, Text, View} from "react-native";
 import styles from './singleproduct.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -10,7 +10,7 @@ import {
     addBasket, addBookmark, addCloud, removeBasket, removeBookmark, removeCloud,
     saveProducts
 } from "../../redux/actions";
-import HTML from "react-native-render-html";
+//import HTML from "react-native-render-html";
 
 class SingleProduct extends Component{
     _getNotExistImage(prod){
@@ -65,16 +65,19 @@ class SingleProduct extends Component{
 
         let maxlimit=100;
         let regex = /(<([^>]+)>)/ig
-        if(prod.Description){
-            prod.Description=prod.Description.replace(regex,'').replace(/(\&.*\;)/gi, '').replace(/^\s*$(?:\r\n?|\n)/gm,'')
+        console.log(prod.Description)
+
+        if(prod.Description) {
+            prod.Description = prod.Description.replace(regex, '').replace(/(\&[a-zA-Z0-9]+\;)/gi, '').replace(/^\s*$(?:\r\n?|\n)/gm, '')
         }
+            console.log(prod.Description)
         // prod.Description=(prod.Description&&((prod.Description).length > maxlimit) ?
         //     (((prod.Description).substring(0,maxlimit-3)) + '...') :
         //     prod.Description );
         // console.log(prod)
         return(
             <View style={styles.main}>
-                {prod.canBuySeperatly!=0&&
+                {(prod.canBuySeperatly!=0&&prod.price!=0)&&
                     <Button style={styles.buy} title={prod.id} onPress={() => {
                         if (this._findBasket()) {
                             alert("قبلا به سبد اضافه شده است")
@@ -106,11 +109,20 @@ class SingleProduct extends Component{
                     </View>
                     {this._getPrices(prod)}
                 </View>
+                {prod.price == 0 &&
+                <Button style={styles.sample} title={prod.id} onPress={()=>{
+                    Actions.lesson({ProductAndCourseId:prod.ProductAndCourseId,isSample:0});
+                }}>
+                    <Text style={styles.proBtnText}>مشاهده</Text>
+                </Button>
+                }
+                {prod.price > 0 &&
                 <Button style={styles.sample} title={prod.id} onPress={()=>{
                     Actions.lesson({ProductAndCourseId:prod.ProductAndCourseId,isSample:1});
                 }}>
-                    <Text style={styles.proBtnText}>نمونه</Text>
+                <Text style={styles.proBtnText}>نمونه</Text>
                 </Button>
+                }
             </View>
         );
     }

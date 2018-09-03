@@ -23,8 +23,12 @@ export default styles = EStyleSheet.create({
         backgroundColor:'$mainColor'
     },
     logo:{
-        width:100,
+        flex:1,
         height:50,
+    },
+    btnText:{
+    fontSize:20,
+        color:'white'
     },
     logoContainer:{
         alignItems:'center',

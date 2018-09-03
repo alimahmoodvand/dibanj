@@ -19,6 +19,7 @@ export default styles = EStyleSheet.create({
     },
     signupForm:{
         margin:50,
+        // marginTop:0,
         marginBottom:0,
     },
     loginBtn:{
@@ -27,15 +28,19 @@ export default styles = EStyleSheet.create({
         backgroundColor:'$mainColor'
     },
     logo:{
-        width:100,
+        flex:1,
         height:50,
     },
     logoContainer:{
-        alignItems:'center',
+        alignItems:'flex-end',
         justifyContent:'center',
         flexDirection:'row'
     },
     inputText:{
     color:'$mainColor'
-    }
+    },
+    btnText:{
+        fontSize:20,
+        color:'white'
+    },
 })

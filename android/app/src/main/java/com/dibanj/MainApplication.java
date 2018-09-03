@@ -3,6 +3,7 @@ package com.dibanj;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.airship.customwebview.CustomWebViewPackage;
 import com.centaurwarchief.smslistener.SmsListenerPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
@@ -13,6 +14,8 @@ import com.facebook.soloader.SoLoader;
 
 import java.util.Arrays;
 import java.util.List;
+
+import co.ronash.pushe.Pushe;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -26,9 +29,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new PickerPackage(),
             new CustomWebViewPackage(),
             new SmsListenerPackage(),
-          new ReactNativeDocumentPicker()
+            new ReactNativeDocumentPicker()
       );
     }
 
@@ -46,6 +50,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    Pushe.initialize(this, true);
     SoLoader.init(this, /* native exopackage */ false);
   }
 }

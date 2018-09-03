@@ -74,6 +74,8 @@ class Search extends Component{
     products=[];
     showSpinner=true;
     render(){
+        // console.log(this.state.selectCatIndex, this.state.selectCatIndex!==false?this.state.selectCatIndex:-1)
+        const selectCatIndex=this.state.selectCatIndex;
         return(
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
@@ -141,17 +143,37 @@ class Search extends Component{
                         style={styles.modal}
                         isVisible={this.state.isModalVisible}>
                     <ScrollView style={styles.categories}>
+                        {/*{console.log(this.state.selectCatIndex!==false?this.state.selectCatIndex:-1)}*/}
+                        <View>
+                        {selectCatIndex === false &&
                         <Accordion
                             duration={500}
-                            sections={ (this.props.categories&&this.props.categories.length> 0)?(this.props.categories.filter((item,index)=>{
-                                if(!item.parentId){
+                            sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
+                                if (!item.parentId) {
                                     return item;
                                 }
-                            })):[]}
+                            })) : []}
+
                             onChange={this._change}
                             renderHeader={this._renderHeader}
                             renderContent={this._renderContent}
                         />
+                        }
+                        {selectCatIndex !== false &&
+                        <Accordion
+                            duration={500}
+                            sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
+                                if (!item.parentId) {
+                                    return item;
+                                }
+                            })) : []}
+                            initiallyActiveSection={selectCatIndex}
+                            onChange={this._change}
+                            renderHeader={this._renderHeader}
+                            renderContent={this._renderContent}
+                        />
+                        }
+                        </View>
                     </ScrollView>
                     </Modal>
                     <View style={styles.serachOptions}>
@@ -174,7 +196,7 @@ class Search extends Component{
                                         return(<Spinner/>);
                                     }
                                     else{
-                                        return(<View></View>)
+                                        return(<Text></Text>)
                                     }
 
                                 }}
@@ -269,7 +291,7 @@ class Search extends Component{
     }
     _renderContent=(section)=> {
         return (
-            <View  style={styles.accordianContent}>
+            <View  style={styles.accordianContent} >
                 {
 
                     this.props.categories.filter((item)=>{
@@ -283,8 +305,11 @@ class Search extends Component{
                          }
                         return(
                             <Button title={index} key={index} style={styles.subCatsBtn} onPress={()=>{
-                                this.setState({indexChanges:this.state.indexChanges++})
                                 this._catSelect(item)
+                                // setTimeout(()=>{
+                                    this.setState({indexChanges:this.state.indexChanges++})
+                                // },1000)
+
                             }}>
                                 <Text style={style}>{item.title}</Text>
                             </Button>

@@ -122,9 +122,7 @@ class Course extends Component{
                                 // Android only:
                                 dialogTitle: 'اشتراک گذاری',
                                 // iOS only:
-                                excludedActivityTypes: [
-                                    'com.apple.UIKit.activity.PostToTwitter'
-                                ]
+                                excludedActivityTypes: []
                             })
                         }} color="white" size={25}/>
                             <MIcon style={styles.filterIcon} name={(this.state.favorite?"favorite":"favorite-border")}
@@ -218,7 +216,7 @@ class Course extends Component{
                                     <Stars
                                         isActive={true}
                                         rateMax={5}
-                                        isHalfStarEnabled={true}
+                                        isHalfStarEnabled={false}
                                         onStarPress={(rating) => {this.rating=rating}}
                                         rate={1}
                                         size={20}

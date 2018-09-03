@@ -28,7 +28,7 @@ class Category extends Component{
     componentWillUnmount() {
     }
     render() {
-
+        const selectCatIndex=this.state.selectCatIndex;
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
@@ -37,17 +37,33 @@ class Category extends Component{
 
                 <ScrollView style={styles.content}>
                     <View style={styles.categories}>
+                        {selectCatIndex === false &&
                         <Accordion
                             duration={500}
-                            sections={ (this.props.categories&&this.props.categories.length> 0)?(this.props.categories.filter((item,index)=>{
-                                if(!item.parentId){
+                            sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
+                                if (!item.parentId) {
                                     return item;
                                 }
-                            })):[]}
+                            })) : []}
                             onChange={this._change}
                             renderHeader={this._renderHeader}
                             renderContent={this._renderContent}
                         />
+                        }
+                        {selectCatIndex !== false &&
+                        <Accordion
+                            duration={500}
+                            sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
+                                if (!item.parentId) {
+                                    return item;
+                                }
+                            })) : []}
+                            onChange={this._change}
+                            initiallyActiveSection={selectCatIndex}
+                            renderHeader={this._renderHeader}
+                            renderContent={this._renderContent}
+                        />
+                        }
                     </View>
                     {
                         this.state.page>0&&

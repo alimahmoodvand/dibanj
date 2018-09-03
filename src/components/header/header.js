@@ -28,7 +28,7 @@ export default class HeaderLayout extends Component {
                     </Left>
                     <Body style={styles.header}>
                     {/*<Text style={styles.headerTitle}>*/}
-                        <Image source={require("../../assets/images/dibanzh.png")} style={styles.logo}/>
+                        <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
                     {/*</Text>*/}
                     </Body>
                     <Right style={{backgroundColor: 'rgba(0,0,0,0)',flex:0,margin:0,padding:0}}>
@@ -58,11 +58,10 @@ const styles = StyleSheet.create({
         width:'100%'
 },
     logo:{
-    width:100,
-    height:30,
-        marginLeft:10,
+    width:140,
+    height:45,
+        // marginLeft:10,
         overflow:'visible',
-
         // backgroundColor:'blue'
     },
   headerTitle:{

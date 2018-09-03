@@ -13,11 +13,6 @@ import Stars from "react-native-stars-rating";
 import {connect} from "react-redux";
 import Http from "../../services/http";
 class User extends Component{
-    constructor(props) {
-        super(props);
-        this._renderItem = this._renderItem.bind(this);
-
-    }
     state = {
         updateUI:0,
         refreshing:false,

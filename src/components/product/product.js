@@ -9,7 +9,7 @@ import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {connect} from "react-redux";
 import {addBasket, removeBookmark, saveProducts} from "../../redux/actions";
 
-import HTML from 'react-native-render-html';
+//import HTML from 'react-native-render-html';
 import Modal from "react-native-modal";
 import Http from "../../services/http";
 
@@ -65,6 +65,7 @@ class Product extends Component{
     }
     render(){
         const {prod,bookmark}=this.props
+        // console.log(prod)
         let maxlimit=50;
         let regex = /(<([^>]+)>)/ig
         if(prod.Description){
@@ -85,7 +86,7 @@ class Product extends Component{
             overlay=<Image style={styles.imageLabel} source={require('../../assets/images/free.png')}/>;
         }
         else if(prod.isSpecial==1){
-             overlay=<Image style={styles.image} source={require('../../assets/images/special.png')}/>;
+             overlay=<Image style={styles.imageLabel} source={require('../../assets/images/special.png')}/>;
         }
         return(
             <View style={styles.main}>
@@ -139,7 +140,7 @@ class Product extends Component{
                         </TouchableOpacity>
                     </View>
                     <View style={styles.basket}>
-                        {prod.canBuySeperatly != 0 &&
+                        {(prod.canBuySeperatly != 0&&prod.price>0)&&
                         <Button style={[styles.buyBtn,{backgroundColor:(prod.price>0?'#0094cc':'green')}]} title={prod.id} onPress={() => {
                             if (this._findBasket()) {
                                 alert("قبلا به سبد اضافه شده است")
@@ -162,11 +163,20 @@ class Product extends Component{
                         }
                     </View>
                 </View>
-                <Button style={styles.sample} title={prod.id} onPress={()=>{
-                    Actions.lesson({ProductAndCourseId:prod.ProductAndCourseId,isSample:1});
+                {prod.price == 0 &&
+                <Button style={styles.sample} title={prod.id} onPress={() => {
+                    Actions.lesson({ProductAndCourseId: prod.ProductAndCourseId, isSample: 0});
+                }}>
+                    <Text style={styles.proBtnText}>مشاهده</Text>
+                </Button>
+                }
+                {prod.price > 0 &&
+                <Button style={styles.sample} title={prod.id} onPress={() => {
+                    Actions.lesson({ProductAndCourseId: prod.ProductAndCourseId, isSample: 1});
                 }}>
                     <Text style={styles.proBtnText}>نمونه</Text>
                 </Button>
+                }
             </View>
         );
     }

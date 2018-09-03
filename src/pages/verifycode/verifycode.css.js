@@ -4,7 +4,8 @@ export default styles = EStyleSheet.create({
         flex:1,backgroundColor:'rgba(0,0,0,0)'
     },
     container:{
-        flex:1,backgroundColor:'rgba(0,0,0,0)',
+        flex:1,
+        backgroundColor:'rgba(0,0,0,0)',
         padding:50,
         justifyContent:'center',
 
@@ -24,7 +25,7 @@ export default styles = EStyleSheet.create({
         backgroundColor: '$mainColor'
     },
     logo:{
-        width:100,
+        flex:1,
         height:50,
     },
     logoContainer:{
@@ -33,5 +34,9 @@ export default styles = EStyleSheet.create({
         flexDirection:'row'
     },inputText:{
         color:'$mainColor'
-    }
+    },
+    btnText:{
+        fontSize:20,
+        color:'white'
+    },
 })

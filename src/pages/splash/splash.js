@@ -6,33 +6,24 @@ import {connect} from "react-redux";
 import {Actions} from "react-native-router-flux";
 import Http from "../../services/http";
 import {initBookmark, removeUser, saveCategories, saveMessages, saveUser} from "../../redux/actions";
-// import OneSignal from "react-native-onesignal";
 
  class Splash extends Component{
-     // componentWillMount() {
-     //     OneSignal.init("4b8d0056-617c-4b04-8e72-0cd5de9a0d23");
-     //     OneSignal.addEventListener('ids', this.onIds);
-     //
-     //     OneSignal.addEventListener('received', this.onReceived);
-     //     OneSignal.addEventListener('opened', this.onOpened);
-     // }
-     //
-     // onReceived(notification) {
-     //     console.log("Notification received: ", notification);
-     // }
-     //
-     // onOpened(openResult) {
-     //     console.log('Message: ', openResult.notification.payload.body);
-     //     console.log('Data: ', openResult.notification.payload.additionalData);
-     //     console.log('isActive: ', openResult.notification.isAppInFocus);
-     //     console.log('openResult: ', openResult);
-     // }
-     // onIds(device) {
-     //     console.log('Device info: ', device);
-     // }
-
     render(){
-       if(this.props.rehydrated)
+        setTimeout(()=>{
+            this._selectState();
+        },500)
+        return(
+            <View style={styles.container}>
+                <Image  style={styles.bgimage} source={require('../../assets/images/splash.jpg')}/>
+                <View style={styles.content}>
+                    <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
+                </View>
+            </View>
+        );
+    }
+
+    _selectState=()=>{
+        if(this.props.rehydrated)
         {
             // this.props.removeUser();
             if (this.props.user.token) {
@@ -42,7 +33,7 @@ import {initBookmark, removeUser, saveCategories, saveMessages, saveUser} from "
                         this.props.saveCategories(responseData)
                         Http._postDataPromise({token:this.props.user.token},'userMessages').then((response) => response.json())
                             .then((responseData) => {
-                                console.log(responseData)
+                                // console.log(responseData)
                                 this.props.saveMessages(responseData)
                                 Http._postDataPromise({token:this.props.user.token,userId:this.props.user.userId},'getUser').then((response) => response.json())
                                     .then((responseData) => {
@@ -61,26 +52,18 @@ import {initBookmark, removeUser, saveCategories, saveMessages, saveUser} from "
                             Actions.reset('drawer')
                         })
                     }).catch((err)=>{
-                        console.log(err)
+                    console.log(err)
                     Actions.reset('drawer')
                 })
                 //     Actions.reset('drawer')
             }
             else if (this.props.user.userId&&!this.props.user.token) {
-                    Actions.signuppage();
+                Actions.signuppage();
             } else {
-                    Actions.loginpage();
+                Actions.loginpage();
             }
         }
-        return(
-            <View style={styles.container}>
-                <Image style={styles.bgimage} source={require('../../assets/images/splash.jpg')}/>
-                <View style={styles.content}>
-                    <Image source={require("../../assets/images/dibanzh.png")} style={styles.logo}/>
-                </View>
-            </View>
-        );
-    }
+ }
 }
 const styles=StyleSheet.create({
     bgimage: {

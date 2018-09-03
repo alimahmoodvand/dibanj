@@ -21,16 +21,10 @@ class Home extends Component {
 
         }
     }
-    constructor(props) {
-        super(props);
-        this.state = {
-            position: 1,
-            interval: null,
-            dataSource: [],
-        };
-    }
     componentWillMount() {
         this.setState({
+            position: 1,
+            dataSource: [],
             interval: setInterval(() => {
                 this.setState({
                     position: this.state.position+1 === this.state.dataSource.length ? 0 : this.state.position + 1
