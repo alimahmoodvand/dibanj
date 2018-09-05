@@ -16,7 +16,7 @@ class Message extends Component{
         return (<Product prod={item}/>);
     };
     state={
-        changeUI:0,
+        selectedIndex:false,
     }
     render() {
 
@@ -42,13 +42,15 @@ class Message extends Component{
         );
     }
 
-    _renderHeader=(section)=> {
+    _renderHeader=(section,index)=> {
         let unread={}
-        if(section.Status===0||true){
-            unread={backgroundColor:'yellow'}
+        if(this.state.selectedIndex===index){
+            unread=styles.unread
         }
         return (
             <View style={[style.header,unread]}>
+                <Text style={style.headerText}>{section.persianCreateAt}</Text>
+                {/*<Text style={style.headerText}>jkjkjkjjkkjkjjkjkjk</Text>*/}
                 <Text style={style.headerText}>{section.Title}</Text>
             </View>
         );
@@ -62,10 +64,8 @@ class Message extends Component{
         );
     }
 
-    _readMessage=(index)=> {
-        console.log(this.props.messages[index])
-        if(this.props.messages[index]) {
-        }
+    _readMessage=(selectedIndex)=> {
+        this.setState({selectedIndex})
     }
 }
 const style = StyleSheet.create({
@@ -82,17 +82,21 @@ const style = StyleSheet.create({
     },
     header: {
         backgroundColor: '#F5FCFF',
-        padding: 10
+        padding: 10,
+        justifyContent:'space-between',
+        flexDirection:'row'
     },
     headerText: {
         textAlign: 'center',
         fontSize: 16,
         fontWeight: '500',
-        color:'black'
+        color:'black',
+
     },
     bodyText: {
         fontSize: 16,
-        color:'black'
+        color:'black',
+        textAlign:'right'
     },
     content: {
         padding: 20,

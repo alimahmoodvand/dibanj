@@ -44,8 +44,10 @@ class Location extends Component {
     selectedAddress=null;
     postalCode;
     field;
+    setAddress=null;
     render() {
         let maxlimit=40
+        this.setAddress=this.props.setAddress
         if(this.selectedAddress) {
             this.selectedAddress.address = (this.selectedAddress.address && ((this.selectedAddress.address).length > maxlimit) ?
                 (((this.selectedAddress.address).substring(0, maxlimit)) + '...') :
@@ -160,9 +162,10 @@ class Location extends Component {
         if(this.selectedAddress&&this.selectedAddress.addressId==field.addressId){
             selectedStyle.backgroundColor='#32ff0044'
         }
-        console.log(selectedStyle)
+        // console.log(selectedStyle)
         return (<TouchableOpacity style={[styles.textContainer,selectedStyle]}  onPress={()=>{
             this.selectedAddress=field;
+            this.setAddress(field)
             this._toggleModal();
         }}>
             <View style={styles.textDetail}  >

@@ -13,6 +13,7 @@ import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {addProducts, decPage, incPage, saveProducts} from "../../redux/actions";
 import Http from "../../services/http";
 import {connect} from "react-redux";
+import Loading from "../../components/laoding/laoding";
 
 const {height, width} = Dimensions.get('window');
 class Absentia extends Component {
@@ -51,6 +52,7 @@ class Absentia extends Component {
             refreshing:false,
             updateUI:1,
             exist:false,
+            loading:false,
         })
         this.filterOptions={
             sort:[
@@ -115,8 +117,8 @@ class Absentia extends Component {
         }
         return (
             <View style={styles.main}>
+                <Loading visible={this.state.loading} />
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
-
                 <HeaderLayout back={true}/>
                 <View style={styles.content}>
                     <View style={[styles.halfCircleContainer, style.halfCircleContainer]}>

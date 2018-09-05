@@ -1,4 +1,4 @@
-import { ADD_PRODUCTS, COURSE_ABS, DEC_PAGE, INC_PAGE} from "../actions/types";
+import {ADD_PRODUCTS, COURSE_ABS, DEC_PAGE, EMPTY_PRODUCTS, INC_PAGE, INIT_PRODUCTS} from "../actions/types";
 
 const initState={
     products:[],
@@ -7,17 +7,19 @@ const initState={
 }
 export default products=(state=initState, action={})=>{
     switch (action.type){
-        case COURSE_ABS:
-            const {products,page}=action;
+        case INIT_PRODUCTS:
+            const {products}=action;
             return  {
-                products,
-                page
+                ...state,
+                products: products
             };
         case ADD_PRODUCTS:
             return  {
                 ...state,
                 products: [...state.products, ...action.products]
             };
+        case EMPTY_PRODUCTS:
+            return  initState;
          case INC_PAGE:
             return  {
                 ...state,

@@ -65,7 +65,7 @@ export default styles = EStyleSheet.create({
     details:{
         paddingRight:10,
         paddingTop:5,
-        flex:0.5,
+        flex:0.8,
         alignItems:'flex-end',
         justifyContent:'flex-start'
     },

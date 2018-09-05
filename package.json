@@ -20,7 +20,7 @@
     "react-native-modal": "^5.4.0",
     "react-native-radio-buttons": "^1.0.0",
     "react-native-remote-svg": "^1.2.0",
-    "react-native-router-flux": "^4.0.0-beta.28",
+    "react-native-router-flux": "^4.0.1",
     "react-native-simple-radio-button": "^2.7.2",
     "react-native-slideshow": "^1.0.1",
     "react-native-stars-rating": "^0.1.7",

@@ -7,16 +7,20 @@ import {connect} from "react-redux";
 import Http from "../../services/http";
 import {Actions} from "react-native-router-flux";
 import styles from "./login.css";
+import Loading from "../../components/laoding/laoding";
+import AlertMessage from "../../services/alertmessage";
 
  class Login extends Component{
       mobile=""
-
+     state={
+          loading:false,
+     }
     render(){
         // console.log(this.props)
 
         return(
             <View style={styles.main}>
-
+                <Loading visible={this.state.loading} />
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
                 <View style={styles.container}>
@@ -28,26 +32,34 @@ import styles from "./login.css";
 
                         <Label style={styles.labelText}>ورود</Label>
                         <Item fixedLabel>
-                            <Input style={styles.inputText} keyboardType="numeric" onChangeText={ (text) => this.mobile = text }  />
+                            <Input style={styles.inputText} keyboardType="numeric" onChangeText={ (text) => this.mobile = text } placeholder='مانند 09123456789'  />
                             <Label style={styles.labelText}>شماره تلفن</Label>
                         </Item>
                         <Button  full style={styles.loginBtn} onPress={this._sendCode}>
                             <Text style={styles.btnText}>ادامه</Text>
                         </Button>
                     </Form>
-                    {/*<Button bordered style={[styles.loginBtn,{width:'50%',justifyContent:'center'}]} onPress={()=>Actions.signuppage()}>*/}
-                        {/*<Text style={styles.btnText} >ثبت نام</Text>*/}
-                    {/*</Button>*/}
                 </View>
             </View>
         );
     }
      _sendCode=async()=>{
-        let data={
-            mobile:this.mobile
-        }
-           let user=await Http._postAsyncData(data,'auth/verification');
-           Actions.verfiycodepage({mobile:this.mobile,activationCode:user.activationCode});
+          let regex=/09(0[0-9]|9[0-9]|1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/
+          if(regex.test(this.mobile)){
+              this.setState({loading:true});
+               let data={
+                  mobile:this.mobile
+              }
+                 let user=await Http._postAsyncData(data,'auth/verification');
+               if(user){
+                   Actions.verfiycodepage({mobile:this.mobile,activationCode:user.activationCode});
+               }
+               this.setState({loading:false});
+
+          }else{
+             new AlertMessage().error('phoneInvalid');
+          }
+
      };
 }
 

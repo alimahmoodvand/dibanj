@@ -14,6 +14,7 @@ import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {saveCategories} from "../../redux/actions";
 import {connect} from "react-redux";
 import Http from "../../services/http";
+import Loading from "../laoding/laoding";
 var categories=null;
  class ProfileCategory extends Component {
     state = {
@@ -22,6 +23,7 @@ var categories=null;
         index:1,
         updateUI:1,
         tabIndex:0,
+        loading:false,
     };
     userCats=[];
      _getUserCats=async()=>{
@@ -47,6 +49,7 @@ var categories=null;
        // console.log(field)
         return (
             <View style={styles.container}>
+                <Loading visible={this.state.loading} />
                 <TouchableOpacity onPress={() => this._toggleModal()}>
                 <View style={styles.textContainer}>
                     <MIcon  name="add" size={20} color="red" style={styles.addIcon}/>
@@ -103,10 +106,6 @@ var categories=null;
         )
     }
     _renderSubCat=()=>{
-        // if(idx!=null)
-        // this.setState({index:idx});
-        // alert(this.state.index);
-        // console.log(this.state.index)
         return(
             <View style={styles.subCatContainer}>
                 {
@@ -143,7 +142,6 @@ var categories=null;
      _isMarked=(categoryId)=>{
         let isMarked=false;
          this.userCats.map((item,index)=>{
-             // console.log(item.categoryId,categoryId,item.categoryId===categoryId)
              if(item.categoryId===categoryId){
                  isMarked= true;
              }
@@ -151,10 +149,6 @@ var categories=null;
          return isMarked;
      }
     _renderSelectedCat=()=>{
-        // if(idx!=null)
-        // this.setState({index:idx});
-        // alert(this.state.index);
-        // console.log(this.state.index,idx)
         return(
             <View style={styles.selectedCatContainer}>
                 <Text style={styles.limitTitle}>حداکثر تعداد هشتگ ها 50 عدد می باشد
@@ -190,7 +184,6 @@ var categories=null;
             </View>
         )
     }
-
      _toggleCat=(target)=> {
         let isMarked=false;
         if(this.userCats.length<=50) {
@@ -209,12 +202,8 @@ var categories=null;
             alert('تعداد موضوعات بیشتر از حد مجاز است')
         }
      }
-
      _sendUserCats=async()=> {
-        // console.log({
-        //     userId:this.props.user.userId,
-        //     categoryIds:this.userCats.filter((item)=>{return item.categoryId}),
-        //     token:this.props.user.token})
+         this.setState({loading:true});
          let categoryIds=[];
          this.userCats.map((item,index)=>{
              categoryIds.push(item.categoryId);
@@ -223,9 +212,8 @@ var categories=null;
              userId:this.props.user.userId,
              categoryIds,
              token:this.props.user.token},'categoryBookmark');
-         // console.log(response)
          this._toggleModal();
-
+         this.setState({loading:false});
      }
  }
 const mapStateToProps=(state)=>{

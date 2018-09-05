@@ -9,7 +9,7 @@ import BasketProduct from "../../components/basketproduct/basketproduct";
 import Location from "../../components/location/location";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {connect} from "react-redux";
-import {addBasket, emptyBasket, removeBasket} from "../../redux/actions";
+import {addBasket, emptyBasket, initProduct, removeBasket} from "../../redux/actions";
 import Http from "../../services/http";
 
 class Basket extends Component{
@@ -104,6 +104,7 @@ class Basket extends Component{
         );
     }
     _setAddress=(add)=>{
+        console.log(add)
         this.address=add;
     }
     _sumBasketPrices=()=> {
@@ -143,10 +144,11 @@ class Basket extends Component{
                 discountId: this.state.offcode ? this.state.discountId : 0,
             }
             let response = await Http._postAsyncData(data, 'order');
-            if (response.message && response.message.indexOf('successful') != -1) {
+            if (Array.isArray(response)) {
                 this.props.emptyBasket()
+                this.props.initProduct(response)
                 alert("خرید با موفقیت انجام شد")
-                Actions.reset();
+                Actions.home();
             } else {
                 alert("خطا دوباره تلاش کنید")
             }
@@ -182,6 +184,8 @@ const mapDispatchToProps=(dispatch)=> {
             dispatch(removeBasket(product));
         },emptyBasket:()=>{
             dispatch(emptyBasket());
+        },initProduct:(products)=>{
+            dispatch(initProduct(products));
         },
 
     }

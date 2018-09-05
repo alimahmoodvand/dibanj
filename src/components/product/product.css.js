@@ -94,21 +94,16 @@ export default styles = EStyleSheet.create({
     detalsText:{
         // color:'black',
         // fontSize:17,
-        width:'90%',
+        // width:'90%',
+        flex:0.8,
         margin:2,
         textAlign:'right',
+        flexWrap:'wrap'
         // marginLeft:'$productBnt',
         // direction:'rtl',
 
     },
     basket:{
-        // paddingTop:5,
-        // paddingBottom:5,
-        // paddingLeft:10,
-        // paddingRight:10,
-        // borderRadius:5,
-        // borderColor:'$mainColor',
-        // borderWidth:1,
         flex:1,
         justifyContent:'center',
         alignItems:'center'
@@ -127,6 +122,12 @@ export default styles = EStyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         backgroundColor:'#0094cc',
-    }
+    },
+    btns:{
+        flexWrap:'wrap',
+        flexDirection:'row',
+        width:'95%',
+        // backgroundColor:'red',
+    },
 
 });

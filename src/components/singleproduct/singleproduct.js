@@ -59,25 +59,38 @@ class SingleProduct extends Component{
         }
         return false;
     }
+    _findProduct=()=>{
+        for(let i=0;i<this.props.products.length;i++){
+            if(this.props.prod.ProductAndCourseId==this.props.products[i].ProductAndCourseId){
+                return true;
+            }
+        }
+        return false;
+    }
     render(){
         const {prod}=this.props
+        const myProduct=this._findProduct();
         // console.log(prod)
 
         let maxlimit=100;
         let regex = /(<([^>]+)>)/ig
-        console.log(prod.Description)
+        // console.log(prod.Description)
 
         if(prod.Description) {
             prod.Description = prod.Description.replace(regex, '').replace(/(\&[a-zA-Z0-9]+\;)/gi, '').replace(/^\s*$(?:\r\n?|\n)/gm, '')
         }
-            console.log(prod.Description)
+            // console.log(prod.Description)
         // prod.Description=(prod.Description&&((prod.Description).length > maxlimit) ?
         //     (((prod.Description).substring(0,maxlimit-3)) + '...') :
         //     prod.Description );
         // console.log(prod)
+        let descStyle={}
+        if(!((prod.canBuySeperatly!=0&&prod.price!=0)&&!myProduct)){
+            descStyle.flex=1
+        }
         return(
             <View style={styles.main}>
-                {(prod.canBuySeperatly!=0&&prod.price!=0)&&
+                {((prod.canBuySeperatly!=0&&prod.price!=0)&&!myProduct)&&
                     <Button style={styles.buy} title={prod.id} onPress={() => {
                         if (this._findBasket()) {
                             alert("قبلا به سبد اضافه شده است")
@@ -99,24 +112,24 @@ class SingleProduct extends Component{
                         </Button>
                 }
                 <View style={styles.content}>
-                    <View style={styles.details}>
+                    <View style={[styles.details,descStyle]}>
                         <Text  style={[styles.detalsText]}>{prod.Title}</Text>
                         <Text  style={[styles.detalsText]}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:''}</Text>
                         <Text  style={[styles.detalsText]}>{prod.Duration}</Text>
                         <Text  style={[styles.detalsText]}>{prod.fullName}</Text>
                         <Text  style={[styles.detalsText]}>{prod.Description}</Text>
                         {/*<Text>{prod.Description}</Text>*/}
+                        {this._getPrices(prod)}
                     </View>
-                    {this._getPrices(prod)}
                 </View>
-                {prod.price == 0 &&
+                {(prod.price == 0 ||myProduct)&&
                 <Button style={styles.sample} title={prod.id} onPress={()=>{
                     Actions.lesson({ProductAndCourseId:prod.ProductAndCourseId,isSample:0});
                 }}>
                     <Text style={styles.proBtnText}>مشاهده</Text>
                 </Button>
                 }
-                {prod.price > 0 &&
+                {prod.price > 0 &&!myProduct&&
                 <Button style={styles.sample} title={prod.id} onPress={()=>{
                     Actions.lesson({ProductAndCourseId:prod.ProductAndCourseId,isSample:1});
                 }}>
@@ -138,6 +151,7 @@ const mapDispatchToProps=(dispatch)=> {
 const mapStateToProps=state=>{
     return{
         user:state.user,
+        products:state.products.products,
         basket:state.basket
     }
 };

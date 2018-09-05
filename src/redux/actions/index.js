@@ -1,6 +1,7 @@
 import {
-    ADD_BASKET, ADD_BOOKMARK, ADD_CLOUD, ADD_PRODUCTS, COURSE_ABS, DEC_PAGE, EMPTY_BASKET, EMPTY_FAVORITES, INC_PAGE,
-    INIT_BOOKMARK,
+    ADD_BASKET, ADD_BOOKMARK, ADD_CLOUD, ADD_PRODUCTS, COURSE_ABS, DEC_PAGE, EMPTY_BASKET, EMPTY_FAVORITES,
+    EMPTY_PRODUCTS, INC_PAGE,
+    INIT_BOOKMARK, INIT_PRODUCTS,
     REMOVE_BASKET,
     REMOVE_BOOKMARK,
     REMOVE_CLOUD,
@@ -65,6 +66,13 @@ export const removeBasket=(product)=>({
 })
 export const addProducts=(products)=>({
     type:ADD_PRODUCTS,
+    products
+})
+export const emptyProduct=()=>({
+    type:EMPTY_PRODUCTS,
+})
+export const initProduct=(products)=>({
+    type:INIT_PRODUCTS,
     products
 })
 export const saveCategories=(categories)=>({

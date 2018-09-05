@@ -18,6 +18,8 @@ import {connect} from "react-redux";
 import {addBasket, saveUser} from "../../redux/actions";
 import Http from "../../services/http";
 import ImagePicker from "react-native-image-crop-picker";
+import AlertMessage from "../../services/alertmessage";
+import Loading from "../../components/laoding/laoding";
 class Profile extends Component {
     componentWillMount(){
         this.uri=this.props.user.image;
@@ -27,7 +29,8 @@ class Profile extends Component {
     }
     state = {
         isModalVisible: false,
-        updateUI:0
+        updateUI:0,
+        loading:false,
     };
     componentWillUnmount(){
         if(this.state.isModalVisible)
@@ -50,6 +53,7 @@ class Profile extends Component {
     render() {
         return (
             <View style={styles.main}>
+                <Loading visible={this.state.loading} />
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
                 <View style={styles.content}>
@@ -65,29 +69,6 @@ class Profile extends Component {
                             </Image>
                             <View style={styles.profileTakePic}>
                                 <MIcon name="photo-camera" onPress={() => {
-                                    // DocumentPicker.show({
-                                    //     filetype: [DocumentPickerUtil.images()],
-                                    // },(error,res) => {
-                                    //     // Android
-                                    //     // console.log(res);
-                                    //     if(res) {
-                                    //         Http._postFilePromise({
-                                    //             token: this.props.user.token,
-                                    //             userId: this.props.user.userId
-                                    //         }, [res], 'userImage')
-                                    //             .then((response) => response.json()).then(response => {
-                                    //             // console.log(response)
-                                    //             let user = this.props.user;
-                                    //             user.imageUrl = response.image;
-                                    //             user.image = response.image;
-                                    //             this.props.saveUser(user);
-                                    //             this.setState({updateUI: this.state.updateUI++});
-                                    //         }).catch(err => {
-                                    //             console.log(err)
-                                    //         })
-                                    //     }
-                                    //
-                                    // });
                                     ImagePicker.openPicker({
                                         width: 300,
                                         height: 300,
@@ -97,6 +78,7 @@ class Profile extends Component {
                                         image.type=image.mime;
                                         image.uri=image.path;
                                         image.fileName=path[path.length-1];
+                                        this.setState({loading:true});
                                         Http._postFilePromise({
                                             token: this.props.user.token,
                                             userId: this.props.user.userId
@@ -107,10 +89,10 @@ class Profile extends Component {
                                             user.imageUrl = response.image;
                                             user.image = response.image;
                                             this.props.saveUser(user);
-                                            this.setState({updateUI: this.state.updateUI++});
+                                            this.setState({loading:false});
                                         }).catch(err => {
-                                            // alert('error')
-                                            // console.log(err)
+                                            this.setState({loading:false});
+                                            new AlertMessage().error('serverError',err.message?err.message:'')
                                         })
 
                                         // console.log(image);
@@ -212,7 +194,6 @@ class Profile extends Component {
         })
         return fields;
     }
-
     _renderFields(item, index) {
            // console.log(item,index)
             return (<ProfileFields
@@ -229,6 +210,7 @@ class Profile extends Component {
             />)
     }
     _deleteAddress=async(add)=>{
+        this.setState({loading:true});
         let data={
             token:this.props.user.token,
             addressId:add.addressId,
@@ -237,12 +219,11 @@ class Profile extends Component {
         let response=await Http._postAsyncData(data,'addressDeletion')
         if(Array.isArray(response)){
             this.userAddresses=response;
-            this.setState({updateUI:this.state.updateUI++});
-        }else{
-         alert('خطا دوباره تلاش کنید')
         }
+        this.setState({loading:false});
     }
     _updateAddress=async(add)=>{
+        this.setState({loading:true});
         let data={
             token:this.props.user.token,
             addressId:add.addressId,
@@ -254,9 +235,8 @@ class Profile extends Component {
         if(Array.isArray(response)){
             this.userAddresses=response;
             this.setState({updateUI:this.state.updateUI++});
-        }else{
-            alert('خطا دوباره تلاش کنید')
         }
+        this.setState({loading:false});
     }
 
     insertAddress=async()=> {
@@ -268,19 +248,19 @@ class Profile extends Component {
                     address: this.address,
                     postalCode: this.postalCode,
                 }
+                this.setState({loading:true});
                 let response = await Http._postAsyncData(data, 'addressInsertion')
                 if (Array.isArray(response)) {
                     this.userAddresses = response;
                     this._toggleModal();
-                } else {
-                    alert('خطا دوباره تلاش کنید')
                 }
+                this.setState({loading:false});
             }
             else {
-                alert('کد پستی را 10 رقمی وارد کنید')
+                new AlertMessage().message('postalCode')
             }
         }else{
-            alert('لطفا همه موارد را پر کنید')
+            new AlertMessage().message('fillAll')
         }
     }
 }

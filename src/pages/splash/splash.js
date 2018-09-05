@@ -5,7 +5,7 @@ import {Image, StyleSheet, View} from "react-native";
 import {connect} from "react-redux";
 import {Actions} from "react-native-router-flux";
 import Http from "../../services/http";
-import {initBookmark, removeUser, saveCategories, saveMessages, saveUser} from "../../redux/actions";
+import {initBookmark, initProduct, removeUser, saveCategories, saveMessages, saveUser} from "../../redux/actions";
 
  class Splash extends Component{
     render(){
@@ -41,7 +41,13 @@ import {initBookmark, removeUser, saveCategories, saveMessages, saveUser} from "
                                         Http._postDataPromise({token:this.props.user.token,userId:this.props.user.userId},'getBookmark').then((response) => response.json())
                                             .then((responseData) => {
                                                 this.props.initBookmark(responseData)
-                                                Actions.reset('drawer')
+                                                Http._postDataPromise({token:this.props.user.token,UserId:this.props.user.userId},'getUserPAC').then((response) => response.json())
+                                                    .then((responseData) => {
+                                                        this.props.initProduct(responseData)
+                                                        Actions.reset('drawer')
+                                                    }).catch((err)=>{
+                                                    Actions.reset('drawer')
+                                                })
                                             }).catch((err)=>{
                                             Actions.reset('drawer')
                                         })
@@ -107,6 +113,9 @@ const mapDispatchToProps=(dispatch)=> {
         },
         initBookmark:(products)=>{
             dispatch(initBookmark(products))
+        },
+        initProduct:(products)=>{
+            dispatch(initProduct(products))
         }
     }
 }

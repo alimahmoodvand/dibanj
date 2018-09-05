@@ -62,7 +62,8 @@ export default styles = EStyleSheet.create({
         paddingTop:15,
         flex:0.5,
         alignItems:'flex-end',
-        justifyContent:'flex-start'
+        justifyContent:'flex-start',
+        flexWrap:'wrap',
     },
     prices:{
         paddingLeft:10,
@@ -76,6 +77,7 @@ export default styles = EStyleSheet.create({
         color:'black',
         fontSize:18,
         margin:2,
+        flexWrap:'wrap',
     },
     basket:{
         paddingTop:5,

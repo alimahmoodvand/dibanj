@@ -18,6 +18,8 @@ import Accordion from 'react-native-collapsible/Accordion';
 import Http from "../../services/http";
 import {removeUser, saveCategories} from "../../redux/actions";
 import {connect} from "react-redux";
+import AlertMessage from "../../services/alertmessage";
+import Loading from "../../components/laoding/laoding";
 class Search extends Component{
     componentWillMount() {
         this.options = [
@@ -53,6 +55,7 @@ class Search extends Component{
             isModalVisible: false,
             indexChanges:0,
             page:0,
+            loading:false,
         })
 
     }
@@ -78,6 +81,7 @@ class Search extends Component{
         const selectCatIndex=this.state.selectCatIndex;
         return(
             <View style={styles.main}>
+                <Loading visible={this.state.loading} />
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
                 <HeaderLayout back={true}/>
@@ -191,15 +195,15 @@ class Search extends Component{
                                 renderItem={({item, index}) =>
                                     this._renderItem(item, index)
                                 }
-                                ListEmptyComponent={() => {
-                                    if(this.showSpinner){
-                                        return(<Spinner/>);
-                                    }
-                                    else{
-                                        return(<Text></Text>)
-                                    }
-
-                                }}
+                                // ListEmptyComponent={() => {
+                                //     if(this.showSpinner){
+                                //         return(<Spinner/>);
+                                //     }
+                                //     else{
+                                //         return(<Text></Text>)
+                                //     }
+                                //
+                                // }}
                                 onEndReached={({distanceFromEnd}) => {
                                         this._searchProduct();
                                 }}
@@ -234,10 +238,10 @@ class Search extends Component{
     _searchProduct=async()=>{
         if(!this.isSearching) {
             this.isSearching=true;
-            if (!this.searchParams.text.trim()) {
+            /*if (!this.searchParams.text.trim()) {
                 this.setState({page: 0});
                 alert("عبارتی وارد نشده است")
-            } else if (this.state.page > 0) {
+            } else */if (this.state.page > 0) {
                 let catsId = [];
                 if (this.searchParams.cats.length > 0) {
                     this.searchParams.cats.map((item) => {
@@ -253,7 +257,9 @@ class Search extends Component{
                     page: this.state.page
                 }
                 // console.log(data)
+                this.setState({loading:true})
                 let response = await Http._postAsyncData(data, 'search')
+                let page=this.state.page;
                 if (Array.isArray(response)) {
                     this.products = this.products.concat(response);
                     // console.log(response)
@@ -261,15 +267,16 @@ class Search extends Component{
                         this.showSpinner = true;
                     } else {
                         this.showSpinner = false;
-                        alert('محصولی یافت نشد')
+                        new AlertMessage().message('notFound')
                     }
-                    this.setState({page: this.state.page + 1});
+                    if (response.length > 0)
+                       page=this.state.page + 1;
                 }
+                this.setState({loading: false,page});
+
             }
             this.isSearching=false;
         }
-        // this.onEndReachedCalledDuringMomentum=false;
-
     }
     _change=(selectCatIndex)=>{
         this.setState({selectCatIndex})
@@ -300,11 +307,14 @@ class Search extends Component{
                         }
                     }).map((item,index)=>{
                         let style={};
-                         if(this.searchParams.cats.indexOf(item)!==-1){
-                             style.color='yellow';
-                         }
+                        let btnStyle={};
+                        if(this.searchParams.cats.indexOf(item)!==-1){
+                            style.color='white';
+                            style.fontWeight='bold';
+                            btnStyle=styles.subCatsBtnSelected;
+                        }
                         return(
-                            <Button title={index} key={index} style={styles.subCatsBtn} onPress={()=>{
+                            <Button title={index} key={index} style={[styles.subCatsBtn,btnStyle]} onPress={()=>{
                                 this._catSelect(item)
                                 // setTimeout(()=>{
                                     this.setState({indexChanges:this.state.indexChanges++})

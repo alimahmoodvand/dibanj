@@ -8,6 +8,8 @@ import Http from "../../services/http";
 import {Actions} from "react-native-router-flux";
 import styles from "./verifycode.css";
 import SmsListener from 'react-native-android-sms-listener'
+import Loading from "../../components/laoding/laoding";
+import AlertMessage from "../../services/alertmessage";
 
  class VerifyCode extends Component{
      mobile;
@@ -54,7 +56,8 @@ import SmsListener from 'react-native-android-sms-listener'
                  });
              }, 1000),
              remining:60,
-             welcomeMessage:false
+             welcomeMessage:false,
+             loading:false
          })
      }
      componentWillUnmount() {
@@ -68,7 +71,7 @@ import SmsListener from 'react-native-android-sms-listener'
         // this.activationCode=activationCode.toString();
         return (
             <View style={styles.main}>
-
+                <Loading visible={this.state.loading} />
                 {!this.state.welcomeMessage &&
                 <View style={styles.main}>
                     <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
@@ -129,17 +132,25 @@ import SmsListener from 'react-native-android-sms-listener'
         );
     }
      _verifyCode=async()=> {
-         if(this.state.remining>0) {
+         let error='';
+         let regex=/[0-9]{5}/
+         if(this.state.remining<=0){
+             error='expireCode'
+         }
+         if(!regex.test(this.activationCode)){
+             error='shortVerify'
+         }
+         // if(this.activationCode.length!=5){
+         //     error='shortVerify'
+         // }
+         if(error=='') {
+             this.setState({loading:true});
              let data = {
                  mobile: this.mobile,
                  activationCode: this.activationCode,
              };
-             // console.log(data)
              let user = await Http._postAsyncData(data, 'auth/checkVerification');
-             // console.log(user)
-
              if (user.fullName) {
-                 console.log("home")
                  this.props.saveUser(user);
                  clearInterval(this.state.interval);
                  ToastAndroid.showWithGravity(
@@ -147,19 +158,14 @@ import SmsListener from 'react-native-android-sms-listener'
                      ToastAndroid.LONG,
                      ToastAndroid.CENTER
                  );
-                 this.setState({welcomeMessage:true});
+                 this.setState({welcomeMessage:true,loading:false});
                  setTimeout(()=>Actions.reset('drawer'),2000)
              }
              else if(user&&!user.message){
-                 console.log("signup")
                  Actions.signuppage({userId:user.userId,mobile:user.mobile});
-             }else if(!user||user.message){
-                 console.log("wrong")
-                 alert("کد اشتباه است")
-
              }
          }else{
-             alert("کد منقضی شد دوباره تلاش کنید")
+             new AlertMessage().error(error)
          }
      };
      _sendCode=async()=>{

@@ -63,8 +63,17 @@ class Product extends Component{
         }
         return false;
     }
+    _findProduct=()=>{
+        for(let i=0;i<this.props.products.length;i++){
+            if(this.props.prod.ProductAndCourseId==this.props.products[i].ProductAndCourseId){
+                return true;
+            }
+        }
+        return false;
+    }
     render(){
         const {prod,bookmark}=this.props
+        const myProduct=this._findProduct();
         // console.log(prod)
         let maxlimit=50;
         let regex = /(<([^>]+)>)/ig
@@ -116,21 +125,21 @@ class Product extends Component{
                 <View style={styles.content}>
                     <View style={styles.container}>
                     <View style={styles.details}>
-                        <TouchableOpacity onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
                         <Text style={[styles.detalsText,{fontWeight:'bold'}]}>{prod.Title}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>Actions.user({userId:prod.MasterId})}>
+                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.user({userId:prod.MasterId})}>
                             <Text style={styles.detalsText} >{prod.fullName}</Text>
                         </TouchableOpacity>
                         {duration&&
-                        <TouchableOpacity onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
                         <Text style={styles.detalsText}>{'مدت دوره:'+prod.Duration}</Text>
                         </TouchableOpacity>
                         }
-                        <TouchableOpacity onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                        <TouchableOpacity  style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
                         <Text style={[styles.detalsText]}>{(prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'')}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
                             {this._getPrices(prod)}
                         </TouchableOpacity>
                     </View>
@@ -140,7 +149,7 @@ class Product extends Component{
                         </TouchableOpacity>
                     </View>
                     <View style={styles.basket}>
-                        {(prod.canBuySeperatly != 0&&prod.price>0)&&
+                        {((prod.canBuySeperatly != 0&&prod.price>0)&&!myProduct)&&
                         <Button style={[styles.buyBtn,{backgroundColor:(prod.price>0?'#0094cc':'green')}]} title={prod.id} onPress={() => {
                             if (this._findBasket()) {
                                 alert("قبلا به سبد اضافه شده است")
@@ -163,14 +172,14 @@ class Product extends Component{
                         }
                     </View>
                 </View>
-                {prod.price == 0 &&
+                {(prod.price == 0||myProduct)&&
                 <Button style={styles.sample} title={prod.id} onPress={() => {
                     Actions.lesson({ProductAndCourseId: prod.ProductAndCourseId, isSample: 0});
                 }}>
                     <Text style={styles.proBtnText}>مشاهده</Text>
                 </Button>
                 }
-                {prod.price > 0 &&
+                {(prod.price > 0 &&!myProduct)&&
                 <Button style={styles.sample} title={prod.id} onPress={() => {
                     Actions.lesson({ProductAndCourseId: prod.ProductAndCourseId, isSample: 1});
                 }}>
@@ -194,6 +203,7 @@ const mapDispatchToProps=(dispatch)=> {
 const mapStateToProps=state=>{
     return{
         user:state.user,
+        products:state.products.products,
         basket:state.basket
     }
 };

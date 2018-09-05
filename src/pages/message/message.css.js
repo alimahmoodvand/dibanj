@@ -119,5 +119,8 @@ export default styles = EStyleSheet.create({
     questionInput:{
         width:'100%',
         textAlign:'right',
+    },
+    unread:{
+        backgroundColor:'$mainColor'
     }
 });

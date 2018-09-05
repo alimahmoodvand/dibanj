@@ -59,23 +59,24 @@ export default styles = EStyleSheet.create({
     details:{
          paddingRight: '$productBnt',
         paddingTop:5,
-        flex:0.5,
-
+        flex:0.8,
+        flexWrap:'wrap',
         // alignItems:'flex-end',
         // justifyContent:'flex-start'
     },
     prices:{
         paddingLeft:'$productBnt',
-        top:'25%',
-        flex:0.5,
+        // top:'25%',
+        flex:0.8,
+        flexDirection:'row',
         // alignItems:'center',
-        // justifyContent:'center',
+        justifyContent:'space-around',
 
     },
     detalsText:{
         // color:'black',
         // fontSize:17,
-
+        flexWrap:'wrap',
         margin:2,
         textAlign:'right',
         // marginLeft:'$productBnt',

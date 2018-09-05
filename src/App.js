@@ -58,7 +58,6 @@ class BadgeIcon extends Component {
         if(this.props[field]===0){
             style.height=0;
         }
-        // console.log(this.props)
         return(
             <View>
                 <MIcon name={name} color={(focused ? "#ffc800" : "white")} size={28}/>
@@ -81,14 +80,18 @@ export default class App extends Component{
         return (
             <Provider store={PStorage}>
                 <RouterRedux>
-                    <Scene key="root" hideNavBar initial>
-                        <Drawer
+                    {/*<Scene key="root" hideNavBar initial>*/}
+                    <Stack key="root" titleStyle={{ alignSelf: 'center' }}>
+                        <Stack key="customNavBar" hideTabBar titleStyle={{ alignSelf: 'center' }}>
+                        </Stack>
+                    <Drawer
                             key="drawer"
                             drawerPosition="right"
                             contentComponent={DrawerLayout}
                             tabStyle={styles.tab}
                             hideNavBar={true}
                         >
+                            <Scene hideNavBar panHandlers={null}>
                             <Tabs
                                 hideNavBar
                                 tabBarStyle={styles.tabs}
@@ -103,53 +106,51 @@ export default class App extends Component{
                                 <Stack
                                     hideNavBar
                                     key="پیام ها"
+                                    icon={({focused}) => (<ConnectedYourTabIcon field="messageCount" name="email" focused={focused} />)}
                                 >
-                                    <Scene key="messagesp" hideNavBar component={Messages} icon={({focused}) => {
-                                        // const icon=(<MIcon name="email" color={(focused ? "#ffc800" : "white")} size={28}/>);
-                                        // return <ConnectedYourTabIcon myicon={icon} />
-                                        return <ConnectedYourTabIcon field="messageCount" name="email" focused={focused} />
-
-                                    }} title="پیام ها">
+                                    <Scene key="messagesp" hideNavBar component={Messages} icon={({focused}) => (<ConnectedYourTabIcon field="messageCount" name="email" focused={focused} />)} title="پیام ها">
                                     </Scene>
                                 </Stack>
                                 <Stack
                                     hideNavBar
                                     key="سبد خرید"
+                                    icon={({focused}) => {
+                                    return <ConnectedYourTabIcon field="basketCount" name="shopping-basket" focused={focused} />
+                                }}
                                 >
-                                    <Scene key="basketp" hideNavBar component={Basket} icon={({focused}) => {
-                                        // const icon=(<MIcon name="shopping-basket" color={(focused ? "#ffc800" : "white")}
-                                        //               size={28}/>);
-                                        return <ConnectedYourTabIcon field="basketCount" name="shopping-basket" focused={focused} />
-                                    }} title="سبد خرید">
+                                    <Scene key="basketp" hideNavBar component={Basket}  title="سبد خرید">
                                     </Scene>
                                 </Stack>
                                 <Stack
                                     hideNavBar
                                     key="دسته بندی"
+                                    icon={({focused}) => {
+                                    return <MIcon name="format-list-bulleted" color={(focused ? "#ffc800" : "white")}
+                                                  size={28}/>;
+                                }}
                                 >
-                                    <Scene key="categoriesp" hideNavBar component={Category} icon={({focused}) => {
-                                        return <MIcon name="format-list-bulleted" color={(focused ? "#ffc800" : "white")}
-                                                      size={28}/>;
-                                    }} title="دسته بندی">
+                                    <Scene key="categoriesp" hideNavBar component={Category} title="دسته بندی">
                                     </Scene>
                                 </Stack>
                                 <Stack
                                     hideNavBar
                                     key="جستجو"
+                                    icon={({focused}) => {
+                                    return <MIcon name="search" color={(focused ? "#ffc800" : "white")} size={28}/>;
+                                }}
                                 >
-                                    <Scene key="searchp" hideNavBar component={Search} icon={({focused}) => {
-                                        return <MIcon name="search" color={(focused ? "#ffc800" : "white")} size={28}/>;
-                                    }} title="جستجو">
+                                    <Scene key="searchp" hideNavBar component={Search} title="جستجو">
                                     </Scene>
                                 </Stack>
                                 <Stack
                                     hideNavBar
                                     key="خانه"
                                     initial
-                                >
-                                    <Scene key="homep" hideNavBar component={Home} icon={({focused}) => {
+                                    icon={({focused}) => {
                                         return <MIcon name="home" color={(focused ? "#ffc800" : "white")} size={28}/>;
-                                    }} title="خانه" initial>
+                                    }}
+                                >
+                                    <Scene key="homep" hideNavBar component={Home}  title="خانه" initial>
                                     </Scene>
                                     <Scene key="absentia" icon={({focused}) => {
                                         return <MIcon name="home" color={(focused ? "#ffc800" : "white")} size={28}/>;
@@ -215,7 +216,7 @@ export default class App extends Component{
                                     </Scene>
                                 </Stack>
                             </Tabs>
-
+                            </Scene>
                         </Drawer>
                         <Scene key="auth" hideNavBar initial>
                             <Scene key="loginpage" hideNavBar component={Login} title="پیام ها">
@@ -227,7 +228,8 @@ export default class App extends Component{
                             <Scene key="verfiycodepage" hideNavBar component={VerifyCode} title="پیام ها">
                             </Scene>
                         </Scene>
-                    </Scene>
+                    </Stack>
+                    {/*</Scene>*/}
                 </RouterRedux>
             </Provider>
         );

@@ -23,55 +23,19 @@ class Term extends Component{
     };
     _getCourses=async()=>{
         let response = await Http._postAsyncData({userId:this.props.user.userId,token:this.props.user.token},'userCourses');
-        if (Array.isArray(response)) {
-            // this.courses=response;
-            let crs = [];
-            // response.map((parent) => {
-            //     try {
-            //         if (!parent.ParentId) {
-            //             let index = this._searchObject(crs, 'ProductAndCourseId', parent.ProductAndCourseId);
-            //             if (index != -1) {
-            //                 if (parent.type == 1) {
-            //                     crs[index].practice = parent.userCoursesExamAndPracticeId
-            //                 }
-            //                 if (parent.type == 2) {
-            //                     crs[index].exam = parent.userCoursesExamAndPracticeId
-            //                 }
-            //                 if (this._searchObject(response, 'ParentId', parent.ProductAndCourseId) != -1) {
-            //                     crs[index].child = true
-            //                 }
-            //             } else {
-            //
-            //                 parent.exam= null
-            //                 parent.practice= null
-            //                 parent.child= null
-            //                 if (parent.type == 1) {
-            //                     parent.practice = parent.userCoursesExamAndPracticeId
-            //                 }
-            //                 if (parent.type == 2) {
-            //                     parent.exam = parent.userCoursesExamAndPracticeId
-            //                 }
-            //                 if (this._searchObject(response, 'ParentId', parent.ProductAndCourseId) != -1) {
-            //                     parent.child = true
-            //                 }
-            //                 crs.push(parent)
-            //             }
-            //         }
-            //     }catch (err){
-            //         console.log(err)
-            //     }
-            // })
+        if (Array.isArray(response)&&response.length>0) {
             this.courses = response;
-          //  console.log(this.courses,crs)
+        }else{
+            alert('دوره ای یافت نشد')
         }
-        // console.log("userCourses",response,{userId:this.props.user.userId,token:this.props.user.token})
+        this.showSpinner=false;
         this.setState({changeUI:this.state.changeUI+1,selectCatIndex:false})
 
-        // console.log(response)
     };
     courses=[];
     userPAC=[];
     curPAC=[];
+    showSpinner=true;
     _selectCourse=async(CourseIndex)=> {
         console.log(CourseIndex,this.courses[CourseIndex])
 
@@ -133,7 +97,7 @@ class Term extends Component{
 
                     </View>
                     {
-                        this.courses.length==0&&
+                        (this.courses.length==0&&this.showSpinner)&&
                         <Spinner/>
                     }
                 </ScrollView>

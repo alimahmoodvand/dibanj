@@ -12,6 +12,8 @@ import {connect} from "react-redux";
 import {saveCategories} from "../../redux/actions";
 import Http from "../../services/http";
 import Product from "../../components/product/product";
+import Loading from "../../components/laoding/laoding";
+import AlertMessage from "../../services/alertmessage";
 
 class Category extends Component{
 
@@ -21,6 +23,7 @@ class Category extends Component{
             selectCatIndex:false ,
             indexChanges:0,
             page:0,
+            loading:false,
         })
     }
     category=null;
@@ -31,6 +34,8 @@ class Category extends Component{
         const selectCatIndex=this.state.selectCatIndex;
         return (
             <View style={styles.main}>
+                <Loading visible={this.state.loading} />
+
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
                 <HeaderLayout back={true}/>
@@ -74,7 +79,7 @@ class Category extends Component{
                                 renderItem={({item, index}) =>
                                     this._renderItem(item, index)
                                 }
-                                ListEmptyComponent={() => <Spinner/>}
+                                // ListEmptyComponent={() => <Spinner/>}
                                 onEndReached={() => {
                                     //this._catSelect();
                                 }}
@@ -116,11 +121,14 @@ class Category extends Component{
                         }
                     }).map((item,index)=>{
                         let style={};
+                        let btnStyle={};
                         if(item===this.category){
-                            style.color='yellow';
+                            style.color='white';
+                            style.fontWeight='bold';
+                            btnStyle=styles.subCatsBtnSelected;
                         }
                         return(
-                            <Button title={index} key={index} style={styles.subCatsBtn} onPress={()=>{
+                            <Button title={index} key={index} style={[styles.subCatsBtn,btnStyle]} onPress={()=>{
                                 this.setState({page:1}, function() {
                                     this.products=[];
                                     this._catSelect(item)
@@ -141,7 +149,7 @@ class Category extends Component{
     };
     _catSelect=async(cat)=> {
 
-        if(this.state.page>0){
+        if (this.state.page > 0) {
 
             this.category = cat;
             let data = {
@@ -149,17 +157,22 @@ class Category extends Component{
                 categoryId: cat.categoryId,
                 page: this.state.page
             }
+            this.setState({loading: true});
+            let page=0;
             let response = await Http._postAsyncData(data, 'category');
             if (Array.isArray(response)) {
                 this.products = this.products.concat(response);
-                this.setState({page: this.state.page + 1,selectCatIndex:false});
+                page=this.state.page + 1;
             }
             if (this.products.length == 0) {
-                alert('محصولی یافت نشد')
-                this.setState({page: 0,selectCatIndex:false})
+                new AlertMessage().message('notFound');
+                page=0;
             }
+            this.setState({loading:false,page});
+
         }
     }
+
 }
 const mapStateToProps=(state)=>{
     return{

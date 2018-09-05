@@ -1,4 +1,5 @@
 import {REMOVE_USER} from "../redux/actions/types";
+import AlertMessage from "./alertmessage";
 
 export default class Http{
     static baseurl="http://199.127.99.12:3001/";
@@ -19,12 +20,20 @@ export default class Http{
 
             const responseJson = await response.json();
             console.log("_postAsyncData",url,data,responseJson)
-            //
-            return responseJson;
+            if((response&&response.message)){
+                new AlertMessage().error(null,response.message)
+                return null;
+            }else if(!response){
+                new AlertMessage().error('responseEmpty')
+                return null;
+            }else{
+                return responseJson;
+            }
         }
         catch (err){
             console.log("_postAsyncData",url,data,err)
-            return err;
+            new AlertMessage().error('serverError',err.message)
+            return null;
         }
     }
 
@@ -78,8 +87,8 @@ export default class Http{
             });
         }
         catch (err) {
-            console.log("_postAsyncData", err, response)
-            return err;
+            new AlertMessage().error('serverError',err.message)
+            // return err;
         }
     }
 }

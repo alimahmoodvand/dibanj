@@ -7,27 +7,32 @@ import {connect} from "react-redux";
 import Http from "../../services/http";
 import {Actions} from "react-native-router-flux";
 import styles from "./singup.css";
+import AlertMessage from "../../services/alertmessage";
+import Loading from "../../components/laoding/laoding";
 
  class Signup extends Component{
      singup={
          "fullName":null,
-         "username":"siamak",
+         "username":"",
          "mobile": null,
-         "password":"12345",
-         "passwordRepeat":null,
-         "email": null,
+         "password":"",
+         "passwordRepeat":"",
+         "email": "",
          "ostan": null,
          "city": null,
          "postalCode": null,
          "address": null,
      };
+     state={
+         loading:false,
+     }
     render(){
         // console.log(this.props)
         this.singup.mobile=this.props.mobile;
         this.singup.userId=this.props.userId;
         return(
             <View style={styles.main}>
-
+                <Loading visible={this.state.loading} />
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
                 <View style={styles.container}>
@@ -38,18 +43,11 @@ import styles from "./singup.css";
                         <View style={styles.logoContainer}>
                         <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
                     </View>
-                        <Label style={styles.labelText}> لطفا برای خود نام کاربری و رمز عبور انتخاب کنید. </Label>
-
-                        {/*<Item fixedLabel>*/}
-                            {/*<Input onChangeText={ (text) => this.singup.fullName = text }  />*/}
-                            {/*<Label style={styles.labelText}>نام کامل</Label>*/}
-                        {/*</Item>*/}
-
+                        <Label style={styles.labelText}> لطفا برای خود نام کاربری,ایمیل و رمز عبور انتخاب کنید. </Label>
                         <Item fixedLabel>
                             <Input style={styles.inputText} onChangeText={ (text) => this.singup.username = text }  />
                             <Label style={styles.labelText}>نام کاربری</Label>
                         </Item>
-
                         <Item fixedLabel>
                             <Input style={styles.inputText} keyboardType="email-address"  onChangeText={ (text) => this.singup.email = text }  />
                             <Label style={styles.labelText}>ایمیل</Label>
@@ -62,63 +60,45 @@ import styles from "./singup.css";
                             <Input style={styles.inputText} secureTextEntry={true} onChangeText={ (text) => this.singup.passwordRepeat = text }  />
                                                 <Label style={styles.labelText}>تکرار رمز </Label>
                         </Item>
-
-                        {/*<Item fixedLabel>*/}
-                            {/*<Input onChangeText={ (text) => this.singup.mobile = text }  />*/}
-                            {/*<Label style={styles.labelText}>شماره تلفن</Label>*/}
-                        {/*</Item>*/}
-
-                        {/*<Item fixedLabel>*/}
-                            {/*<Input onChangeText={ (text) => this.singup.ostan = text }  />*/}
-                            {/*<Label style={styles.labelText}>استان</Label>*/}
-                        {/*</Item>*/}
-                        {/*<Item fixedLabel>*/}
-                            {/*<Input onChangeText={ (text) => this.singup.city = text } />*/}
-                            {/*<Label style={styles.labelText}>شهر</Label>*/}
-                        {/*</Item>*/}
-                        {/*<Item fixedLabel>*/}
-                            {/*<Input onChangeText={ (text) => this.singup.postalCode = text } />*/}
-                            {/*<Label style={styles.labelText}>کدپستی</Label>*/}
-                        {/*</Item>*/}
-                        {/*<Item fixedLabel>*/}
-                            {/*<Input multiline={true} onChangeText={ (text) => this.singup.address = text } />*/}
-                            {/*<Label style={styles.labelText}>آدرس</Label>*/}
-                        {/*</Item>*/}
                         <Button full style={styles.loginBtn} onPress={this._loginCheck}>
                             <Text style={styles.btnText}>ثبت نام</Text>
                         </Button>
                     </Form>
-                    {/*<Button bordered style={styles.loginBtn} onPress={()=>Actions.loginpage()}>*/}
-                        {/*<Text style={styles.labelText} >ورود</Text>*/}
-                    {/*</Button>*/}
                     </ScrollView>
                 </View>
 
             </View>
         );
     }
-       _loginCheck=async()=>{
-        // data={
-        //     email:'a@a.a',
-        //     password:'123',
-        // }
-           if(this.singup.password==this.singup.passwordRepeat) {
+       _loginCheck=async()=> {
+         console.log(this.singup)
+           let error = '';
+           let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+           if (this.singup.password != this.singup.passwordRepeat) {
+               error = 'notEqualPass'
+           }
+           if (this.singup.password.length < 8) {
+               error = 'shortPass'
+           }
+           if (this.singup.email.trim().length==0||!regex.test(this.singup.email)) {
+               error = 'emailInvalid'
+           }
+           if (this.singup.username.trim().length < 3) {
+               error = 'shortUsername'
+           }
+           console.log(error)
+           if (error == '') {
+               this.setState({loading: true});
                let user = await Http._postAsyncData(this.singup, 'auth/register');
-               // console.log("user",this.singup)
-               // console.log("user",user)
-               if (user.userId) {
+               if (user && user.userId) {
                    this.props.saveUser(user)
                    Actions.reset('drawer');
-               } else {
-                   alert("خطایی رخ داد دوباره تلاش کنید")
                }
+               this.setState({loading: false});
+           } else {
+               new AlertMessage().error(error)
            }
-           else {
-               alert("رمز عبور با تکرار رمز عبور برابر نیست")
-           }
-
-        // console.log("user",user)
-     };
+       };
 }
 
 const mapDispatchToProps=dispatch=>{

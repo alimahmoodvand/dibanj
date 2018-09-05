@@ -117,6 +117,9 @@ export default styles = ExStyleSheet.create({
         justifyContent:'flex-end',
         paddingRight:10,
     },
+    subCatsBtnSelected:{
+        backgroundColor:'$mainColor'
+    },
     accordianHeader:{
         flexDirection:'row',
         padding:5,

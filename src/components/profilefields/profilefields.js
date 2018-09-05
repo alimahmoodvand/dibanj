@@ -10,11 +10,14 @@ import ProfileModal from "../profilemodal/profilemodal";
 import {connect} from "react-redux";
 import {addBasket, saveUser} from "../../redux/actions";
 import Http from "../../services/http";
+import Loading from "../laoding/laoding";
+import AlertMessage from "../../services/alertmessage";
 
 class ProfileFields extends Component {
     state = {
         isModalVisible: false,
-        language:'java'
+        language:'java',
+        loading:false,
     };
     componentWillUnmount(){
         if(this.state.isModalVisible)
@@ -25,12 +28,11 @@ class ProfileFields extends Component {
     textValue;
     field;
     render() {
-
         const {field} = this.props;
         this.textValue=field.value
-       // console.log(field)
         return (
             <View style={styles.container}>
+                <Loading visible={this.state.loading} />
                 <View style={styles.fieldIcon}>
                     <FIcon name="angle-left" onPress={() => this._toggleModal()} color="black" size={25}/>
                 </View>
@@ -74,16 +76,23 @@ class ProfileFields extends Component {
     }
     _updateUser=async()=>{
         if(this.textValue==''){
-            alert("فیلد خالی است")
+            new AlertMessage().error('isEmpty')
         }
         else{
+            this.setState({loading:true})
             let user=this.props.user;
             user[this.field.enKey]=this.textValue
             this.field.value=this.textValue;
             let token=this.props.user.token.toString();
             user=await Http._postAsyncData(user,'user/update')
-            this.props.saveUser(user);
-            this._toggleModal();
+            if(user) {
+                user.token=token;
+                this.props.saveUser(user);
+                new AlertMessage().message('updateUser')
+                this._toggleModal();
+            }
+            this.setState({loading:false})
+
         }
     }
 
