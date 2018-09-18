@@ -11,6 +11,8 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {connect} from "react-redux";
 import {addBasket, emptyBasket, initProduct, removeBasket} from "../../redux/actions";
 import Http from "../../services/http";
+import Loading from "../../components/laoding/laoding";
+import AlertMessage from "../../services/alertmessage";
 
 class Basket extends Component{
     _renderItem = (item,index) => {
@@ -24,6 +26,7 @@ class Basket extends Component{
         discountCode:0,
         discountId:0,
         isModalVisible: false,
+        loading: false,
     };
     componentWillUnmount(){
         if(this.state.isModalVisible)
@@ -39,8 +42,10 @@ class Basket extends Component{
         // console.log(this.prices)
         return (
             <View style={styles.main}>
+                <Loading visible={this.state.loading} />
+
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
-                <HeaderLayout back={true}/>
+                <HeaderLayout/>
                 <View style={styles.content}>
                     <View style={styles.products}>
                         <FlatList
@@ -53,7 +58,9 @@ class Basket extends Component{
                     </View>
                     {(this.props.basket.basket.length > 0 )&&
                     <View style={styles.paymentSection}>
+                        {this.addressRequired &&
                         <Location setAddress={this._setAddress}/>
+                        }
                       {this.prices.price > 0 &&
                         <View style={styles.offSection}>
                             <View style={styles.offSwitch}>
@@ -107,9 +114,14 @@ class Basket extends Component{
         console.log(add)
         this.address=add;
     }
+    addressRequired=false;
     _sumBasketPrices=()=> {
         let price=0
         this.props.basket.basket.map((item,index)=>{
+            // console.log(item.PriceAfterDiscount)
+            if(item.type==2&&item.subType==1){
+                this.addressRequired=true;
+            }
             price+=item.PriceAfterDiscount;
 
         })
@@ -135,11 +147,12 @@ class Basket extends Component{
     }
 
     buyBasket=async()=> {
-        if(this.address) {
+        if(this.address||!this.addressRequired) {
             let data = {
                 token: this.props.user.token,
                 UserId: this.props.user.userId,
                 products: this.props.basket.basket,
+                address:(this.address&& this.address.addressId)?this.address.addressId:0,
                 discountCode: this.state.offcode ? this.state.discountCode : 0,
                 discountId: this.state.offcode ? this.state.discountId : 0,
             }
@@ -149,31 +162,32 @@ class Basket extends Component{
                 this.props.initProduct(response)
                 alert("خرید با موفقیت انجام شد")
                 Actions.home();
-            } else {
-                alert("خطا دوباره تلاش کنید")
             }
         } else {
-            alert("لطفا یک آدرس انتخاب کنید")
+            new AlertMessage().error("addressEmpty")
         }
         // console.log(response,data)
     }
 
     _checkOffcode=async()=> {
-        let data={
-            token:this.props.user.token,
-            discountCode:this.offcode
-        }
-        let response=await Http._postAsyncData(data,'discountCode');
-        // Actions.pop();
-        if(Array.isArray(response)&&response.length==1){
-            this.setState({
-                offPercent:response[0].percent,
-                offPrice:response[0].price,
-                discountId:response[0].discountId,
-                discountCode:response[0].discountCode,
-            })
+        // console.log(this.offcode)
+        if(this.offcode&&this.offcode.trim()!='') {
+            let data = {
+                token: this.props.user.token,
+                discountCode: this.offcode
+            }
+            let response = await Http._postAsyncData(data, 'discountCode');
+            // Actions.pop();
+            if (Array.isArray(response) && response.length == 1) {
+                this.setState({
+                    offPercent: response[0].percent,
+                    offPrice: response[0].price,
+                    discountId: response[0].discountId,
+                    discountCode: response[0].discountCode,
+                })
+            }
         }else{
-            alert("کد معتبر  نیست")
+            new AlertMessage().error('offEmpty')
         }
         // console.log(response)
     }

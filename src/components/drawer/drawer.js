@@ -35,7 +35,7 @@ class DrawerLayout extends Component{
                         image.type=image.mime;
                         image.uri=image.path;
                         image.fileName=path[path.length-1];
-                        this.setState({loading:true});
+                         this.setState({loading:true});
                         Http._postFilePromise({
                                     token: this.props.user.token,
                                     userId: this.props.user.userId
@@ -49,7 +49,6 @@ class DrawerLayout extends Component{
                             this.setState({loading:false});
                                 }).catch(err => {
                             this.setState({loading:false});
-
                             new AlertMessage().error('serverError',err.message?err.message:'')
                                 })
                     });

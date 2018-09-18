@@ -80,11 +80,8 @@ export default class App extends Component{
         return (
             <Provider store={PStorage}>
                 <RouterRedux>
-                    {/*<Scene key="root" hideNavBar initial>*/}
-                    <Stack key="root" titleStyle={{ alignSelf: 'center' }}>
-                        <Stack key="customNavBar" hideTabBar titleStyle={{ alignSelf: 'center' }}>
-                        </Stack>
-                    <Drawer
+                    <Scene key="root" hideNavBar initial>
+                        <Drawer
                             key="drawer"
                             drawerPosition="right"
                             contentComponent={DrawerLayout}
@@ -102,6 +99,21 @@ export default class App extends Component{
                                 showLabel={true}
                                 activeTintColor="#ffc800"
                                 inactiveTintColor="white"
+                                tabBarOnPress={(scene, jumpToIndex) => {
+                                    const { navigation,defaultHandler} = scene;
+                                    // console.log(navigation,scene)
+
+                                    if (navigation.isFocused()) return; // Skip transition when if a tab is already focused to prevent unwanted hard refresh.
+                                    const { key } = navigation.state; // This is a key of a scene has been tapped.
+                                    // console.log(key, navigation.router.childRouters)
+                                    if (key === 'خانه' && navigation.router.childRouters) { // You've leave a child scene before, excepts default.
+                                        Actions.replace('homep') // This might be what you want to do. It will show you default scene with fresh state.
+                                        return;
+                                    }
+
+                                    // Otherwise, jump to next scene has been tapped with a index
+                                    defaultHandler(scene.index);
+                                }}
                             >
                                 <Stack
                                     hideNavBar
@@ -228,8 +240,7 @@ export default class App extends Component{
                             <Scene key="verfiycodepage" hideNavBar component={VerifyCode} title="پیام ها">
                             </Scene>
                         </Scene>
-                    </Stack>
-                    {/*</Scene>*/}
+                    </Scene>
                 </RouterRedux>
             </Provider>
         );

@@ -20,10 +20,10 @@ export default class Http{
 
             const responseJson = await response.json();
             console.log("_postAsyncData",url,data,responseJson)
-            if((response&&response.message)){
-                new AlertMessage().error(null,response.message)
+            if((responseJson&&responseJson.message)){
+                new AlertMessage().error(null,responseJson.message)
                 return null;
-            }else if(!response){
+            }else if(!responseJson){
                 new AlertMessage().error('responseEmpty')
                 return null;
             }else{

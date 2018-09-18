@@ -86,7 +86,7 @@ import Loading from "../../components/laoding/laoding";
            if (this.singup.username.trim().length < 3) {
                error = 'shortUsername'
            }
-           console.log(error)
+           // console.log(error)
            if (error == '') {
                this.setState({loading: true});
                let user = await Http._postAsyncData(this.singup, 'auth/register');

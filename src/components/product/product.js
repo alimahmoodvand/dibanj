@@ -72,7 +72,7 @@ class Product extends Component{
         return false;
     }
     render(){
-        const {prod,bookmark}=this.props
+        const {prod,bookmark,category,search}=this.props
         const myProduct=this._findProduct();
         // console.log(prod)
         let maxlimit=50;
@@ -89,13 +89,21 @@ class Product extends Component{
         }
         let overlay=<Image style={styles.image} source={{uri: prod.thumbnailUrl}}/>;
 
-        if(prod.subType==2&&prod.remainCount==0){
+        if(prod.subType==1&&prod.remainCount<1){
              overlay=<Image style={styles.imageLabel} source={require('../../assets/images/finish.png')}/>;
         }else if(prod.PriceAfterDiscount==0){
             overlay=<Image style={styles.imageLabel} source={require('../../assets/images/free.png')}/>;
         }
         else if(prod.isSpecial==1){
              overlay=<Image style={styles.imageLabel} source={require('../../assets/images/special.png')}/>;
+        }
+        let deadline=false;
+        if(prod.RegisterDeadLine){
+            let now=new Date().getTime()
+            let deadline=new Date(prod.RegisterDeadLine).getTime()
+            if(deadline<now){
+                deadline=true;
+            }
         }
         return(
             <View style={styles.main}>
@@ -112,31 +120,31 @@ class Product extends Component{
                     let data = {
                         token: this.props.user.token,
                         UserId: this.props.user.userId,
-                        ProductAndCourseId: item.ProductAndCourseId,
+                        ProductAndCourseId: prod.ProductAndCourseId,
                     };
                     data.type = "delete";
-                    this.props.removeBookmark(item)
+                    this.props.removeBookmark(prod)
                     Http._postAsyncData(data, 'bookmark')
                 }} color="red" size={25}/>
                 }
-                <Button style={styles.buy} title={prod.id} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                <Button style={styles.buy} title={prod.id} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
                     <Text style={styles.proBtnText}>جزئیات</Text>
                 </Button>
                 <View style={styles.content}>
                     <View style={styles.container}>
                     <View style={styles.details}>
-                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
                         <Text style={[styles.detalsText,{fontWeight:'bold'}]}>{prod.Title}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.user({userId:prod.MasterId})}>
-                            <Text style={styles.detalsText} >{prod.fullName}</Text>
+                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.user({userId:prod.MasterId,category,search})}>
+                            <Text style={[styles.detalsText,{color:'blue'}]} >{prod.fullName}</Text>
                         </TouchableOpacity>
                         {duration&&
-                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
                         <Text style={styles.detalsText}>{'مدت دوره:'+prod.Duration}</Text>
                         </TouchableOpacity>
                         }
-                        <TouchableOpacity  style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                        <TouchableOpacity  style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
                         <Text style={[styles.detalsText]}>{(prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
@@ -144,21 +152,16 @@ class Product extends Component{
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity style={styles.image}  onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                    <TouchableOpacity style={styles.image}  onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
                     <ImageBackground style={styles.image} source={{uri: prod.thumbnailUrl}}>{overlay}</ImageBackground>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.basket}>
-                        {((prod.canBuySeperatly != 0&&prod.price>0)&&!myProduct)&&
+                        {this.canBy(prod)&&
                         <Button style={[styles.buyBtn,{backgroundColor:(prod.price>0?'#0094cc':'green')}]} title={prod.id} onPress={() => {
                             if (this._findBasket()) {
                                 alert("قبلا به سبد اضافه شده است")
-                            }
-                            else if (prod.canBuySeperatly === 0) {
-                                alert("این محصول جداگانه قابل خرید نیست ")
-                            }
-                            else {
-                                alert("به سبد خرید اضافه شد")
+                            }else{
                                 this.props.addBasket(prod);
                             }
                         }}>
@@ -174,20 +177,42 @@ class Product extends Component{
                 </View>
                 {(prod.price == 0||myProduct)&&
                 <Button style={styles.sample} title={prod.id} onPress={() => {
-                    Actions.lesson({ProductAndCourseId: prod.ProductAndCourseId, isSample: 0});
+                    Actions.lesson({ProductAndCourseId: prod.ProductAndCourseId, isSample: 0,category,search});
                 }}>
                     <Text style={styles.proBtnText}>مشاهده</Text>
                 </Button>
                 }
                 {(prod.price > 0 &&!myProduct)&&
                 <Button style={styles.sample} title={prod.id} onPress={() => {
-                    Actions.lesson({ProductAndCourseId: prod.ProductAndCourseId, isSample: 1});
+                    Actions.lesson({ProductAndCourseId: prod.ProductAndCourseId, isSample: 1,category,search});
                 }}>
                     <Text style={styles.proBtnText}>نمونه</Text>
                 </Button>
                 }
             </View>
         );
+    }
+    canBy=(prod)=>{
+        let deadline=false;
+        if(prod.RegisterDeadLine){
+            // let now=new Date(new Date().toISOString()).getTime()
+            // let deadline=new Date(prod.RegisterDeadLine).getTime()
+            // console.log((new Date(prod.RegisterDeadLine)-new Date(new Date().toISOString())),deadline<now,deadline,now,new Date(prod.RegisterDeadLine),new Date(),prod.Title)
+            if((new Date(prod.RegisterDeadLine)-new Date(new Date().toISOString()))<0){
+                deadline=true;
+            }
+        }
+        let count=false;
+        if(prod.remainCount!==-1&&prod.remainCount<1){
+            count=true;
+        }
+            const myProduct=this._findProduct();
+        // console.log((prod.canBuySeperatly != 0||!prod.ParentId),prod.price>0,!deadline,!myProduct,!count)
+        if(((prod.canBuySeperatly != 0||!prod.ParentId)&&prod.price>0)&&!deadline&&!myProduct&&!count){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 const mapDispatchToProps=(dispatch)=> {

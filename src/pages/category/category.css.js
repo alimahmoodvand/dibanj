@@ -35,7 +35,7 @@ export default styles = EStyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent:'center',
-        alignItems:'center',
+        // alignItems:'center',
         borderRadius:5,
         overflow:'hidden'
     },

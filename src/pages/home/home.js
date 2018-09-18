@@ -17,21 +17,27 @@ class Home extends Component {
     _getSlider=async()=> {
         let response = await Http._postAsyncData({token: this.props.user.token}, 'sliderImages')
         if (Array.isArray(response)) {
-            this.setState({dataSource:response})
-
+            this.dataSource=response;
+            // setTimeout(()=>{
+            // this.setState({updateUI:this.state.updateUI++})
+            // },2000)
         }
     }
+    dataSource=[]
+    state= {
+        position: 1,
+        updateUI:0,
+        dataSource: [],
+        interval: setInterval(() => {
+            this.setState({
+                position: this.state.position + 1 === this.dataSource.length ? 0 : this.state.position + 1
+            });
+        }, 4000)
+    };
     componentWillMount() {
-        this.setState({
-            position: 1,
-            dataSource: [],
-            interval: setInterval(() => {
-                this.setState({
-                    position: this.state.position+1 === this.state.dataSource.length ? 0 : this.state.position + 1
-                });
-            }, 4000)
-        });
-        this._getSlider();
+       // setTimeout(()=>{
+           this._getSlider();
+       // },2000)
     }
 
     componentWillUnmount() {
@@ -48,7 +54,7 @@ class Home extends Component {
                         <Slideshow
                             indicatorSize={1}
                             containerStyle={[styles.slideshow,style.slideshow]}
-                            dataSource={this.state.dataSource}
+                            dataSource={this.dataSource}
                             position={this.state.position}
                             arrowSize={1}
                             height={slideHeight}

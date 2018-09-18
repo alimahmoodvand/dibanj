@@ -55,6 +55,8 @@ class User extends Component{
                 }
                 if (response && response[1] && response[1].length > 0)
                     this.page = this.page + 1;
+                else
+                    this.footer=(<View><Text> </Text></View>);
                 this.setState({updateUI: this.state.updateUI++});
             }
             this.pending=false;
@@ -85,12 +87,14 @@ class User extends Component{
         item['id']=index;
        return(<WindowProduct   prod={item}/>);
     };
+    footer=<Spinner/>;
     render() {
+        const {category=false,search=false}=this.props;
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
-                <HeaderLayout back={true}/>
+                <HeaderLayout category={category} search={search} back={true}/>
 
                 <View style={styles.content}>
                     {/*<View style={styles.userInfo}*/}
@@ -105,6 +109,9 @@ class User extends Component{
                             <Image style={styles.userImage} source={{uri: this.user.imageUrl}}/>
                         </View>
                     </View>
+                    }
+                    {!this.user &&
+                        <Spinner/>
                     }
                 {/*</View>*/}
                     {(this.userCats.length + this.userComments.length) > 0 &&
@@ -195,6 +202,7 @@ class User extends Component{
                         console.log("onEndReached")
                         this._getMasterProduct();
                     }}
+                        ListFooterComponent={() => { return this.footer }}
                         onEndReachedThreshold={0.1}
                         />
                         </View>

@@ -10,6 +10,8 @@ import Http from "../../services/http";
 import {connect} from "react-redux";
 import RadioForm,{} from "react-native-simple-radio-button";
 import {DocumentPicker, DocumentPickerUtil} from "react-native-document-picker";
+import Loading from "../../components/laoding/laoding";
+import AlertMessage from "../../services/alertmessage";
 class Practice extends Component{
     _getQuestions=async()=>{
 
@@ -20,12 +22,12 @@ class Practice extends Component{
         },'getQuestions');
         if (Array.isArray(response)) {
             this.questions=response;
-            this.setState({changeUI:this.state.changeUI+1})
         }
+        this.setState({loading:false})
     };
     questions=[];
     componentWillMount() {
-        this.setState({changeUI:1})
+        this.setState({changeUI:1,loading:true})
         this._getQuestions();
         // console.log("scdjhbjhbjhsvddZsd")
     }
@@ -50,6 +52,7 @@ class Practice extends Component{
         }))
         return (
             <View style={styles.main}>
+                <Loading visible={this.state.loading} />
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
                 <HeaderLayout back={true}/>
                 <View style={styles.content}>
@@ -153,9 +156,10 @@ class Practice extends Component{
 
     _sendAnswer=()=> {
         if(this.answers.length==0){
-            alert("جواب های خالی را پر کنید")
+            new AlertMessage().error("answerEmpty")
             return;
         }else{
+            this.setState({loading:true})
             Http._postFilePromise({userId:this.props.user.userId,
                 token:this.props.user.token,
                 ProductAndCourseId:this.props.ProductAndCourseId,
@@ -163,12 +167,15 @@ class Practice extends Component{
                 answers:this.answers,
             },this.files,'insertAnswer').then((response) => response.json()).then(response=>{
                 console.log(response)
-                alert("جواب های شما ثبت شد")
+                this.setState({loading:false})
+                new AlertMessage().error("answerDone")
                 Actions.term();
             }).catch(err=>{
                 console.log(err)
-               alert("خطا دوباره تلاش کنید")
-        })
+                this.setState({loading:false})
+                new AlertMessage().error("serverError")
+            })
+
         }
     }
 }

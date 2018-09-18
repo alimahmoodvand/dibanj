@@ -8,17 +8,30 @@ import {Actions} from "react-native-router-flux";
 import {Container, Header, Left, View, Right, Body, Title} from "native-base";
 import FIcon from 'react-native-vector-icons/FontAwesome';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
+import category from "../../pages/category/category";
+import search from "../../pages/search/search";
 
 export default class HeaderLayout extends Component {
     _getBackArrow() {
+        const {back = false,category=false,search=false} = this.props;
         if(this.isback)
         return(
-        <MIcon name="chevron-left" onPress={() => Actions.pop()} color="white" size={35}/>);
+        <MIcon name="chevron-left" onPress={() =>{
+            if(category){
+                Actions.categoriesp()
+            }else if(search){
+                Actions.searchp()
+            }else{
+                Actions.pop()
+            }
+        }} color="white" size={35}/>);
         return;
     };
     isback=false;
+    category=false;
+
     render() {
-        const {back = false} = this.props;
+        const {back = false,category=false,search=false} = this.props;
         this.isback=back;
         return (
             <View style={styles.main}>
@@ -32,9 +45,10 @@ export default class HeaderLayout extends Component {
                     {/*</Text>*/}
                     </Body>
                     <Right style={{backgroundColor: 'rgba(0,0,0,0)',flex:0,margin:0,padding:0}}>
-                        <MIcon name="menu" onPress={() => Actions.drawerOpen()} color="white" size={30}/>
+                        <MIcon name="menu" onPress={() => {
+                            Actions.drawerOpen()
+                        }} color="white" size={30}/>
                     </Right>
-
                 </Header>
             </View>
         );

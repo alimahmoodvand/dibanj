@@ -85,18 +85,15 @@ class SingleProduct extends Component{
         //     prod.Description );
         // console.log(prod)
         let descStyle={}
-        if(!((prod.canBuySeperatly!=0&&prod.price!=0)&&!myProduct)){
+        if(!this.canBy(prod)){
             descStyle.flex=1
         }
         return(
             <View style={styles.main}>
-                {((prod.canBuySeperatly!=0&&prod.price!=0)&&!myProduct)&&
+                {this.canBy(prod)&&
                     <Button style={styles.buy} title={prod.id} onPress={() => {
                         if (this._findBasket()) {
                             alert("قبلا به سبد اضافه شده است")
-                        }
-                        else if (prod.canBuySeperatly === 0) {
-                            alert("این محصول جداگانه قابل خرید نیست ")
                         }
                         else {
                             alert("به سبد خرید اضافه شد")
@@ -138,6 +135,28 @@ class SingleProduct extends Component{
                 }
             </View>
         );
+    }
+    canBy=(prod)=>{
+        let deadline=false;
+        if(prod.RegisterDeadLine){
+            // let now=new Date(new Date().toISOString()).getTime()
+            // let deadline=new Date(prod.RegisterDeadLine).getTime()
+            // console.log((new Date(prod.RegisterDeadLine)-new Date(new Date().toISOString())),deadline<now,deadline,now,new Date(prod.RegisterDeadLine),new Date(),prod.Title)
+            if((new Date(prod.RegisterDeadLine)-new Date(new Date().toISOString()))<0){
+                deadline=true;
+            }
+        }
+        let count=false;
+        if(prod.remainCount!==-1&&prod.remainCount<1){
+            count=true;
+        }
+        const myProduct=this._findProduct();
+        // console.log((prod.canBuySeperatly != 0||!prod.ParentId),prod.price>0,!deadline,!myProduct,!count)
+        if(((prod.canBuySeperatly != 0||!prod.ParentId)&&prod.price>0)&&!deadline&&!myProduct&&!count){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 const mapDispatchToProps=(dispatch)=> {

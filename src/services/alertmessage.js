@@ -17,6 +17,13 @@ export default class AlertMessage{
        updateUser:'اطلاعات کاربر بروز شد',
        fillAll:'لطفا همه موارد را پر کنید',
        postalCode:'کد پستی را 10 رقمی وارد کنید',
+       commentEmpty:'لطفا نظر خود را وارد کنید',
+       offEmpty:'لطفا کد تخفیف خود را وارد کنید',
+       addressEmpty:'لطفا یک آدرس انتخاب کنید',
+       rateEmpty:'لطفا برای نظر دهی امتیاز را نیز مشخص کنید',
+       commentDone:'نظر شما ثبت شد',
+       answerEmpty:'جواب های خالی را پر کنید',
+       answerDone:'جواب های شما ثبت شد',
     };
     error=(index=null,more='',delay=ToastAndroid.LONG,position=ToastAndroid.BOTTOM)=> {
         let textMessage = ``;

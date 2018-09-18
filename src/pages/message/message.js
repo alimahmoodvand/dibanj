@@ -23,7 +23,7 @@ class Message extends Component{
         return (
             <View style={styles.main}>
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
-                <HeaderLayout back={true}/>
+                <HeaderLayout/>
                 <Accordion
                     sections={this.props.messages}
                     // renderSectionTitle={this._renderSectionTitle}

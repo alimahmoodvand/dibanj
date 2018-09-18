@@ -16,6 +16,8 @@ import {
 import Http from "../../services/http";
 import CommentComp from "../../components/comment/comment";
 import Stars from "react-native-stars-rating";
+import AlertMessage from "../../services/alertmessage";
+import Loading from "../../components/laoding/laoding";
 
 class Course extends Component{
     product=null;
@@ -33,7 +35,7 @@ class Course extends Component{
             dataSource: [],
             favorite:false,
             save:false,
-
+            loading:true,
         });
     }
     componentWillUnmount() {
@@ -44,26 +46,14 @@ class Course extends Component{
     comments=[];
     rating=-1;
     _findProduct=async()=>{
-        // for(let i=0;i<this.props.products.products.length;i++){
-        //     if(this.props.id===this.props.products.products[i].ProductAndCourseId){
-        //         return this.props.products.products[i];
-        //     }
-        // }
         let data={
             UserId:this.props.user.userId,
             token:this.props.user.token,
             ProductAndCourseId:this.props.id,
         }
-        // console.log(data)
+        // this.setState({loading:true})
        let response=await Http._postAsyncData(data,'singleProduct')
-        // console.log(response)
         if(Array.isArray(response)) {
-            // response.map((item,index)=>{
-            //     if(item.ProductAndCourseId===this.props.id){
-            //         this.product = item;
-            //         response.splice(index,1)
-            //     }
-            // })
             if(response[0][0]) {
                 this.product = response[0][0];
                 this.childs = response[1];
@@ -88,6 +78,8 @@ class Course extends Component{
                 Actions.pop();
             }
         }
+        this.setState({loading:false})
+
 
     }
 
@@ -105,11 +97,14 @@ class Course extends Component{
     };
 
     render() {
+        const {category=false,search=false}=this.props;
+
         return (
             <View style={styles.main}>
+                <Loading visible={this.state.loading} />
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
-                <HeaderLayout back={true}/>
+                <HeaderLayout category={category} search={search} back={true}/>
 
                 <ScrollView style={styles.content}>
                     <View style={styles.filter}>
@@ -192,7 +187,7 @@ class Course extends Component{
                             onPositionChanged={(position) => this.setState({position})}
                         />
                     }
-                    <SingleProduct  prod={this.product}/>
+                    <SingleProduct prod={this.product}/>
                     {this.childs.length > 0 &&
                     <View style={styles.childHeader}>
                         <Text style={styles.childHeaderText}>
@@ -312,22 +307,21 @@ class Course extends Component{
                     Comment: this.comment,
                     Rate: this.rating,
                 }
+                this.setState({loading:true})
                 let response = await Http._postAsyncData(data, 'comment/insert');
                 if (Array.isArray(response)) {
                     this.comments = response
                     this.comment = "";
-                    alert('نظر شما ثبت شد')
-                } else {
-                    alert('خطا دوباره تلاش کنید')
+                    new AlertMessage().message('commentDone')
                 }
                 this.setState({comment: true})
             } else {
-                alert('لطفا برای نظر دهی امتیاز را نیز مشخص کنید')
+                new AlertMessage().error('rateEmpty')
             }
         }else{
-            alert('لطفا نظر خود را وارد کنید')
+            new AlertMessage().error('commentEmpty')
         }
-
+        this.setState({loading:false})
     }
 }
 const mapDispatchToProps=(dispatch)=> {

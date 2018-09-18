@@ -9,7 +9,7 @@ import Stepper from "../../components/stepper/stepper";
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {connect} from "react-redux";
 import Http from "../../services/http";
-import {Spinner} from "native-base";
+import {Button, Spinner} from "native-base";
 
 class Term extends Component{
     _searchObject=(arr,mykey,myvalue)=>{
@@ -24,13 +24,16 @@ class Term extends Component{
     _getCourses=async()=>{
         let response = await Http._postAsyncData({userId:this.props.user.userId,token:this.props.user.token},'userCourses');
         if (Array.isArray(response)&&response.length>0) {
+            // let res=[];
+            // for(let i=0;i<20;i++){
+            //     res.push(response[0])
+            // }
             this.courses = response;
         }else{
             alert('دوره ای یافت نشد')
         }
         this.showSpinner=false;
         this.setState({changeUI:this.state.changeUI+1,selectCatIndex:false})
-
     };
     courses=[];
     userPAC=[];
@@ -62,11 +65,24 @@ class Term extends Component{
         //     })
     }
     componentWillMount() {
+        this.filterOptions=[
+            {
+                condition:'notStarted',
+                title:'دوره های در حال ثبت نام',
+            },{
+                condition:'inProgress',
+                title:'دوره های جاری',
+            },{
+                condition:'finished',
+                title:'دوره های پایان یافته',
+            }
+        ];
         this._getCourses();
-        this.setState({isShow:false,changeUI:0,selectCatIndex:false})
+        this.setState({isShow:false,changeUI:0,selectCatIndex:false,ddlist:false,selected:null})
     }
     componentWillUnmount() {
     }
+
     render() {
         const body={ProductAndCourseId:162,isSample:1}
         const token=this.props.user.token;
@@ -76,14 +92,25 @@ class Term extends Component{
 
                 <HeaderLayout back={true}/>
 
-                <ScrollView style={styles.content}>
-                    <View style={styles.filter}>
-                        <View style={styles.filterExist} >
-                            <MIcon style={styles.filterIcon} name="filter-list" onPress={() =>{}} color="white"
-                                   size={25}/>
-                        </View>
-                    </View>
-                    <View style={styles.categories}>
+                <View style={styles.content}>
+                    {/*<View style={styles.filter}>*/}
+                        {/*<View style={styles.filterExist} >*/}
+                            {/*<MIcon onPress={() => {*/}
+                                {/*console.log('clicked')*/}
+                                {/*this.setState({ddlist: true})*/}
+                            {/*}} style={styles.filterIcon} name="filter-list" color="white"*/}
+                                   {/*size={25}/>*/}
+
+                        {/*</View>*/}
+                    {/*</View>*/}
+                    {/*<View style={styles.filter}>*/}
+                    {/*{*/}
+                        {/*this.state.ddlist&&*/}
+                        {/*this._renderFilter()*/}
+                    {/*}*/}
+                    {/*</View>*/}
+                    {this.courses.length>0&&
+                    <ScrollView style={styles.categories}>
                         {
                             this.courses.length>0&&
                             <Accordion
@@ -95,15 +122,38 @@ class Term extends Component{
                             />
                         }
 
-                    </View>
+                    </ScrollView>
+                    }
                     {
                         (this.courses.length==0&&this.showSpinner)&&
                         <Spinner/>
                     }
-                </ScrollView>
+                </View>
 
             </View>
         );
+    }
+    _renderFilter=()=>{
+        // console.log(this.filterOptions)
+        return  (
+            <View style={[styles.ddlistContainer]}>
+                {
+                    this.filterOptions.map((item,index)=>{
+                        // console.log(index)
+                        return(
+                            <Button key={index} title={index} onPress={()=> {
+                                this.setState({selected:item,ddlist:false})
+                            }} style={styles.ddlist}><Text style={{color:item===this.state.selected?'red':'black'}}>{item.title}</Text></Button>
+                        );
+                    })
+                }
+                <View style={styles.collapseContainer}>
+                    <MIcon name="keyboard-arrow-up" onPress={() => this.setState({
+                        ddlist:!this.state.ddlist
+                    })} color="red" size={25}/>
+                </View>
+            </View>
+        )
     }
     _renderHeader=(section,index)=> {
         return (
@@ -129,7 +179,7 @@ class Term extends Component{
                     </TouchableOpacity>
                 }
                 <View style={styles.accordianHeaderContainerText}>
-                    <Text onPress={()=>{}} style={styles.accordianHeaderText}>{section.Title}</Text>
+                    <Text onPress={()=>{Actions.course({id:section.ProductAndCourseId});}} style={styles.accordianHeaderText}>{section.Title}</Text>
                 </View>
             </View>
         );

@@ -38,42 +38,45 @@ class Category extends Component{
 
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
-                <HeaderLayout back={true}/>
+                <HeaderLayout/>
 
-                <ScrollView style={styles.content}>
-                    <View style={styles.categories}>
-                        {selectCatIndex === false &&
-                        <Accordion
-                            duration={500}
-                            sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
-                                if (!item.parentId) {
-                                    return item;
-                                }
-                            })) : []}
-                            onChange={this._change}
-                            renderHeader={this._renderHeader}
-                            renderContent={this._renderContent}
-                        />
-                        }
-                        {selectCatIndex !== false &&
-                        <Accordion
-                            duration={500}
-                            sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
-                                if (!item.parentId) {
-                                    return item;
-                                }
-                            })) : []}
-                            onChange={this._change}
-                            initiallyActiveSection={selectCatIndex}
-                            renderHeader={this._renderHeader}
-                            renderContent={this._renderContent}
-                        />
-                        }
-                    </View>
+                <View style={styles.content}>
+
                     {
-                        this.state.page>0&&
+                        (this.state.page>0||true)&&
                         <View style={styles.products}>
                             <FlatList
+                                ListHeaderComponent={()=>{
+                                    return(<View style={styles.categories}>
+                                        {selectCatIndex === false &&
+                                        <Accordion
+                                            duration={500}
+                                            sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
+                                                if (!item.parentId) {
+                                                    return item;
+                                                }
+                                            })) : []}
+                                            onChange={this._change}
+                                            renderHeader={this._renderHeader}
+                                            renderContent={this._renderContent}
+                                        />
+                                        }
+                                        {selectCatIndex !== false &&
+                                        <Accordion
+                                            duration={500}
+                                            sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
+                                                if (!item.parentId) {
+                                                    return item;
+                                                }
+                                            })) : []}
+                                            onChange={this._change}
+                                            initiallyActiveSection={selectCatIndex}
+                                            renderHeader={this._renderHeader}
+                                            renderContent={this._renderContent}
+                                        />
+                                        }
+                                    </View>)
+                                }}
                                 data={this.products}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({item, index}) =>
@@ -81,13 +84,14 @@ class Category extends Component{
                                 }
                                 // ListEmptyComponent={() => <Spinner/>}
                                 onEndReached={() => {
-                                    //this._catSelect();
+                                    console.log(this.category)
+                                    this._catSelect(this.category );
                                 }}
                                 onEndReachedThreshold={0.1}
                             />
                         </View>
                     }
-                </ScrollView>
+                </View>
 
             </View>
         );
@@ -129,7 +133,8 @@ class Category extends Component{
                         }
                         return(
                             <Button title={index} key={index} style={[styles.subCatsBtn,btnStyle]} onPress={()=>{
-                                this.setState({page:1}, function() {
+                                this.category=item;
+                                this.setState({page:1}, ()=> {
                                     this.products=[];
                                     this._catSelect(item)
 
@@ -145,11 +150,11 @@ class Category extends Component{
     }
     _renderItem = (item, index) => {
         item['id'] = index;
-        return (<Product prod={item}/>);
+        return (<Product category={true} prod={item}/>);
     };
     _catSelect=async(cat)=> {
 
-        if (this.state.page > 0) {
+        if (this.state.page > 0&&cat) {
 
             this.category = cat;
             let data = {
@@ -158,11 +163,12 @@ class Category extends Component{
                 page: this.state.page
             }
             this.setState({loading: true});
-            let page=0;
-            let response = await Http._postAsyncData(data, 'category');
+            let page=this.state.page;
+            let response = await Http._postAsyncData(data, 'categoryProduct');
             if (Array.isArray(response)) {
                 this.products = this.products.concat(response);
-                page=this.state.page + 1;
+                if (response.length > 0)
+                    page += 1;
             }
             if (this.products.length == 0) {
                 new AlertMessage().message('notFound');

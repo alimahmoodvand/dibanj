@@ -84,7 +84,7 @@ class Search extends Component{
                 <Loading visible={this.state.loading} />
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
-                <HeaderLayout back={true}/>
+                <HeaderLayout/>
                 <View style={styles.content}>
                     <View style={{backgroundColor:'white'}}>
                     <View style={styles.searchSection}>
@@ -207,6 +207,7 @@ class Search extends Component{
                                 onEndReached={({distanceFromEnd}) => {
                                         this._searchProduct();
                                 }}
+
                                 removeClippedSubviews={true}
                                 onEndReachedThreshold = {0.1}
                             />
@@ -219,7 +220,7 @@ class Search extends Component{
     }
     _renderItem = (item, index) => {
         item['id'] = index;
-        return (<Product prod={item}/>);
+        return (<Product search={true} prod={item}/>);
     };
     _renderCatButton=()=>{
        return this.searchParams.cats.map((item,index)=>{

@@ -97,5 +97,12 @@ export default styles = StyleSheet.create({
     filterExistText:{
         color:'white',
         marginRight:10,
+    },
+    loadmore:{
+        position:'absolute',
+        marginTop:50,
+        bottom:0,
+        left:'45%',
+        backgroundColor:'transparent'
     }
 });
