@@ -10,9 +10,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-
-    <uses-sdk
-        tools:overrideLibrary="co.ronash.pushe" />
     <permission
         android:name="com.dinabj.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -45,20 +42,6 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-
-
-
-
-        <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-
-                <data
-                        android:path="com.dibanj"
-                        android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
         <receiver
                 android:name="com.google.android.gms.gcm.GcmReceiver"
                 android:exported="true"
@@ -71,11 +54,6 @@
                 <category android:name="com.dibanj" />
             </intent-filter>
         </receiver>
-
-        <meta-data android:name="co.ronash.pushe.token" android:value="PUSHE_574977032761"/>
-        <meta-data android:name="co.ronash.pushe.cr" android:value="Tm9uZQ=="/>
-
-
     </application>
 
 </manifest>

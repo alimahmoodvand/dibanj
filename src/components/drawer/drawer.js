@@ -102,12 +102,21 @@ class DrawerLayout extends Component{
                 this.props.emptyBasket();
                 this.props.emptyProduct();
                 this.props.emptyFavoriets();
-
+                Http._postAsyncData({token:this.props.user.token,userId:this.props.user.userId}, 'auth/logout');
                 Actions.reset('auth');
             }}>
                 <Text style={styles.proImageText}>خروج</Text>
             </Button>
         </Container>;
+    }
+    static clearData=()=>{
+        this.props.removeUser(this.props.user);
+        this.props.emptyBasket();
+        this.props.emptyProduct();
+        this.props.emptyFavoriets();
+    }
+    static logout=async()=>{
+         await Http._postAsyncData({userId:this.props.user.userId}, '/auth/logout');
     }
 }
 

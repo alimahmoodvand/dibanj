@@ -54,6 +54,22 @@
 		EE1AEB9A3A284F5AAC639239 /* libRNDocumentPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBFA2843F4FD498E8C40584C /* libRNDocumentPicker.a */; };
 		065C81818F404353B22380B8 /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38D6473AF1E04E6A8A84487D /* libRNFIRMessaging.a */; };
 		9AEBF474C6B6463893F21C71 /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CCDCDADA646447CBCABC93C /* libimageCropPicker.a */; };
+		F064EF312CC34297A7823141 /* libRNPushe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D79302483AEC4DA28227D768 /* libRNPushe.a */; };
+		61BEB0B189D54CF699CE263A /* absentia.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE5C47720FC4EFB863D0A04 /* absentia.png */; };
+		19DA4283596A47549F023308 /* absentia1.png in Resources */ = {isa = PBXBuildFile; fileRef = 67AB9E6ECEAE41D0A6201E92 /* absentia1.png */; };
+		D3AB11FB10BB44A99764DF14 /* bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9C81BF2BC53D47BBADA28484 /* bg.jpg */; };
+		C309B25AC9A04A69BDC2B204 /* course.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC58DB215C246BA93A99272 /* course.png */; };
+		3B289644D93042BD99953D65 /* dibanzhnew.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EF8E1E88E8A4BFDA466F485 /* dibanzhnew.png */; };
+		46C1E98AC45D4893A0903D4A /* dibanzhold.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F2F405F94C2463CAF1F6978 /* dibanzhold.png */; };
+		5D69F6DC24AE442A9C02784C /* filter.png in Resources */ = {isa = PBXBuildFile; fileRef = 73CFA0AEF3F7478EB3B28D1E /* filter.png */; };
+		1814C0D0334E4636A9F7DFC3 /* finish.png in Resources */ = {isa = PBXBuildFile; fileRef = 626E04C294A64053BAEDC3BC /* finish.png */; };
+		8BF12BDC44BB477B8DB41092 /* free.png in Resources */ = {isa = PBXBuildFile; fileRef = 71E07736E60D4FBCA0BCDFD6 /* free.png */; };
+		3064C638F21D424A8AF9C9F5 /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 49DEA6193D5F4705A48BA744 /* loading.gif */; };
+		33466932EFE84F07948E6F3D /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = FF3ABB0D9672431A83C6A957 /* lock.png */; };
+		C79BDAE6631C492C94472A99 /* roocket.png in Resources */ = {isa = PBXBuildFile; fileRef = CAEC1D863A204B21AFC63533 /* roocket.png */; };
+		4E63E363C443477FB7E13CA5 /* special.png in Resources */ = {isa = PBXBuildFile; fileRef = 71E0A35774A1478D9D096282 /* special.png */; };
+		A167AA3CC2504862BAFC942D /* splash.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4E57FBCF3EB9406DB7741045 /* splash.jpg */; };
+		4BF7946CC1F449EE887C65D2 /* store.png in Resources */ = {isa = PBXBuildFile; fileRef = 05A7BB99FC254EEA9EF4D878 /* store.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -325,6 +341,23 @@
 		38D6473AF1E04E6A8A84487D /* libRNFIRMessaging.a */ = {isa = PBXFileReference; name = "libRNFIRMessaging.a"; path = "libRNFIRMessaging.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		6235CFD4E5A541F8BB0E70A1 /* imageCropPicker.xcodeproj */ = {isa = PBXFileReference; name = "imageCropPicker.xcodeproj"; path = "../node_modules/react-native-image-crop-picker/ios/imageCropPicker.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		5CCDCDADA646447CBCABC93C /* libimageCropPicker.a */ = {isa = PBXFileReference; name = "libimageCropPicker.a"; path = "libimageCropPicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		97A78FD4EBE64510919749FF /* RNPushe.xcodeproj */ = {isa = PBXFileReference; name = "RNPushe.xcodeproj"; path = "../node_modules/react-native-pushe/ios/RNPushe.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		D79302483AEC4DA28227D768 /* libRNPushe.a */ = {isa = PBXFileReference; name = "libRNPushe.a"; path = "libRNPushe.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		5CE5C47720FC4EFB863D0A04 /* absentia.png */ = {isa = PBXFileReference; name = "absentia.png"; path = "../src/assets/images/absentia.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		67AB9E6ECEAE41D0A6201E92 /* absentia1.png */ = {isa = PBXFileReference; name = "absentia1.png"; path = "../src/assets/images/absentia1.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9C81BF2BC53D47BBADA28484 /* bg.jpg */ = {isa = PBXFileReference; name = "bg.jpg"; path = "../src/assets/images/bg.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DDC58DB215C246BA93A99272 /* course.png */ = {isa = PBXFileReference; name = "course.png"; path = "../src/assets/images/course.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4EF8E1E88E8A4BFDA466F485 /* dibanzhnew.png */ = {isa = PBXFileReference; name = "dibanzhnew.png"; path = "../src/assets/images/dibanzhnew.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3F2F405F94C2463CAF1F6978 /* dibanzhold.png */ = {isa = PBXFileReference; name = "dibanzhold.png"; path = "../src/assets/images/dibanzhold.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		73CFA0AEF3F7478EB3B28D1E /* filter.png */ = {isa = PBXFileReference; name = "filter.png"; path = "../src/assets/images/filter.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		626E04C294A64053BAEDC3BC /* finish.png */ = {isa = PBXFileReference; name = "finish.png"; path = "../src/assets/images/finish.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		71E07736E60D4FBCA0BCDFD6 /* free.png */ = {isa = PBXFileReference; name = "free.png"; path = "../src/assets/images/free.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		49DEA6193D5F4705A48BA744 /* loading.gif */ = {isa = PBXFileReference; name = "loading.gif"; path = "../src/assets/images/loading.gif"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FF3ABB0D9672431A83C6A957 /* lock.png */ = {isa = PBXFileReference; name = "lock.png"; path = "../src/assets/images/lock.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CAEC1D863A204B21AFC63533 /* roocket.png */ = {isa = PBXFileReference; name = "roocket.png"; path = "../src/assets/images/roocket.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		71E0A35774A1478D9D096282 /* special.png */ = {isa = PBXFileReference; name = "special.png"; path = "../src/assets/images/special.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4E57FBCF3EB9406DB7741045 /* splash.jpg */ = {isa = PBXFileReference; name = "splash.jpg"; path = "../src/assets/images/splash.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		05A7BB99FC254EEA9EF4D878 /* store.png */ = {isa = PBXFileReference; name = "store.png"; path = "../src/assets/images/store.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -357,6 +390,7 @@
 				EE1AEB9A3A284F5AAC639239 /* libRNDocumentPicker.a in Frameworks */,
 				065C81818F404353B22380B8 /* libRNFIRMessaging.a in Frameworks */,
 				9AEBF474C6B6463893F21C71 /* libimageCropPicker.a in Frameworks */,
+				F064EF312CC34297A7823141 /* libRNPushe.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +573,7 @@
 				66366DAEF0BE47C8A6E09182 /* RNDocumentPicker.xcodeproj */,
 				EA91060DE3E0449F94511854 /* RNFIRMessaging.xcodeproj */,
 				6235CFD4E5A541F8BB0E70A1 /* imageCropPicker.xcodeproj */,
+				97A78FD4EBE64510919749FF /* RNPushe.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -603,6 +638,21 @@
 				70F9E412BA3146B7A9482090 /* SimpleLineIcons.ttf */,
 				BECD9F079CD64A7F9BA3F1B4 /* Zocial.ttf */,
 				30859D7C15DD4AD3A42A3F03 /* dibanj.ttf */,
+				5CE5C47720FC4EFB863D0A04 /* absentia.png */,
+				67AB9E6ECEAE41D0A6201E92 /* absentia1.png */,
+				9C81BF2BC53D47BBADA28484 /* bg.jpg */,
+				DDC58DB215C246BA93A99272 /* course.png */,
+				4EF8E1E88E8A4BFDA466F485 /* dibanzhnew.png */,
+				3F2F405F94C2463CAF1F6978 /* dibanzhold.png */,
+				73CFA0AEF3F7478EB3B28D1E /* filter.png */,
+				626E04C294A64053BAEDC3BC /* finish.png */,
+				71E07736E60D4FBCA0BCDFD6 /* free.png */,
+				49DEA6193D5F4705A48BA744 /* loading.gif */,
+				FF3ABB0D9672431A83C6A957 /* lock.png */,
+				CAEC1D863A204B21AFC63533 /* roocket.png */,
+				71E0A35774A1478D9D096282 /* special.png */,
+				4E57FBCF3EB9406DB7741045 /* splash.jpg */,
+				05A7BB99FC254EEA9EF4D878 /* store.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1011,6 +1061,21 @@
 				ED9218D7990B4157B2400B0F /* SimpleLineIcons.ttf in Resources */,
 				A399BE7A71BB4DF7A269CAE3 /* Zocial.ttf in Resources */,
 				93DE8F0220B449719B4B2824 /* dibanj.ttf in Resources */,
+				61BEB0B189D54CF699CE263A /* absentia.png in Resources */,
+				19DA4283596A47549F023308 /* absentia1.png in Resources */,
+				D3AB11FB10BB44A99764DF14 /* bg.jpg in Resources */,
+				C309B25AC9A04A69BDC2B204 /* course.png in Resources */,
+				3B289644D93042BD99953D65 /* dibanzhnew.png in Resources */,
+				46C1E98AC45D4893A0903D4A /* dibanzhold.png in Resources */,
+				5D69F6DC24AE442A9C02784C /* filter.png in Resources */,
+				1814C0D0334E4636A9F7DFC3 /* finish.png in Resources */,
+				8BF12BDC44BB477B8DB41092 /* free.png in Resources */,
+				3064C638F21D424A8AF9C9F5 /* loading.gif in Resources */,
+				33466932EFE84F07948E6F3D /* lock.png in Resources */,
+				C79BDAE6631C492C94472A99 /* roocket.png in Resources */,
+				4E63E363C443477FB7E13CA5 /* special.png in Resources */,
+				A167AA3CC2504862BAFC942D /* splash.jpg in Resources */,
+				4BF7946CC1F449EE887C65D2 /* store.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1145,6 +1210,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1152,6 +1218,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 					"$(SRCROOT)\..\node_modules\react-native-fcm\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-pushe\ios",
 				);
 			};
 			name = Debug;
@@ -1173,6 +1240,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1180,6 +1248,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 					"$(SRCROOT)\..\node_modules\react-native-fcm\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-pushe\ios",
 				);
 			};
 			name = Release;
@@ -1205,6 +1274,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 					"$(SRCROOT)\..\node_modules\react-native-fcm\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-pushe\ios",
 				);
 			};
 			name = Debug;
@@ -1229,6 +1299,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 					"$(SRCROOT)\..\node_modules\react-native-fcm\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-pushe\ios",
 				);
 			};
 			name = Release;
@@ -1259,6 +1330,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1266,6 +1338,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 					"$(SRCROOT)\..\node_modules\react-native-fcm\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-pushe\ios",
 				);
 			};
 			name = Debug;
@@ -1296,6 +1369,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1303,6 +1377,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 					"$(SRCROOT)\..\node_modules\react-native-fcm\ios",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-pushe\ios",
 				);
 			};
 			name = Release;
@@ -1328,6 +1403,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1352,6 +1428,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};

@@ -18,6 +18,7 @@
     "react-native-extended-stylesheet": "^0.8.1",
     "react-native-image-crop-picker": "^0.21.1",
     "react-native-modal": "^5.4.0",
+    "react-native-pushe": "^1.5.0",
     "react-native-radio-buttons": "^1.0.0",
     "react-native-remote-svg": "^1.2.0",
     "react-native-router-flux": "^4.0.1",

@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {Actions} from "react-native-router-flux";
 import Http from "../../services/http";
 import {initBookmark, initProduct, removeUser, saveCategories, saveMessages, saveUser} from "../../redux/actions";
+import DrawerLayout from "../../components/drawer/drawer";
 
  class Splash extends Component{
     render(){
@@ -21,54 +22,46 @@ import {initBookmark, initProduct, removeUser, saveCategories, saveMessages, sav
             </View>
         );
     }
-
-    _selectState=()=>{
-        if(this.props.rehydrated)
-        {
+    isInitial=false;
+    _selectState=()=> {
+        if (this.props.rehydrated) {
             // this.props.removeUser();
             if (this.props.user.token) {
+                if (!this.isInitial) {
+                    this.isInitial=true;
+                    Http._postDataPromise({
+                        token: this.props.user.token,
+                        userId: this.props.user.userId
+                    }, 'initial').then((response) =>response.json()).then((responseData) => {
+                            // console.log(responseData)
+                            this.props.saveCategories(responseData[0])
+                            this.props.saveMessages(responseData[1])
+                            this.props.saveUser(responseData[2][0])
+                            this.props.initBookmark(responseData[3])
+                            this.props.initProduct(responseData[4])
+                            Actions.reset('drawer');
+                            setTimeout(()=> this.isInitial=false,2000)
 
-                Http._postDataPromise({token:this.props.user.token},'categories').then((response) => response.json())
-                    .then((responseData) => {
-                        this.props.saveCategories(responseData)
-                        Http._postDataPromise({token:this.props.user.token},'userMessages').then((response) => response.json())
-                            .then((responseData) => {
-                                // console.log(responseData)
-                                this.props.saveMessages(responseData)
-                                Http._postDataPromise({token:this.props.user.token,userId:this.props.user.userId},'getUser').then((response) => response.json())
-                                    .then((responseData) => {
-                                        this.props.saveUser(responseData)
-                                        Http._postDataPromise({token:this.props.user.token,userId:this.props.user.userId},'getBookmark').then((response) => response.json())
-                                            .then((responseData) => {
-                                                this.props.initBookmark(responseData)
-                                                Http._postDataPromise({token:this.props.user.token,UserId:this.props.user.userId},'getUserPAC').then((response) => response.json())
-                                                    .then((responseData) => {
-                                                        this.props.initProduct(responseData)
-                                                        Actions.reset('drawer')
-                                                    }).catch((err)=>{
-                                                    Actions.reset('drawer')
-                                                })
-                                            }).catch((err)=>{
-                                            Actions.reset('drawer')
-                                        })
-                                    }).catch((err)=>{
-                                    Actions.reset('drawer')
-                                })
-                            }).catch((err)=>{
-                            Actions.reset('drawer')
-                        })
-                    }).catch((err)=>{
-                    console.log(err)
-                    Actions.reset('drawer')
-                })
-                //     Actions.reset('drawer')
+                        }).catch((err) => {
+                        console.log(err)
+                        setTimeout(()=> this.isInitial=false,2000)
+                    })
+                }
             }
-            else if (this.props.user.userId&&!this.props.user.token) {
+            else if (this.props.user.userId && !this.props.user.token) {
                 Actions.signuppage();
             } else {
                 Actions.loginpage();
             }
         }
+    }
+ errorInit=()=>{
+
+ }
+ logout=()=>{
+     alert('مجوز استفاده از اپ صادر نشد')
+     DrawerLayout.clearData()
+     Actions.reset('auth');
  }
 }
 const styles=StyleSheet.create({

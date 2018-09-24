@@ -44,7 +44,7 @@ class Absentia extends Component {
                     this.showSpinner = true;
                 }
                 this.showFooter = false;
-                console.log('this.setState({updateUI: this.state.updateUI++})')
+                // console.log('this.setState({updateUI: this.state.updateUI++})')
                 this.setState({updateUI: this.state.updateUI++})
             }
         // }

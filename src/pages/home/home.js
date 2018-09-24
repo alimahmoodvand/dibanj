@@ -7,6 +7,9 @@ import Slideshow from "react-native-slideshow";
 import {connect} from "react-redux";
 import {removeUser, saveProducts} from "../../redux/actions";
 import Http from "../../services/http";
+
+import Pushe from 'react-native-pushe'
+
 // import SVGImage from 'react-native-remote-svg';
 // import DIcon from "../../components/dicon/dicon";
 // import DIcon from "../../components/dicon/dicon";
@@ -17,7 +20,7 @@ class Home extends Component {
     _getSlider=async()=> {
         let response = await Http._postAsyncData({token: this.props.user.token}, 'sliderImages')
         if (Array.isArray(response)) {
-            this.dataSource=response;
+    this.dataSource=response;
             // setTimeout(()=>{
             // this.setState({updateUI:this.state.updateUI++})
             // },2000)
@@ -35,7 +38,12 @@ class Home extends Component {
         }, 4000)
     };
     componentWillMount() {
-       // setTimeout(()=>{
+        Pushe.initialize(true);
+        Pushe.getPusheId((pusheId) => {
+            let pid = pusheId;
+            Http._postAsyncData({token: this.props.user.token,userId:this.props.user.userId,pusheId:pid}, 'setPushe')
+        });
+        // setTimeout(()=>{
            this._getSlider();
        // },2000)
     }

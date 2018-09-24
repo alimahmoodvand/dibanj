@@ -42,6 +42,8 @@ import Messages from "./pages/message/message";
 import Lesson from "./pages/lesson/lesson";
 import {Actions} from "react-native-router-flux";
 import Answer from "./pages/answer/answer";
+import Unauthorized from "./pages/unauthorized/unauthorized"
+
 EStyleSheet.build({
     $statusBarColor:'red',
     $mainColor:'rgb(255, 200, 0)',
@@ -226,10 +228,15 @@ export default class App extends Component{
                                         return <MIcon name="home" color={(focused ? "#ffc800" : "white")} size={28}/>;
                                     }}>
                                     </Scene>
+
                                 </Stack>
                             </Tabs>
                             </Scene>
                         </Drawer>
+                        <Scene key="unauthorized" hideNavBar component={Unauthorized} title="unauthorized" icon={({focused}) => {
+                        return <MIcon name="home" color={(focused ? "#ffc800" : "white")} size={28}/>;
+                    }}>
+                    </Scene>
                         <Scene key="auth" hideNavBar initial>
                             <Scene key="loginpage" hideNavBar component={Login} title="پیام ها">
                             </Scene>

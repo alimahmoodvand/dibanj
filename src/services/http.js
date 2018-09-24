@@ -1,7 +1,14 @@
 import {REMOVE_USER} from "../redux/actions/types";
 import AlertMessage from "./alertmessage";
-
-export default class Http{
+import {Actions} from "react-native-router-flux";
+import DrawerLayout from './../components/drawer/drawer'
+import {Component} from "react";
+import React from "react";
+import {Text, View} from "react-native";
+export default class Http extends Component {
+    render(){
+        return(<View><Text></Text></View>)
+}
     static baseurl="http://199.127.99.12:3001/";
     static async _postAsyncData(data,url='login'){
         try {
@@ -16,18 +23,22 @@ export default class Http{
                 },
                 body: JSON.stringify(data),
             });
-            // console.log("_postAsyncData",url,data,response)
-
-            const responseJson = await response.json();
-            console.log("_postAsyncData",url,data,responseJson)
-            if((responseJson&&responseJson.message)){
-                new AlertMessage().error(null,responseJson.message)
-                return null;
-            }else if(!responseJson){
-                new AlertMessage().error('responseEmpty')
-                return null;
-            }else{
-                return responseJson;
+            const statusCode = response.status;
+            if(statusCode==401){
+                // alert('مجوز استفاده از اپ صادر نشد')
+                Actions.unauthorized();
+            }else {
+                const responseJson = await response.json();
+                console.log("_postAsyncData", url, data, responseJson)
+                if ((responseJson && responseJson.message)) {
+                    new AlertMessage().error(null, responseJson.message)
+                    return null;
+                } else if (!responseJson) {
+                    new AlertMessage().error('responseEmpty')
+                    return null;
+                } else {
+                    return responseJson;
+                }
             }
         }
         catch (err){

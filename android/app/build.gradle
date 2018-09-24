@@ -158,8 +158,8 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-pushe')
     compile project(':react-native-image-crop-picker')
-    compile 'co.ronash.android:pushe-base:1.3.1'
     compile project(':react-native-android-fullscreen-webview-video')
     compile project(':react-native-android-sms-listener')
     compile project(':react-native-document-picker')
