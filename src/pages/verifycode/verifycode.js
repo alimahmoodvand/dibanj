@@ -112,7 +112,7 @@ import AlertMessage from "../../services/alertmessage";
                             </Button>
                         </Form>
                         <Button bordered style={[styles.loginBtn, {width: '50%', justifyContent: 'center'}]}
-                                onPress={() => Actions.loginpage()}>
+                                onPress={() => Actions.pop()}>
                             <Text style={styles.btnText}>تغییر شماره</Text>
                         </Button>
                         <Button bordered style={[styles.loginBtn, {width: '50%', justifyContent: 'center'}]}

@@ -14,6 +14,7 @@ export default class AlertMessage{
         shortUsername:`نام کاربری باید حداقل 3 حرف باشد`,
         notFound:`موردی یافت نشد`,
        isEmpty:'فیلد خالی است',
+       empty:' خالی است',
        updateUser:'اطلاعات کاربر بروز شد',
        fillAll:'لطفا همه موارد را پر کنید',
        postalCode:'کد پستی را 10 رقمی وارد کنید',
@@ -24,6 +25,7 @@ export default class AlertMessage{
        commentDone:'نظر شما ثبت شد',
        answerEmpty:'جواب های خالی را پر کنید',
        answerDone:'جواب های شما ثبت شد',
+       passwordChange:'رمز عبور شما تغییر کرد',
     };
     error=(index=null,more='',delay=ToastAndroid.LONG,position=ToastAndroid.BOTTOM)=> {
         let textMessage = ``;

@@ -88,6 +88,11 @@ class DrawerLayout extends Component{
                 <Text style={styles.proImageText}>ازمون های من</Text>
             </Button>
             <Button block style={styles.drawerBtn} onPress={() => {
+                Actions.order()
+            }}>
+                <Text style={styles.proImageText}> سفارشات</Text>
+            </Button>
+            <Button block style={styles.drawerBtn} onPress={() => {
                 Actions.help()
             }}>
                 <Text style={styles.proImageText}>راهنما</Text>

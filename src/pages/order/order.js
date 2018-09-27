@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Image, ScrollView, Text, TouchableOpacity, View, WebView} from "react-native";
-import styles from './term.css'
+import styles from './orders.css.js'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
 import Accordion from 'react-native-collapsible/Accordion';
@@ -11,7 +11,7 @@ import {connect} from "react-redux";
 import Http from "../../services/http";
 import {Button, Spinner} from "native-base";
 
-class Term extends Component{
+class Order extends Component{
     _searchObject=(arr,mykey,myvalue)=>{
         let resIndex=-1;
         arr.map((item,index)=>{
@@ -21,47 +21,54 @@ class Term extends Component{
         })
         return resIndex;
     };
-    _getCourses=async()=>{
-        let response = await Http._postAsyncData({userId:this.props.user.userId,token:this.props.user.token},'userCourses');
+    _getOrders=async()=>{
+        let response = await Http._postAsyncData({userId:this.props.user.userId,token:this.props.user.token},'userOrders');
         if (Array.isArray(response)&&response.length>0) {
-            // let res=[];
-            // for(let i=0;i<20;i++){
-            //     res.push(response[0])
-            // }
-            this.courses = response;
+            let orders=[];
+            let ids=[];
+            response.map((item)=>{
+                if(this._searchObject(orders,"orderId",item.orderId)===-1){
+                    orders.push(item);
+                    orders[this._searchObject(orders,"orderId",item.orderId)].child=[];
+                }
+                orders[this._searchObject(orders,"orderId",item.orderId)].child.push(item);
+            });
+            this.orders = orders;
         }else{
-            alert('دوره ای یافت نشد')
+            alert('سفارشی یافت نشد')
         }
         this.showSpinner=false;
         this.setState({changeUI:this.state.changeUI+1,selectCatIndex:false})
     };
-    courses=[];
+    orders=[];
     userPAC=[];
     curPAC=[];
     showSpinner=true;
-    _selectCourse=async(CourseIndex)=> {
-        console.log(CourseIndex,this.courses[CourseIndex])
-
-        if(CourseIndex!==false) {
-            response = await Http._postAsyncData({
-                userId: this.props.user.userId,
-                courseId: this.courses[CourseIndex].ProductAndCourseId,
-                token: this.props.user.token
-            }, 'userCourses');
-            if (Array.isArray(response)) {
-                this.curPAC=response;
+    _selectOrder=async(OrderIndex)=> {
+        // console.log(OrderIndex,this.orders[OrderIndex])
+        //
+        if(OrderIndex!==false) {
+            this.curPAC=this.orders[OrderIndex].child
+            console.log(this.curPAC)
+        //     response = await Http._postAsyncData({
+        //         userId: this.props.user.userId,
+        //         orderId: this.orders[OrderIndex].ProductAndOrderId,
+        //         token: this.props.user.token
+        //     }, 'userOrders');
+        //     if (Array.isArray(response)) {
+        //         this.curPAC=response;
             }
-        }
-        this.setState({selectCatIndex: CourseIndex})
+        // }
+        this.setState({selectCatIndex: OrderIndex})
         //     this.curPAC=[];
         //     this.userPAC.map((item,index)=>{
-        //         if(item.ParentId===this.courses[CourseIndex].ProductAndCourseId){
+        //         if(item.ParentId===this.orders[OrderIndex].ProductAndOrderId){
         //             this.curPAC.push(item)
         //         }
         //     })
         // }
-        //     this.setState({selectCatIndex: CourseIndex}, () => {
-        //         console.log(this.state.selectCatIndex,this.courses[CourseIndex])
+        //     this.setState({selectCatIndex: OrderIndex}, () => {
+        //         console.log(this.state.selectCatIndex,this.orders[OrderIndex])
         //     })
     }
     componentWillMount() {
@@ -77,14 +84,14 @@ class Term extends Component{
                 title:'دوره های پایان یافته',
             }
         ];
-        this._getCourses();
+        this._getOrders();
         this.setState({isShow:false,changeUI:0,selectCatIndex:false,ddlist:false,selected:null})
     }
     componentWillUnmount() {
     }
 
     render() {
-        const body={ProductAndCourseId:162,isSample:1}
+        const body={ProductAndOrderId:162,isSample:1}
         const token=this.props.user.token;
         return (
             <View style={styles.main}>
@@ -109,23 +116,23 @@ class Term extends Component{
                         {/*this._renderFilter()*/}
                     {/*}*/}
                     {/*</View>*/}
-                    {this.courses.length>0&&
+                    {this.orders.length>0&&
                     <ScrollView style={styles.categories}>
                         {
-                            this.courses.length>0&&
+                            this.orders.length>0&&
                             <Accordion
                                 duration={300}
-                                sections={this.courses}
+                                sections={this.orders}
                                 renderHeader={this._renderHeader}
                                 renderContent={this._renderContent}
-                                onChange={this._selectCourse}
+                                onChange={this._selectOrder}
                             />
                         }
 
                     </ScrollView>
                     }
                     {
-                        (this.courses.length==0&&this.showSpinner)&&
+                        (this.orders.length==0&&this.showSpinner)&&
                         <Spinner/>
                     }
                 </View>
@@ -156,8 +163,14 @@ class Term extends Component{
         )
     }
     _renderHeader=(section,index)=> {
+        let bg={}
+        if(section.ostatus===2){
+            bg={backgroundColor:'#ff000a22'}
+        }else if(section.ostatus===1){
+            bg={backgroundColor:'#5bff1d33'};
+        }
         return (
-            <View onPress={()=>{}} style={styles.accordianHeader}>
+            <View onPress={()=>{}} style={[styles.accordianHeader,bg]}>
                 {
                         this.state.selectCatIndex !== index &&
                     <FIcon style={styles.filterIcon} name="angle-left" color="black" size={25}/>
@@ -166,32 +179,30 @@ class Term extends Component{
                     this.state.selectCatIndex===index&&
                     <FIcon style={styles.filterIcon} name="angle-down"  color="black" size={25}/>
                 }
-                {
-                    section.practice&&
-                    <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:section.practice,ProductAndCourseId:section.ProductAndCourseId,EAPtype:2})}>
-                        <Text>{"تمرین"}</Text>
-                    </TouchableOpacity>
-                }
-                {
-                    section.exam&&
-                    <TouchableOpacity style={styles.train} onPress={()=>Actions.practice({userCoursesExamAndPracticeId:section.exam,ProductAndCourseId:section.ProductAndCourseId,EAPtype:1})}>
-                        <Text>{"آزمون"}</Text>
-                    </TouchableOpacity>
-                }
                 <View style={styles.accordianHeaderContainerText}>
-                    <Text onPress={()=>{Actions.course({id:section.ProductAndCourseId});}} style={styles.accordianHeaderText}>{section.Title}</Text>
+                     <Text style={styles.accordianHeaderText}>{section.persianRegDate.split(' ')[0]}:  </Text>
+                    <Text  style={styles.accordianHeaderText}> تاریخ </Text>
+                    <Text  style={styles.accordianHeaderText}>  {section.paymentCost}: </Text>
+                    <Text  style={styles.accordianHeaderText}> قیمت </Text>
+                    <Text  style={styles.accordianHeaderText}>  {section.orderId} :</Text>
+                    <Text  style={styles.accordianHeaderText}> شماره </Text>
+
                 </View>
             </View>
         );
     }
     _renderContent=(section)=> {
-        console.log(section,this.curPAC)
+        // console.log(section,this.curPAC,section)
         if(this.curPAC.length>0) {
             return (
                 <View style={styles.accordianSubContent}>
                     <View style={styles.accordianSubContainer}>
                         <View style={styles.accordianSectionStepper}>
-                            <Stepper pacs={this.curPAC}/>
+                            {
+                                this.curPAC.map(item=>{
+                                    return this._renderContentItem(item);
+                                })
+                            }
                         </View>
                     </View>
                 </View>
@@ -202,6 +213,33 @@ class Term extends Component{
                 <Spinner/>
             )
         }
+    }
+    _renderContentItem=(section)=>{
+        let bg={}
+        let status='ثبت شده'
+        if(section.dstatus===1){
+            bg={backgroundColor:'#daff1d82'};
+            status='در حال بررسی'
+        }else if(section.dstatus===2){
+            bg={backgroundColor:'#1d4cff33'}
+            status='ارسال شده'
+        }else if(section.dstatus===3){
+            bg={backgroundColor:'#5bff1d33'}
+            status='موفق'
+        }else if(section.dstatus===-1){
+            bg={backgroundColor:'#ff000a22'}
+            status='ناموفق'
+        }
+        return (
+            <View key={section.orderDetailId} style={[styles.accordianHeader,bg]}>
+                <View style={styles.accordianHeaderContainerText}>
+                    <Text  style={styles.accordianHeaderText}>  {status} </Text>
+                    <Text  style={styles.accordianHeaderText}>  {section.totalPrice} </Text>
+                    <Text  style={styles.accordianHeaderText}>  {section.Title} </Text>
+                    <Text  style={styles.accordianHeaderText}>  {section.orderDetailId} </Text>
+                </View>
+            </View>
+        );
     }
     // _renderContent=(section)=> {
     //     return ;
@@ -245,4 +283,4 @@ const mapStateToProps=state=>{
         user:state.user,
     }
 };
-export default connect(mapStateToProps,null)(Term);
+export default connect(mapStateToProps,null)(Order);

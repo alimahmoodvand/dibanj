@@ -20,6 +20,7 @@ import Http from "../../services/http";
 import ImagePicker from "react-native-image-crop-picker";
 import AlertMessage from "../../services/alertmessage";
 import Loading from "../../components/laoding/laoding";
+import ChangePassword from "../../components/changepassword/changepassword";
 class Profile extends Component {
     componentWillMount(){
         this.uri=this.props.user.image;
@@ -114,6 +115,7 @@ class Profile extends Component {
                                     this._renderFields(item, index)
                                 }
                             />
+                            <ChangePassword/>
                             <FlatList
                                 data={this.userAddresses}
                                 keyExtractor={(item, index) => index.toString()}

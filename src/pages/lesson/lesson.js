@@ -42,7 +42,8 @@ class Lesson extends Component{
 
                     <ScrollView>
                         <WebView
-                            source={{uri: uri}}
+                            onRequest={req => req.addHeader('Authorization', 'JWT '+this.props.user.token)}
+                            source={{uri: uri,headers:{'Authorization':'JWT '+this.props.user.token}}}
                             style={styles.contentRender}
                                 startInLoadingState={true}
                             renderLoading={()=>{return <Spinner/>}}

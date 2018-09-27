@@ -71,7 +71,7 @@ import Loading from "../../components/laoding/laoding";
         );
     }
        _loginCheck=async()=> {
-         console.log(this.singup)
+         // console.log(this.singup)
            let error = '';
            let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
            if (this.singup.password != this.singup.passwordRepeat) {

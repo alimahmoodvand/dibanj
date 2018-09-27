@@ -43,6 +43,8 @@ import Lesson from "./pages/lesson/lesson";
 import {Actions} from "react-native-router-flux";
 import Answer from "./pages/answer/answer";
 import Unauthorized from "./pages/unauthorized/unauthorized"
+import Order from "./pages/order/order"
+import Signin from "./pages/signin/signin"
 
 EStyleSheet.build({
     $statusBarColor:'red',
@@ -228,6 +230,10 @@ export default class App extends Component{
                                         return <MIcon name="home" color={(focused ? "#ffc800" : "white")} size={28}/>;
                                     }}>
                                     </Scene>
+                                    <Scene key="order" hideNavBar component={Order} title="order" icon={({focused}) => {
+                                        return <MIcon name="home" color={(focused ? "#ffc800" : "white")} size={28}/>;
+                                    }}>
+                                    </Scene>
 
                                 </Stack>
                             </Tabs>
@@ -245,6 +251,8 @@ export default class App extends Component{
                             <Scene key="splashpage" hideNavBar initial component={Splash} title="پیام ها">
                             </Scene>
                             <Scene key="verfiycodepage" hideNavBar component={VerifyCode} title="پیام ها">
+                            </Scene>
+                            <Scene key="signinpage" hideNavBar component={Signin} title="پیام ها">
                             </Scene>
                         </Scene>
                     </Scene>

@@ -38,6 +38,10 @@ import AlertMessage from "../../services/alertmessage";
                         <Button  full style={styles.loginBtn} onPress={this._sendCode}>
                             <Text style={styles.btnText}>ادامه</Text>
                         </Button>
+                        <Button bordered style={[styles.loginBtn, {width: '50%', justifyContent: 'center'}]}
+                                onPress={() => Actions.signinpage()}>
+                            <Text style={styles.btnText}>ورود با ایمیل</Text>
+                        </Button>
                     </Form>
                 </View>
             </View>
