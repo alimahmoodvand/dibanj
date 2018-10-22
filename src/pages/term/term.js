@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
-import {Image, ScrollView, Text, TouchableOpacity, View, WebView} from "react-native";
+import {FlatList, Image, ScrollView, Text, TouchableOpacity, View, WebView} from "react-native";
 import styles from './term.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -25,7 +25,7 @@ class Term extends Component{
         let response = await Http._postAsyncData({userId:this.props.user.userId,token:this.props.user.token},'userCourses');
         if (Array.isArray(response)&&response.length>0) {
             // let res=[];
-            // for(let i=0;i<20;i++){
+            // for(let i=0;i<30;i++){
             //     res.push(response[0])
             // }
             this.courses = response;
@@ -40,19 +40,20 @@ class Term extends Component{
     curPAC=[];
     showSpinner=true;
     _selectCourse=async(CourseIndex)=> {
-        console.log(CourseIndex,this.courses[CourseIndex])
-
+        this.curPAC=[];
+        // console.log(CourseIndex,this.courses[CourseIndex])
+        this.setState({selectCatIndex: CourseIndex})
         if(CourseIndex!==false) {
-            response = await Http._postAsyncData({
+           let response = await Http._postAsyncData({
                 userId: this.props.user.userId,
                 courseId: this.courses[CourseIndex].ProductAndCourseId,
                 token: this.props.user.token
             }, 'userCourses');
             if (Array.isArray(response)) {
                 this.curPAC=response;
+                this.setState({changeUI: this.state.changeUI++})
             }
         }
-        this.setState({selectCatIndex: CourseIndex})
         //     this.curPAC=[];
         //     this.userPAC.map((item,index)=>{
         //         if(item.ParentId===this.courses[CourseIndex].ProductAndCourseId){
@@ -109,20 +110,30 @@ class Term extends Component{
                         {/*this._renderFilter()*/}
                     {/*}*/}
                     {/*</View>*/}
+
+                    {/*<Accordion*/}
+                    {/*// duration={300}*/}
+                    {/*sections={this.courses}*/}
+                    {/*renderHeader={this._renderHeader}*/}
+                    {/*renderContent={this._renderContent}*/}
+                    {/*onChange={this._selectCourse}*/}
+                    {/*/>*/}
                     {this.courses.length>0&&
-                    <ScrollView style={styles.categories}>
+                    <View style={styles.categories}>
                         {
                             this.courses.length>0&&
-                            <Accordion
-                                duration={300}
-                                sections={this.courses}
-                                renderHeader={this._renderHeader}
-                                renderContent={this._renderContent}
-                                onChange={this._selectCourse}
+                            <FlatList style={{flex:1}}
+                            data={this.courses}
+                            extraData={this.state}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({item,index})=> {
+                              return  this._renderHeader(item,index);
+                            }}
                             />
+
                         }
 
-                    </ScrollView>
+                    </View>
                     }
                     {
                         (this.courses.length==0&&this.showSpinner)&&
@@ -155,16 +166,20 @@ class Term extends Component{
             </View>
         )
     }
+    _renderItem=(item,index)=>{
+        return <Text>{index}</Text>
+    }
     _renderHeader=(section,index)=> {
         return (
-            <View onPress={()=>{}} style={styles.accordianHeader}>
+            <View key={index} onPress={()=>{}} >
+            <View style={styles.accordianHeader}>
                 {
                         this.state.selectCatIndex !== index &&
-                    <FIcon style={styles.filterIcon} name="angle-left" color="black" size={25}/>
+                    <FIcon style={styles.filterIcon} onPress={()=>{this._selectCourse(index)}} name="angle-left" color="black" size={25}/>
                 }
                 {
                     this.state.selectCatIndex===index&&
-                    <FIcon style={styles.filterIcon} name="angle-down"  color="black" size={25}/>
+                    <FIcon style={styles.filterIcon}  onPress={()=>{this._selectCourse(false)}} name="angle-down"  color="black" size={25}/>
                 }
                 {
                     section.practice&&
@@ -181,25 +196,40 @@ class Term extends Component{
                 <View style={styles.accordianHeaderContainerText}>
                     <Text onPress={()=>{Actions.course({id:section.ProductAndCourseId});}} style={styles.accordianHeaderText}>{section.Title}</Text>
                 </View>
+                </View>
+                {
+                    this._renderContent(section,index)
+                }
             </View>
         );
     }
-    _renderContent=(section)=> {
-        console.log(section,this.curPAC)
-        if(this.curPAC.length>0) {
-            return (
-                <View style={styles.accordianSubContent}>
-                    <View style={styles.accordianSubContainer}>
-                        <View style={styles.accordianSectionStepper}>
-                            <Stepper pacs={this.curPAC}/>
+    _renderContent=(section,index)=> {
+        if(index===this.state.selectCatIndex) {
+            // console.log(index, this.state.selectCatIndex,this.curPAC)
+            // setTimeout(()=>{
+            //     this.setState({changeUI: this.state.changeUI++})
+            // },2000)
+            if (this.curPAC.length > 0) {
+                return (
+                    <View style={styles.accordianSubContent}>
+                        <View style={styles.accordianSubContainer}>
+                            <View style={styles.accordianSectionStepper}>
+                                <Stepper pacs={this.curPAC}/>
+                            </View>
                         </View>
                     </View>
-                </View>
-            );
-        }
-        else{
-            return (
-                <Spinner/>
+                );
+            }
+            else {
+                return (
+                    <Spinner/>
+                )
+            }
+        }else{
+            return(
+                <View><Text>
+
+                </Text></View>
             )
         }
     }

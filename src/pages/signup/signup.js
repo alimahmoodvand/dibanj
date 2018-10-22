@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container, Form, Input, Item, Label, Text} from "native-base";
-import {Image, ScrollView, StyleSheet, View} from "react-native";
+import {Image, ScrollView, StyleSheet, ToastAndroid, View} from "react-native";
 import {saveUser} from "../../redux/actions";
 import {connect} from "react-redux";
 import Http from "../../services/http";
@@ -25,6 +25,7 @@ import Loading from "../../components/laoding/laoding";
      };
      state={
          loading:false,
+         welcomeMessage:false
      }
     render(){
         // console.log(this.props)
@@ -32,41 +33,55 @@ import Loading from "../../components/laoding/laoding";
         this.singup.userId=this.props.userId;
         return(
             <View style={styles.main}>
-                <Loading visible={this.state.loading} />
-                <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
+                <Loading visible={this.state.loading}/>
+                {!this.state.welcomeMessage &&
 
-                <View style={styles.container}>
+                <View style={styles.main}>
+                    <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
-                    <ScrollView>
+                    <View style={styles.container}>
 
-                    <Form style={styles.signupForm}>
-                        <View style={styles.logoContainer}>
-                        <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
+                        <ScrollView>
+
+                            <Form style={styles.signupForm}>
+                                <View style={styles.logoContainer}>
+                                    <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
+                                </View>
+                                <Label style={styles.labelText}> لطفا برای خود نام کاربری,ایمیل و رمز عبور انتخاب
+                                    کنید. </Label>
+                                <Item fixedLabel>
+                                    <Input style={styles.inputText}
+                                           onChangeText={(text) => this.singup.username = text}/>
+                                    <Label style={styles.labelText}>نام کاربری</Label>
+                                </Item>
+                                <Item fixedLabel>
+                                    <Input style={styles.inputText} keyboardType="email-address"
+                                           onChangeText={(text) => this.singup.email = text}/>
+                                    <Label style={styles.labelText}>ایمیل</Label>
+                                </Item>
+                                <Item fixedLabel>
+                                    <Input style={styles.inputText} secureTextEntry={true}
+                                           onChangeText={(text) => this.singup.password = text}/>
+                                    <Label style={styles.labelText}>رمزکاربری</Label>
+                                </Item>
+                                <Item fixedLabel>
+                                    <Input style={styles.inputText} secureTextEntry={true}
+                                           onChangeText={(text) => this.singup.passwordRepeat = text}/>
+                                    <Label style={styles.labelText}>تکرار رمز </Label>
+                                </Item>
+                                <Button full style={styles.loginBtn} onPress={this._loginCheck}>
+                                    <Text style={styles.btnText}>ثبت نام</Text>
+                                </Button>
+                            </Form>
+                        </ScrollView>
                     </View>
-                        <Label style={styles.labelText}> لطفا برای خود نام کاربری,ایمیل و رمز عبور انتخاب کنید. </Label>
-                        <Item fixedLabel>
-                            <Input style={styles.inputText} onChangeText={ (text) => this.singup.username = text }  />
-                            <Label style={styles.labelText}>نام کاربری</Label>
-                        </Item>
-                        <Item fixedLabel>
-                            <Input style={styles.inputText} keyboardType="email-address"  onChangeText={ (text) => this.singup.email = text }  />
-                            <Label style={styles.labelText}>ایمیل</Label>
-                        </Item>
-                        <Item fixedLabel>
-                            <Input style={styles.inputText} secureTextEntry={true} onChangeText={ (text) => this.singup.password = text }  />
-                                                <Label style={styles.labelText}>رمزکاربری</Label>
-                        </Item>
-                        <Item fixedLabel>
-                            <Input style={styles.inputText} secureTextEntry={true} onChangeText={ (text) => this.singup.passwordRepeat = text }  />
-                                                <Label style={styles.labelText}>تکرار رمز </Label>
-                        </Item>
-                        <Button full style={styles.loginBtn} onPress={this._loginCheck}>
-                            <Text style={styles.btnText}>ثبت نام</Text>
-                        </Button>
-                    </Form>
-                    </ScrollView>
-                </View>
 
+                </View>
+                }
+                {
+                this.state.welcomeMessage &&
+                <Image style={styles.bgimage} source={require('../../assets/images/splash.jpg')}/>
+            }
             </View>
         );
     }
@@ -77,9 +92,9 @@ import Loading from "../../components/laoding/laoding";
            if (this.singup.password != this.singup.passwordRepeat) {
                error = 'notEqualPass'
            }
-           if (this.singup.password.length < 8) {
-               error = 'shortPass'
-           }
+           // if (this.singup.password.length < 8) {
+           //     error = 'shortPass'
+           // }
            if (this.singup.email.trim().length==0||!regex.test(this.singup.email)) {
                error = 'emailInvalid'
            }
@@ -92,6 +107,13 @@ import Loading from "../../components/laoding/laoding";
                let user = await Http._postAsyncData(this.singup, 'auth/register');
                if (user && user.userId) {
                    this.props.saveUser(user)
+                   ToastAndroid.showWithGravity(
+                       '"به رسانه نوین آموزشی دیبانژ" خوش آمدید.',
+                       ToastAndroid.LONG,
+                       ToastAndroid.CENTER
+                   );
+                   this.setState({welcomeMessage:true});
+                   setTimeout(()=>Actions.reset('drawer'),3000)
                    Actions.reset('drawer');
                }
                this.setState({loading: false});

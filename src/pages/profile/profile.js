@@ -43,6 +43,7 @@ class Profile extends Component {
     postalCode;
     uri="";
     userAddresses=[];
+    statusCode=0;
     _getUserAddresses=async()=>{
         let response = await Http._postAsyncData({userId:this.props.user.userId,token:this.props.user.token},'getAddresses');
         // console.log(response)
@@ -82,15 +83,23 @@ class Profile extends Component {
                                         this.setState({loading:true});
                                         Http._postFilePromise({
                                             token: this.props.user.token,
+                                            uniqueCode: this.props.user.uniqueCode,
                                             userId: this.props.user.userId
                                         }, [image], 'userImage')
-                                            .then((response) => response.json()).then(response => {
-                                            console.log(response)
-                                            let user = this.props.user;
-                                            user.imageUrl = response.image;
-                                            user.image = response.image;
-                                            this.props.saveUser(user);
-                                            this.setState({loading:false});
+                                            .then((response) =>{
+                                                this.setState({loading:false})
+                                                this.statusCode=response.status;
+                                                return   response.json()
+                                            }).then(response => {
+                                            if (this.statusCode == 200) {
+                                                let user = this.props.user;
+                                                user.imageUrl = response.image;
+                                                user.image = response.image;
+                                                this.props.saveUser(user);
+                                            } else if (this.statusCode == 401) {
+                                                Actions.unauthorized();
+                                            }
+                                            this.setState({loading: false});
                                         }).catch(err => {
                                             this.setState({loading:false});
                                             new AlertMessage().error('serverError',err.message?err.message:'')

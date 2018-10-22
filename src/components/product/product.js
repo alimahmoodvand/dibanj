@@ -42,19 +42,23 @@ class Product extends Component{
         return(
             <View style={styles.prices}>
                 { prod.price>0&&
-                    <Text style={[decStyle]}>
-                        {prod.price}
+                    <Text style={[decStyle,{fontSize:11,fontWeight:'normal'}]}>
+                        {this._priceSeparate(prod.price)}
                     </Text>
                 }
                 {prod.DiscountPercent > 0 &&
-                    <Text >{prod.DiscountPercent+'%'}</Text>
+                    <Text style={[{fontSize:11,fontWeight:'normal'}]}>{prod.DiscountPercent+'%'+' تخفیف'}</Text>
                 }
                 {prod.PriceAfterDiscount > 0&&
-                <Text style={[{color:'green'}]}>{prod.PriceAfterDiscount}</Text>
+                <Text style={[{color:'green'},{fontSize:11,fontWeight:'normal'}]}>{this._priceSeparate(prod.PriceAfterDiscount)}</Text>
                 }
             </View>
         );
     }
+    _priceSeparate=(x)=>{
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "/");
+
+    };
     _findBasket=()=>{
         for(let i=0;i<this.props.basket.basket.length;i++){
             if(this.props.prod.ProductAndCourseId==this.props.basket.basket[i].ProductAndCourseId){
@@ -71,6 +75,35 @@ class Product extends Component{
         }
         return false;
     }
+    _renderImages=(prod)=> {
+        let images=[]
+
+
+
+        if((prod.remainCount===0||prod.remainCount<-1)||new Date(prod.EndDate).getTime()<new Date().getTime()){
+            images.push(<Image style={styles.imageStickerDate} key={0} source={require('../../assets/images/finish.png')}/>);
+        }
+        else if(new Date(prod.StartDate).getTime()>new Date().getTime()){
+            images.push(<Image style={styles.imageStickerDate} key={3}  source={require('../../assets/images/registering.png')}/>);
+        }
+        else if(new Date(prod.StartDate).getTime()<new Date().getTime()&&new Date(prod.EndDate).getTime()>new Date().getTime()){
+            images.push(<Image style={styles.imageStickerDate} key={4}  source={require('../../assets/images/progress.png')}/>);
+        }
+        let marginFree={}
+        if(prod.PriceAfterDiscount===0){
+            images.push(<Image style={styles.imageStickerFree} key={1} source={require('../../assets/images/free.png')}/>);
+        }else{
+            marginFree={marginLeft:'20%'}
+            //images.push(<Image style={[styles.imageStickerFree,{height:0}]} key={1} source={require('../../assets/images/free.png')}/>);
+
+        }
+        if(prod.isSpecial===1){
+            images.push(<Image style={[styles.imageStickerFree,marginFree]} key={2} source={require('../../assets/images/special.png')}/>);
+        }
+        return images.map((item,index)=>{
+            return  item;
+        })
+    }
     render(){
         const {prod,bookmark,category,search}=this.props
         const myProduct=this._findProduct();
@@ -84,27 +117,21 @@ class Product extends Component{
             (((prod.Description).substring(0,maxlimit-3)) + '...') :
             prod.Description );
         let duration=false;
+        // prod.Duration="10 روز"
+        // prod.Title+=' '+prod.Title+' '+prod.Title+' '+prod.Title;
         if(prod.Duration&&prod.Duration.trim()!==''){
             duration=true;
         }
         let overlay=<Image style={styles.image} source={{uri: prod.thumbnailUrl}}/>;
 
-        if(prod.subType==1&&prod.remainCount<1){
-             overlay=<Image style={styles.imageLabel} source={require('../../assets/images/finish.png')}/>;
-        }else if(prod.PriceAfterDiscount==0){
-            overlay=<Image style={styles.imageLabel} source={require('../../assets/images/free.png')}/>;
-        }
-        else if(prod.isSpecial==1){
-             overlay=<Image style={styles.imageLabel} source={require('../../assets/images/special.png')}/>;
-        }
-        let deadline=false;
-        if(prod.RegisterDeadLine){
-            let now=new Date().getTime()
-            let deadline=new Date(prod.RegisterDeadLine).getTime()
-            if(deadline<now){
-                deadline=true;
-            }
-        }
+        // let deadline=false;
+        // if(prod.RegisterDeadLine){
+        //     let now=new Date().getTime()
+        //     let deadline=new Date(prod.RegisterDeadLine).getTime()
+        //     if(deadline<now){
+        //         deadline=true;
+        //     }
+        // }
         return(
             <View style={styles.main}>
                 {bookmark &&
@@ -112,7 +139,7 @@ class Product extends Component{
                     // backgroundColor:'yellow',
                     position: 'absolute',
                     top: 0,
-                    left: '13%',
+                    left: '7%',
                     zIndex: 101,
                     // width:'100%',
 
@@ -125,14 +152,20 @@ class Product extends Component{
                     data.type = "delete";
                     this.props.removeBookmark(prod)
                     Http._postAsyncData(data, 'bookmark')
-                }} color="red" size={25}/>
+                }} color="red" size={22}/>
                 }
                 <Button style={styles.buy} title={prod.id} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
                     <Text style={styles.proBtnText}>جزئیات</Text>
                 </Button>
                 <View style={styles.content}>
                     <View style={styles.container}>
+
                     <View style={styles.details}>
+                        <View style={styles.images}>
+                            {this._renderImages(prod)}
+                        </View>
+
+                        <View style={styles.infoSide}>
                         <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
                         <Text style={[styles.detalsText,{fontWeight:'bold'}]}>{prod.Title}</Text>
                         </TouchableOpacity>
@@ -145,19 +178,21 @@ class Product extends Component{
                         </TouchableOpacity>
                         }
                         <TouchableOpacity  style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
-                        <Text style={[styles.detalsText]}>{(prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:'')}</Text>
+                        <Text style={[styles.detalsText,{textAlign:'right',fontSize:10,color:'black'}]}>{(prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):'')}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>
+                        </View>
+                        <View style={styles.priceSide}>
+                        {/*<TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>*/}
                             {this._getPrices(prod)}
-                        </TouchableOpacity>
+                        {/*</TouchableOpacity>*/}
+                        </View>
                     </View>
-
                     <TouchableOpacity style={styles.image}  onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
                     <ImageBackground style={styles.image} source={{uri: prod.thumbnailUrl}}>{overlay}</ImageBackground>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.basket}>
-                        {this.canBy(prod)&&
+                        {false&&
                         <Button style={[styles.buyBtn,{backgroundColor:(prod.price>0?'#0094cc':'green')}]} title={prod.id} onPress={() => {
                             if (this._findBasket()) {
                                 alert("قبلا به سبد اضافه شده است")
@@ -214,6 +249,8 @@ class Product extends Component{
             return false;
         }
     }
+
+
 }
 const mapDispatchToProps=(dispatch)=> {
     return{

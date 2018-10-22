@@ -156,12 +156,15 @@ class Basket extends Component{
                 discountCode: this.state.offcode ? this.state.discountCode : 0,
                 discountId: this.state.offcode ? this.state.discountId : 0,
             }
+            this.setState({loading:true})
             let response = await Http._postAsyncData(data, 'order');
+            this.setState({loading:false})
+
             if (Array.isArray(response)) {
                 this.props.emptyBasket()
                 this.props.initProduct(response)
-                alert("خرید با موفقیت انجام شد")
-                Actions.home();
+                alert("خرید با موفقیت انجام شد");
+                Actions.order();
             }
         } else {
             new AlertMessage().error("addressEmpty")
@@ -172,6 +175,7 @@ class Basket extends Component{
     _checkOffcode=async()=> {
         // console.log(this.offcode)
         if(this.offcode&&this.offcode.trim()!='') {
+            this.setState({loading:true})
             let data = {
                 token: this.props.user.token,
                 discountCode: this.offcode
@@ -186,6 +190,7 @@ class Basket extends Component{
                     discountCode: response[0].discountCode,
                 })
             }
+            this.setState({loading:false})
         }else{
             new AlertMessage().error('offEmpty')
         }

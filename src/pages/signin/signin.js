@@ -68,9 +68,9 @@ import AlertMessage from "../../services/alertmessage";
          let error='';
          let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-         if (this.password.length < 8) {
-             error = 'shortPass'
-         }
+         // if (this.password.length < 8) {
+         //     error = 'shortPass'
+         // }
          if (this.email.trim().length==0||!regex.test(this.email)) {
              error = 'emailInvalid'
          }
@@ -85,12 +85,12 @@ import AlertMessage from "../../services/alertmessage";
              if (user&&user.fullName) {
                  this.props.saveUser(user);
                  ToastAndroid.showWithGravity(
-                     'به دیبانژ خوش آمدید',
+                     '"به رسانه نوین آموزشی دیبانژ" خوش آمدید.',
                      ToastAndroid.LONG,
                      ToastAndroid.CENTER
                  );
                  this.setState({welcomeMessage:true});
-                 setTimeout(()=>Actions.reset('drawer'),2000)
+                 setTimeout(()=>Actions.reset('drawer'),3000)
              }else{
                  new AlertMessage().error('notFound')
              }

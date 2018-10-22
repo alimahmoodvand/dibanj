@@ -91,6 +91,9 @@ export default styles = EStyleSheet.create({
         flexDirection:'row',
         flex:1,
         padding:10,
+        // width:'100%',
+        // height:20,
+        // backgroundColor:'red',
         borderBottomColor:'black',
         borderBottomWidth:1,
 

@@ -56,7 +56,7 @@ import AlertMessage from "../../services/alertmessage";
               }
                  let user=await Http._postAsyncData(data,'auth/verification');
                if(user){
-                   Actions.verfiycodepage({mobile:this.mobile,activationCode:user.activationCode});
+                   Actions.verfiycodepage({mobile:this.mobile});
                }
                this.setState({loading:false});
 

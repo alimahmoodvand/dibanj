@@ -75,7 +75,7 @@ class BasketProduct extends Component{
                     <View style={styles.details}>
                         <Text style={styles.detalsText}>{prod.Title}</Text>
                         <Text style={styles.detalsText}>{prod.fullName}</Text>
-                        <Text style={styles.detalsText}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:''}</Text>
+                        <Text style={styles.detalsText}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):''}</Text>
                     </View>
                     <View style={styles.prices}>
                         <View style={styles.price}>

@@ -112,6 +112,7 @@ export default styles = EStyleSheet.create({
     accordianHeader:{
         flexDirection:'row',
         padding:5,
+
         // borderBottomColor:'black',
         // borderBottomWidth:1,
     },

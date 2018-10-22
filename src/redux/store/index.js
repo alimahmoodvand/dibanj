@@ -5,7 +5,7 @@ import {createLogger} from "redux-logger";
 import reducers from "../reducers"
 import { autoRehydrate, persistStore} from "redux-persist";
 
-const middleware=[thunk,createLogger()];
+const middleware=[thunk/*,createLogger()*/];
 const persistConfig = {
     key: 'root',
     storage:AsyncStorage,

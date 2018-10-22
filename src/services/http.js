@@ -31,8 +31,13 @@ export default class Http extends Component {
                 const responseJson = await response.json();
                 console.log("_postAsyncData", url, data, responseJson)
                 if ((responseJson && responseJson.message)) {
+                    if(responseJson.message!=="nil")
                     new AlertMessage().error(null, responseJson.message)
-                    return null;
+                    if(statusCode==200){
+                        return responseJson;
+                    }else{
+                        return null;
+                    }
                 } else if (!responseJson) {
                     new AlertMessage().error('responseEmpty')
                     return null;
@@ -86,7 +91,7 @@ export default class Http extends Component {
                     name:item.fileName
                 });
             })
-            console.log("_postFilePromise",data,file,form,url)
+            // console.log("_postFilePromise",data,file,form,url)
             return fetch(Http.baseurl + url, {
                 method: 'POST',
                 headers: {

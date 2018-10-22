@@ -73,41 +73,88 @@ export default styles = EStyleSheet.create({
         width:'40%',
         // backgroundColor:'#c3c3c377'
     },
+    imageStickerDate:{
+        height:25,
+        width:"20%",
+        marginLeft:'15%',
+        // backgroundColor:'#c3c3c377'
+    },
+    imageStickerFree:{
+        height:25,
+        width:"20%",
+        // marginLeft:'30%',
+        // backgroundColor:'#c3c3c377'
+    },
     details:{
-        paddingRight:10,
+        flexDirection:'row-reverse',
+        // paddingRight:10,
         // paddingTop:15,
-        flex:0.55,
-        alignItems:'flex-end',
-        justifyContent:'flex-start',
-        // backgroundColor:'red'
+        flex:0.8,
+        flexWrap:'wrap',
+
+        // flexDirection:'column-reverse',
+        // alignItems:'flex-end',
+        // justifyContent:'flex-start',
+        // alignItems:'flex-end',
+        // justifyContent:'flex-start',
+        backgroundColor:'yellow'
+    },
+    images:{
+        // height:10,
+        width:'100%',
+        // justifyContent:'center',
+        // alignItems:'center',
+
+        // backgroundColor:'green',
+        position:'absolute',
+        flexDirection:'row',
+    },
+    infoSide:{
+      flex:0.53,
+        backgroundColor:'green',
+        paddingTop:25,
+
+        // justifyContent:'center',
+    },
+    priceSide:{
+      flex:0.3,
+
+        backgroundColor:'blue',
+        // justifyContent:'flex-end'
     },
     prices:{
         // marginLeft:10,
         // marginRight:10,
-        paddingTop:15,
-        width:'100%',
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-around',
-
+        // paddingTop:15,
+        // width:'100%',
+        // flexDirection:'row',
+        alignItems:'flex-start',
+        // backgroundColor:'blue',
+        justifyContent:'center',
+        height:'100%'
     },
     detalsText:{
         // color:'black',
         // fontSize:17,
         // width:'90%',
-        flex:0.8,
+        flex:1,
         margin:2,
-        textAlign:'right',
-        flexWrap:'wrap'
+        // textAlign:'right',
+        flexWrap:'wrap',
+        // backgroundColor:'green',
+        fontSize:14,
+        fontWeight:'normal',
         // marginLeft:'$productBnt',
         // direction:'rtl',
 
     },
     basket:{
-        flex:1,
+        // flex:0.2,
+        height:10,
+        width:10,
         justifyContent:'center',
-        alignItems:'center'
-        // backgroundColor:'red',
+        alignItems:'center',
+        backgroundColor:'red',
     },
     filterImage:{
         width:25,
@@ -115,7 +162,7 @@ export default styles = EStyleSheet.create({
     },
     container:{
         flexDirection:'row',
-        justifyContent:'flex-end'
+        // justifyContent:'flex-end'
     },
     buyBtn:{
         width:'100%',
@@ -125,9 +172,9 @@ export default styles = EStyleSheet.create({
     },
     btns:{
         flexWrap:'wrap',
-        flexDirection:'row',
+        flexDirection:'row-reverse',
         width:'95%',
-        // backgroundColor:'red',
+        // backgroundColor:'blue',
     },
 
 });

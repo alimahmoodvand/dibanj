@@ -111,7 +111,7 @@ class SingleProduct extends Component{
                 <View style={styles.content}>
                     <View style={[styles.details,descStyle]}>
                         <Text  style={[styles.detalsText]}>{prod.Title}</Text>
-                        <Text  style={[styles.detalsText]}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0]:''}</Text>
+                        <Text  style={[styles.detalsText]}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):''}</Text>
                         <Text  style={[styles.detalsText]}>{prod.Duration}</Text>
                         <Text  style={[styles.detalsText]}>{prod.fullName}</Text>
                         <Text  style={[styles.detalsText]}>{prod.Description}</Text>

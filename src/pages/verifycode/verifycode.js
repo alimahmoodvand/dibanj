@@ -150,16 +150,18 @@ import AlertMessage from "../../services/alertmessage";
                  activationCode: this.activationCode,
              };
              let user = await Http._postAsyncData(data, 'auth/checkVerification');
+             this.setState({loading:false});
+
              if (user.fullName) {
                  this.props.saveUser(user);
                  clearInterval(this.state.interval);
                  ToastAndroid.showWithGravity(
-                     'به دیبانژ خوش آمدید',
+                     '"به رسانه نوین آموزشی دیبانژ" خوش آمدید.',
                      ToastAndroid.LONG,
                      ToastAndroid.CENTER
                  );
-                 this.setState({welcomeMessage:true,loading:false});
-                 setTimeout(()=>Actions.reset('drawer'),2000)
+                 this.setState({welcomeMessage:true});
+                 setTimeout(()=>Actions.reset('drawer'),3000)
              }
              else if(user&&!user.message){
                  Actions.signuppage({userId:user.userId,mobile:user.mobile});
@@ -167,6 +169,7 @@ import AlertMessage from "../../services/alertmessage";
          }else{
              new AlertMessage().error(error)
          }
+         console.log("         this.setState({loading:false});")
      };
      _sendCode=async()=>{
         let data={

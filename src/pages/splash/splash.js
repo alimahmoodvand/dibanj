@@ -23,6 +23,7 @@ import DrawerLayout from "../../components/drawer/drawer";
         );
     }
     isInitial=false;
+    statusCode=0;
     _selectState=()=> {
         if (this.props.rehydrated) {
             // this.props.removeUser();
@@ -31,17 +32,24 @@ import DrawerLayout from "../../components/drawer/drawer";
                     this.isInitial=true;
                     Http._postDataPromise({
                         token: this.props.user.token,
+                        uniqueCode: this.props.user.uniqueCode,
                         userId: this.props.user.userId
-                    }, 'initial').then((response) =>response.json()).then((responseData) => {
-                            // console.log(responseData)
-                            this.props.saveCategories(responseData[0])
-                            this.props.saveMessages(responseData[1])
-                            this.props.saveUser(responseData[2][0])
-                            this.props.initBookmark(responseData[3])
-                            this.props.initProduct(responseData[4])
-                            Actions.reset('drawer');
-                            setTimeout(()=> this.isInitial=false,2000)
-
+                    }, 'initial').then((response) =>{
+                        this.statusCode=response.status;
+                        return response.json()
+                    }).then((responseData) => {
+                        console.log(responseData)
+                            if(this.statusCode==200) {
+                                this.props.saveCategories(responseData[0])
+                                this.props.saveMessages(responseData[1])
+                                this.props.saveUser(responseData[2][0])
+                                this.props.initBookmark(responseData[3])
+                                this.props.initProduct(responseData[4])
+                                Actions.reset('drawer');
+                                setTimeout(() => this.isInitial = false, 2000)
+                            }else if(this.statusCode==401){
+                                Actions.unauthorized();
+                            }
                         }).catch((err) => {
                         console.log(err)
                         setTimeout(()=> this.isInitial=false,2000)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
-import {Image, ScrollView, Text, TouchableOpacity, View, WebView} from "react-native";
+import {FlatList, Image, ScrollView, Text, TouchableOpacity, View, WebView} from "react-native";
 import styles from './orders.css.js'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -116,20 +116,22 @@ class Order extends Component{
                         {/*this._renderFilter()*/}
                     {/*}*/}
                     {/*</View>*/}
-                    {this.orders.length>0&&
-                    <ScrollView style={styles.categories}>
+                    {this.orders.length > 0 &&
+                    <View style={styles.categories}>
                         {
-                            this.orders.length>0&&
-                            <Accordion
-                                duration={300}
-                                sections={this.orders}
-                                renderHeader={this._renderHeader}
-                                renderContent={this._renderContent}
-                                onChange={this._selectOrder}
+                            this.orders.length > 0 &&
+                            <FlatList style={{flex: 1}}
+                                      data={this.orders}
+                                      extraData={this.state}
+                                      keyExtractor={(item, index) => index.toString()}
+                                      renderItem={({item, index}) => {
+                                          return this._renderHeader(item, index);
+                                      }}
                             />
+
                         }
 
-                    </ScrollView>
+                    </View>
                     }
                     {
                         (this.orders.length==0&&this.showSpinner)&&
@@ -170,15 +172,16 @@ class Order extends Component{
             bg={backgroundColor:'#5bff1d33'};
         }
         return (
-            <View onPress={()=>{}} style={[styles.accordianHeader,bg]}>
-                {
+            <View key={index} onPress={()=>{}} >
+                <View style={styles.accordianHeader}>
+                    {
                         this.state.selectCatIndex !== index &&
-                    <FIcon style={styles.filterIcon} name="angle-left" color="black" size={25}/>
-                }
-                {
-                    this.state.selectCatIndex===index&&
-                    <FIcon style={styles.filterIcon} name="angle-down"  color="black" size={25}/>
-                }
+                        <FIcon style={styles.filterIcon} onPress={()=>{this._selectOrder(index)}} name="angle-left" color="black" size={30}/>
+                    }
+                    {
+                        this.state.selectCatIndex===index&&
+                        <FIcon style={styles.filterIcon}  onPress={()=>{this._selectOrder(false)}} name="angle-down"  color="black" size={30}/>
+                    }
                 <View style={styles.accordianHeaderContainerText}>
                      <Text style={styles.accordianHeaderText}>{section.persianRegDate.split(' ')[0]}:  </Text>
                     <Text  style={styles.accordianHeaderText}> تاریخ </Text>
@@ -188,29 +191,41 @@ class Order extends Component{
                     <Text  style={styles.accordianHeaderText}> شماره </Text>
 
                 </View>
+              </View>
+                {
+                    this._renderContent(section,index)
+                }
             </View>
         );
     }
-    _renderContent=(section)=> {
+    _renderContent=(section,index)=> {
         // console.log(section,this.curPAC,section)
-        if(this.curPAC.length>0) {
-            return (
-                <View style={styles.accordianSubContent}>
-                    <View style={styles.accordianSubContainer}>
-                        <View style={styles.accordianSectionStepper}>
-                            {
-                                this.curPAC.map(item=>{
-                                    return this._renderContentItem(item);
-                                })
-                            }
+        if(index===this.state.selectCatIndex) {
+            if (this.curPAC.length > 0) {
+                return (
+                    <View style={styles.accordianSubContent}>
+                        <View style={styles.accordianSubContainer}>
+                            <View style={styles.accordianSectionStepper}>
+                                {
+                                    this.curPAC.map(item => {
+                                        return this._renderContentItem(item);
+                                    })
+                                }
+                            </View>
                         </View>
                     </View>
-                </View>
-            );
-        }
-        else{
-            return (
-                <Spinner/>
+                );
+            }
+            else {
+                return (
+                    <Spinner/>
+                )
+            }
+        }else{
+            return(
+                <View><Text>
+
+                </Text></View>
             )
         }
     }
@@ -241,42 +256,6 @@ class Order extends Component{
             </View>
         );
     }
-    // _renderContent=(section)=> {
-    //     return ;
-    // return (
-    //         <View  style={styles.accordianContent}>
-    //             <Accordion
-    //                 duration={1000}
-    //                 sections={SECTIONS}
-    //                 renderHeader={Term._renderSubHeader}
-    //                 renderContent={Term._renderSubContent}
-    //             />
-    //         </View>
-    //     );
-    // }
-    // static _renderSubHeader(section,index) {
-    //     return (
-    //         <View onPress={()=>{}} style={styles.accordianSubHeader}>
-    //             <FIcon style={styles.filterIcon} name="angle-left"  color="black" size={25}/>
-    //
-    //             <View style={styles.accordianSubHeaderContainerText}>
-    //                 <Text onPress={()=>{}} style={styles.accordianSubHeaderText}>{section.Title}</Text>
-    //             </View>
-    //         </View>
-    //     );
-    // }
-    //
-    // static _renderSubContent(section) {
-    // return (
-    //         <View  style={styles.accordianSubContent}>
-    //             <View style={styles.accordianSubContainer}>
-    //                 <View  style={styles.accordianSectionStepper}>
-    //                     <Stepper/>
-    //                 </View>
-    //             </View>
-    //         </View>
-    //     );
-    // }
 }
 const mapStateToProps=state=>{
     return{

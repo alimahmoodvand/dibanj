@@ -28,10 +28,13 @@ class Category extends Component{
     }
     category=null;
     products=[];
+    onEndReachedCalledDuringMomentum = true;
     componentWillUnmount() {
     }
     render() {
         const selectCatIndex=this.state.selectCatIndex;
+        // let categories=this.props.categories.concat(this.props.categories.concat(this.props.categories.concat(this.props.categories.concat(this.props.categories))))
+        // categories=categories.concat(categories)
         return (
             <View style={styles.main}>
                 <Loading visible={this.state.loading} />
@@ -82,12 +85,16 @@ class Category extends Component{
                                 renderItem={({item, index}) =>
                                     this._renderItem(item, index)
                                 }
+                                onEndReachedThreshold={0.5}
+                                onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
                                 // ListEmptyComponent={() => <Spinner/>}
                                 onEndReached={() => {
-                                    console.log(this.category)
-                                    this._catSelect(this.category );
+                                    // console.log("onEndReached")
+                                    if(!this.onEndReachedCalledDuringMomentum){
+                                        this._catSelect(this.category );
+                                        this.onEndReachedCalledDuringMomentum=true;
+                                    }
                                 }}
-                                onEndReachedThreshold={0.1}
                             />
                         </View>
                     }

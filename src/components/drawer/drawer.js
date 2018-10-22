@@ -20,6 +20,7 @@ class DrawerLayout extends Component{
         updateUI:0,
         loading:false,
     }
+    statusCode=0;
     render(){
         // console.log("mmmmm",this.props.user)
         return <Container style={{backgroundColor: 'gray'}}>
@@ -37,17 +38,24 @@ class DrawerLayout extends Component{
                         image.fileName=path[path.length-1];
                          this.setState({loading:true});
                         Http._postFilePromise({
-                                    token: this.props.user.token,
-                                    userId: this.props.user.userId
-                                }, [image], 'userImage')
-                                    .then((response) => response.json()).then(response => {
-                                    console.log(response)
-                                    let user = this.props.user;
-                                    user.imageUrl = response.image;
-                                    user.image = response.image;
-                                    this.props.saveUser(user);
-                            this.setState({loading:false});
-                                }).catch(err => {
+                            token: this.props.user.token,
+                            uniqueCode: this.props.user.uniqueCode,
+                            userId: this.props.user.userId
+                        }, [image], 'userImage')
+                                    .then((response) =>{
+                                        this.statusCode=response.status;
+                                     return   response.json()
+                                    }).then(response => {
+                            if (this.statusCode == 200) {
+                                let user = this.props.user;
+                                user.imageUrl = response.image;
+                                user.image = response.image;
+                                this.props.saveUser(user);
+                            } else if (this.statusCode == 401) {
+                                Actions.unauthorized();
+                            }
+                            this.setState({loading: false});
+                        }).catch(err => {
                             this.setState({loading:false});
                             new AlertMessage().error('serverError',err.message?err.message:'')
                                 })
@@ -113,15 +121,6 @@ class DrawerLayout extends Component{
                 <Text style={styles.proImageText}>خروج</Text>
             </Button>
         </Container>;
-    }
-    static clearData=()=>{
-        this.props.removeUser(this.props.user);
-        this.props.emptyBasket();
-        this.props.emptyProduct();
-        this.props.emptyFavoriets();
-    }
-    static logout=async()=>{
-         await Http._postAsyncData({userId:this.props.user.userId}, '/auth/logout');
     }
 }
 

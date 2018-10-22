@@ -162,14 +162,22 @@ class Practice extends Component{
             this.setState({loading:true})
             Http._postFilePromise({userId:this.props.user.userId,
                 token:this.props.user.token,
+                uniqueCode: this.props.user.uniqueCode,
                 ProductAndCourseId:this.props.ProductAndCourseId,
                 EAPtype:this.props.EAPtype,
                 answers:this.answers,
-            },this.files,'insertAnswer').then((response) => response.json()).then(response=>{
-                console.log(response)
+            },this.files,'insertAnswer').then((response) => {
                 this.setState({loading:false})
-                new AlertMessage().error("answerDone")
-                Actions.term();
+                this.statusCode=response.status;
+                return   response.json()
+            }).then(response=> {
+                this.setState({loading: false})
+                if (this.statusCode == 200) {
+                    new AlertMessage().error("answerDone")
+                    Actions.term();
+                } else if (this.statusCode == 401) {
+                    Actions.unauthorized();
+                }
             }).catch(err=>{
                 console.log(err)
                 this.setState({loading:false})

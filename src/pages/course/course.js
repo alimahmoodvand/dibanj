@@ -79,8 +79,6 @@ class Course extends Component{
             }
         }
         this.setState({loading:false})
-
-
     }
 
     _renderItem = (item,index) => {
