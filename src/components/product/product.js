@@ -39,7 +39,17 @@ class Product extends Component{
         }
         // console.log(prod,decStyle,prod.PriceAfterDiscount,prod.price,prod.DiscountPercent)
         // decStyle.backgroundColor='red';
+        let sectionStyle={};
+
+        if( prod.price===0){
+            sectionStyle={
+            width:0,
+                height:0
+            }
+            this.infoSideStyle={flex:0.9}
+        }
         return(
+            <View style={[styles.priceSide,sectionStyle]}>
             <View style={styles.prices}>
                 { prod.price>0&&
                     <Text style={[decStyle,{fontSize:11,fontWeight:'normal'}]}>
@@ -53,8 +63,10 @@ class Product extends Component{
                 <Text style={[{color:'green'},{fontSize:11,fontWeight:'normal'}]}>{this._priceSeparate(prod.PriceAfterDiscount)}</Text>
                 }
             </View>
+            </View>
         );
     }
+    infoSideStyle={}
     _priceSeparate=(x)=>{
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "/");
 
@@ -132,6 +144,7 @@ class Product extends Component{
         //         deadline=true;
         //     }
         // }
+        let price=this._getPrices(prod);
         return(
             <View style={styles.main}>
                 {bookmark &&
@@ -165,7 +178,7 @@ class Product extends Component{
                             {this._renderImages(prod)}
                         </View>
 
-                        <View style={styles.infoSide}>
+                        <View style={[styles.infoSide,this.infoSideStyle]}>
                         <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
                         <Text style={[styles.detalsText,{fontWeight:'bold'}]}>{prod.Title}</Text>
                         </TouchableOpacity>
@@ -181,18 +194,17 @@ class Product extends Component{
                         <Text style={[styles.detalsText,{textAlign:'right',fontSize:10,color:'black'}]}>{(prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):'')}</Text>
                         </TouchableOpacity>
                         </View>
-                        <View style={styles.priceSide}>
                         {/*<TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>*/}
-                            {this._getPrices(prod)}
+                            {price}
                         {/*</TouchableOpacity>*/}
-                        </View>
                     </View>
-                    <TouchableOpacity style={styles.image}  onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
-                    <ImageBackground style={styles.image} source={{uri: prod.thumbnailUrl}}>{overlay}</ImageBackground>
+                        <TouchableOpacity style={styles.image}  onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
+                            <ImageBackground style={styles.image} source={{uri: prod.thumbnailUrl}}>{overlay}</ImageBackground>
                         </TouchableOpacity>
                     </View>
+
                     <View style={styles.basket}>
-                        {false&&
+                        {this.canBuy(prod)&&
                         <Button style={[styles.buyBtn,{backgroundColor:(prod.price>0?'#0094cc':'green')}]} title={prod.id} onPress={() => {
                             if (this._findBasket()) {
                                 alert("قبلا به سبد اضافه شده است")
@@ -227,7 +239,7 @@ class Product extends Component{
             </View>
         );
     }
-    canBy=(prod)=>{
+    canBuy=(prod)=>{
         let deadline=false;
         if(prod.RegisterDeadLine){
             // let now=new Date(new Date().toISOString()).getTime()

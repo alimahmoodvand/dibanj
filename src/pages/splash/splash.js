@@ -7,17 +7,35 @@ import {Actions} from "react-native-router-flux";
 import Http from "../../services/http";
 import {initBookmark, initProduct, removeUser, saveCategories, saveMessages, saveUser} from "../../redux/actions";
 import DrawerLayout from "../../components/drawer/drawer";
+import  {Animated,Easing}from "react-native";
 
  class Splash extends Component{
+     state = {
+         offsetX: new Animated.Value(0),
+     }
     render(){
-        setTimeout(()=>{
-            this._selectState();
-        },500)
+         setTimeout(()=>{
+             Animated.timing(
+                 this.state.offsetX,
+                 {
+                     toValue: 1000,
+                     easing: Easing.back(),
+                     duration: 2000,
+                 }
+             ).start();
+             this._selectState();
+
+         },1000)
+
+        // setTimeout(()=>{
+        // },2000)
         return(
             <View style={styles.container}>
                 <Image  style={styles.bgimage} source={require('../../assets/images/splash.jpg')}/>
                 <View style={styles.content}>
+                    <Animated.View style={[styles.logo,{flexDirection:'row'},{ transform: [{translateX: this.state.offsetX}]}]}>
                     <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
+                    </Animated.View>
                 </View>
             </View>
         );
@@ -27,9 +45,11 @@ import DrawerLayout from "../../components/drawer/drawer";
     _selectState=()=> {
         if (this.props.rehydrated) {
             // this.props.removeUser();
+            // console.log(new Date())
             if (this.props.user.token) {
                 if (!this.isInitial) {
                     this.isInitial=true;
+
                     Http._postDataPromise({
                         token: this.props.user.token,
                         uniqueCode: this.props.user.uniqueCode,
@@ -45,7 +65,9 @@ import DrawerLayout from "../../components/drawer/drawer";
                                 this.props.saveUser(responseData[2][0])
                                 this.props.initBookmark(responseData[3])
                                 this.props.initProduct(responseData[4])
-                                Actions.reset('drawer');
+                                setTimeout(()=> {
+                                    Actions.reset('drawer');
+                                },500);
                                 setTimeout(() => this.isInitial = false, 2000)
                             }else if(this.statusCode==401){
                                 Actions.unauthorized();
@@ -57,9 +79,13 @@ import DrawerLayout from "../../components/drawer/drawer";
                 }
             }
             else if (this.props.user.userId && !this.props.user.token) {
-                Actions.signuppage();
+                setTimeout(()=>{
+                    Actions.signuppage();
+                },2000)
             } else {
-                Actions.loginpage();
+                setTimeout(()=>{
+                    Actions.loginpage();
+                },2000)
             }
         }
     }

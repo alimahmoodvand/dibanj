@@ -15,9 +15,9 @@ export default styles = ExStyleSheet.create({
     content:{
         flex:1,
         // backgroundColor: '#fff',
-        marginRight:15,
+        // marginRight:15,
         marginTop:15,
-        marginLeft:15,
+        // marginLeft:15,
         borderTopLeftRadius:5,
         borderTopRightRadius:5,
         // paddingRight:10,

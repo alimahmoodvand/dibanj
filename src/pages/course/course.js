@@ -20,8 +20,7 @@ import AlertMessage from "../../services/alertmessage";
 import Loading from "../../components/laoding/laoding";
 
 class Course extends Component{
-    product=null;
-    comment="";
+
     componentWillMount() {
         this._findProduct();
         this.setState({
@@ -37,9 +36,35 @@ class Course extends Component{
             save:false,
             loading:true,
         });
+        // console.log('component: componentWillMount');
+        // console.log(this.props);
     }
     componentWillUnmount() {
         clearInterval(this.state.interval);
+    }
+    componentWillReceiveProps(props){
+        this.props=props;
+        this.product=null;
+        this.comment="";
+        this.product={};
+        this.childs=[];
+        this.comments=[];
+        this.rating=-1;
+        this._findProduct();
+        this.setState({
+            interval: setInterval(() => {
+                this.setState({
+                    position: this.state.position+1 === this.state.dataSource.length ? 0 : this.state.position + 1
+                });
+            }, 4000),
+            position: 1,
+            interval: null,
+            dataSource: [],
+            favorite:false,
+            save:false,
+            loading:true,
+        });
+
     }
     product={};
     childs=[];

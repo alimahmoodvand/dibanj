@@ -63,7 +63,7 @@ export default styles = EStyleSheet.create({
         minHeight:'$productImage',
         height:'$productImage',
         width:'$productImage',
-        flex:.35,
+        flex:.4,
         overflow:'hidden',
         // borderBottomRightRadius:2,
         // borderTopRightRadius:2,
@@ -77,11 +77,14 @@ export default styles = EStyleSheet.create({
         height:25,
         width:"20%",
         marginLeft:'15%',
+        zIndex:100,
         // backgroundColor:'#c3c3c377'
     },
     imageStickerFree:{
         height:25,
         width:"20%",
+        zIndex:100,
+
         // marginLeft:'30%',
         // backgroundColor:'#c3c3c377'
     },
@@ -97,7 +100,7 @@ export default styles = EStyleSheet.create({
         // justifyContent:'flex-start',
         // alignItems:'flex-end',
         // justifyContent:'flex-start',
-        backgroundColor:'yellow'
+        // backgroundColor:'yellow'
     },
     images:{
         // height:10,
@@ -111,7 +114,7 @@ export default styles = EStyleSheet.create({
     },
     infoSide:{
       flex:0.53,
-        backgroundColor:'green',
+        // backgroundColor:'green',
         paddingTop:25,
 
         // justifyContent:'center',
@@ -119,7 +122,7 @@ export default styles = EStyleSheet.create({
     priceSide:{
       flex:0.3,
 
-        backgroundColor:'blue',
+        // backgroundColor:'blue',
         // justifyContent:'flex-end'
     },
     prices:{
@@ -150,11 +153,11 @@ export default styles = EStyleSheet.create({
     },
     basket:{
         // flex:0.2,
-        height:10,
-        width:10,
+        // height:10,
+        // width:10,
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'red',
+        // backgroundColor:'red',
     },
     filterImage:{
         width:25,
@@ -162,6 +165,8 @@ export default styles = EStyleSheet.create({
     },
     container:{
         flexDirection:'row',
+        minHeight:'$productImage',
+        height:'$productImage',
         // justifyContent:'flex-end'
     },
     buyBtn:{

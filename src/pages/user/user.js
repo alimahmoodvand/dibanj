@@ -13,12 +13,7 @@ import Stars from "react-native-stars-rating";
 import {connect} from "react-redux";
 import Http from "../../services/http";
 class User extends Component{
-    state = {
-        updateUI:0,
-        refreshing:false,
-        showSpinner:true,
-    };
-    page=1;
+
     _getUserCats=async()=>{
         let response = await Http._postAsyncData({userId:this.props.userId,token:this.props.user.token},'userCategoryBookmarks');
         // console.log(response)
@@ -36,7 +31,6 @@ class User extends Component{
             this.setState({updateUI:this.state.updateUI++});
         }
     }
-    pending=false;
     _getMasterProduct=async()=>{
         if(!this.pending) {
             this.pending=true;
@@ -63,10 +57,41 @@ class User extends Component{
         }
         // console.log(this.page,this.state)
     }
+    state = {
+        updateUI:0,
+        refreshing:false,
+        showSpinner:true,
+    };
+    page=1;
     userCats=[];
     userComments=[];
     masterProduct=[];
     user=null;
+    pending=false;
+    footer=<Spinner/>;
+    componentWillReceiveProps(props) {
+        this.props = props;
+        this.setState({
+            updateUI:0,
+            refreshing:false,
+            showSpinner:true,
+        });
+        this.page=1;
+        this.userCats=[];
+        this.userComments=[];
+        this.masterProduct=[];
+        this.user=null;
+        this.pending=false;
+        this.footer=<Spinner/>;
+
+        const {isUser}=this.props;
+        if(isUser) {
+            this._getUserCats();
+            this._getUserComments();
+        }else{
+            this._getMasterProduct();
+        }
+    }
     componentWillMount() {
         const {isUser}=this.props;
         if(isUser) {
@@ -87,7 +112,6 @@ class User extends Component{
         item['id']=index;
        return(<WindowProduct   prod={item}/>);
     };
-    footer=<Spinner/>;
     render() {
         const {category=false,search=false}=this.props;
         return (
