@@ -142,7 +142,7 @@ const styles = EStyleSheet.create({
         borderBottomWidth:0.25
     },
     proImageText:{
-        color:'white',
+        color:'black',
         fontSize:17,
     },
     userInfo:{

@@ -29,9 +29,9 @@ import AlertMessage from "../../services/alertmessage";
                     </View>
 
                     <Form>
+                            <Label style={[styles.labelText,{textAlign:'center'}]}>ورود</Label>
+                            <Item fixedLabel>
 
-                        <Label style={styles.labelText}>ورود</Label>
-                        <Item fixedLabel>
                             <Input style={styles.inputText} keyboardType="numeric" onChangeText={ (text) => this.mobile = text } placeholder='مانند 09123456789'  />
                             <Label style={styles.labelText}>شماره تلفن</Label>
                         </Item>

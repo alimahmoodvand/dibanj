@@ -37,6 +37,6 @@ export default styles = EStyleSheet.create({
     },
     btnText:{
         fontSize:20,
-        color:'white'
+        color:'black'
     },
 })

@@ -31,7 +31,7 @@ export default styles = EStyleSheet.create({
         zIndex:100,
     },
     proBtnText:{
-        color:'white',
+        color:'black',
         fontSize:15,
         textAlign:'center'
     },
@@ -82,5 +82,11 @@ export default styles = EStyleSheet.create({
         // marginLeft:'$productBnt',
         // direction:'rtl',
 
+    },
+    btns:{
+        flexWrap:'wrap',
+        flexDirection:'row-reverse',
+        width:'95%',
+        // backgroundColor:'blue',
     },
 });

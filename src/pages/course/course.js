@@ -18,6 +18,7 @@ import CommentComp from "../../components/comment/comment";
 import Stars from "react-native-stars-rating";
 import AlertMessage from "../../services/alertmessage";
 import Loading from "../../components/laoding/laoding";
+import {Keyboard} from 'react-native'
 
 class Course extends Component{
 
@@ -50,6 +51,7 @@ class Course extends Component{
         this.childs=[];
         this.comments=[];
         this.rating=-1;
+        this.commentInput;
         this._findProduct();
         this.setState({
             interval: setInterval(() => {
@@ -69,7 +71,9 @@ class Course extends Component{
     product={};
     childs=[];
     comments=[];
+    masters=[];
     rating=-1;
+    commentInput;
     _findProduct=async()=>{
         let data={
             UserId:this.props.user.userId,
@@ -83,6 +87,7 @@ class Course extends Component{
                 this.product = response[0][0];
                 this.childs = response[1];
                 this.comments = response[3];
+                this.masters = response[4];
                 let cmt=false;
                 if(Array.isArray(this.comments)){
                     this.comments.map((item)=>{
@@ -129,7 +134,13 @@ class Course extends Component{
 
                 <HeaderLayout category={category} search={search} back={true}/>
 
-                <ScrollView style={styles.content}>
+                <ScrollView style={styles.content}
+                            keyboardDismissMode='interactive'
+                            keyboardShouldPersistTaps="handled"
+                            onScrollBeginDrag={()=>{
+                                Keyboard.dismiss()
+                            }}
+                >
                     <View style={styles.filter}>
                         <MIcon style={styles.filterIcon} name="share" onPress={() =>{
                             Share.share({
@@ -210,7 +221,7 @@ class Course extends Component{
                             onPositionChanged={(position) => this.setState({position})}
                         />
                     }
-                    <SingleProduct prod={this.product}/>
+                    <SingleProduct prod={this.product} masters={this.masters } category={category} search={search}/>
                     {this.childs.length > 0 &&
                     <View style={styles.childHeader}>
                         <Text style={styles.childHeaderText}>
@@ -245,11 +256,16 @@ class Course extends Component{
                                         underlineColorAndroid='rgba(0,0,0,0)'
                                         placeholder='* نظر شما در مورد این مطلب چیست؟'
                                         editable={true}
+                                        ref={input => { this.commentInput = input }}
                                         onChangeText={(text) => this.comment = text}
                                         maxLength={40}
                                     />
                                     <Button small style={styles.commentBtn} title={0}
-                                            onPress={() => this.sendComment()}>
+                                            onPress={() => {
+                                                Keyboard.dismiss();
+                                                this.sendComment()
+
+                                            }}>
                                         <Text style={styles.commentBtnText}>ارسال</Text>
                                     </Button>
                                 </View>
@@ -335,6 +351,7 @@ class Course extends Component{
                 if (Array.isArray(response)) {
                     this.comments = response
                     this.comment = "";
+                    this.commentInput.clear();
                     new AlertMessage().message('commentDone')
                 }
                 this.setState({comment: true})

@@ -27,7 +27,7 @@ export default styles = EStyleSheet.create({
         justifyContent:'center'
     },
     circleText:{
-        color:'white',
+        color:'black',
         textAlign:'center',
     },
     lineYellow:{

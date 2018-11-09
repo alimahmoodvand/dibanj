@@ -103,7 +103,7 @@ class User extends Component{
     }
     componentWillUnmount() {
         clearInterval(this.state.interval);
-    }
+    };
     _renderItem = (item,index) => {
         item['id']=index;
        return( <Product prod={item}/>);
@@ -126,12 +126,18 @@ class User extends Component{
                     <View style={styles.userInfo}>
                         <View style={styles.userInfoContainer}>
                             <Text style={styles.userInfoText}>{this.user.fullName}</Text>
-                            <Text style={styles.userInfoText}>{this.user.ostan}</Text>
                             <Text style={styles.userInfoText}>{this.user.persianRegdate.split(' ')[0]}</Text>
                         </View>
                         <View style={styles.userImageContainer}>
-                            <Image style={styles.userImage} source={{uri: this.user.imageUrl}}/>
+                            <Image style={styles.userImage} source={{uri: this.user.imageUrl+"?v="+new Date().getTime()}}/>
                         </View>
+                    </View>
+                    }
+                    {this.user&&this.user.about &&
+                    <View style={styles.about}>
+                        <Text style={styles.aboutText}>
+                            {this.user.about}
+                        </Text>
                     </View>
                     }
                     {!this.user &&

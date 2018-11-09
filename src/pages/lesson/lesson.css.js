@@ -13,7 +13,7 @@ export default styles = EStyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0)'
     },
     content: {
-        flex: 0.60,
+        flex: 0.55,
         backgroundColor: '#fff',
         marginRight: 15,
         marginTop: 15,
@@ -27,9 +27,9 @@ export default styles = EStyleSheet.create({
         // paddingLeft:10,
     },
     contentRender:{
-        flex:0.9,
+        flex:0.8,
         // backgroundColor:'red',
-        minHeight:500,
+        minHeight:300,
         // borderWidth:4,
         // borderColor:'black',
         // borderStyle:'solid',
@@ -61,5 +61,13 @@ export default styles = EStyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         flexDirection:'row',
-    }
+    },
+    modal:{
+        flex:1,
+        height:500,
+        width:600,
+        justifyContent: "flex-end",
+        margin: 0,
+        backgroundColor:'red'
+    },
 });

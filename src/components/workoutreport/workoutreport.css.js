@@ -32,7 +32,7 @@ export default styles = EStyleSheet.create({
         zIndex:100,
     },
     proBtnText:{
-        color:'white',
+        color:'black',
         fontSize:15,
         textAlign:'center'
     },
@@ -130,7 +130,7 @@ export default styles = EStyleSheet.create({
         justifyContent: 'center',
     },
     circleText: {
-        color: 'white',
+        color: 'black',
         // backgroundColor:'red',
         paddingRight:'$productBnt/12',
         paddingBottom:'$productBnt/12',

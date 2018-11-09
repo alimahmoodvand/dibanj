@@ -16,7 +16,7 @@ export default styles = ExStyleSheet.create({
         flex:1,
         // backgroundColor: '#fff',
         // marginRight:15,
-        marginTop:15,
+        // marginTop:15,
         // marginLeft:15,
         borderTopLeftRadius:5,
         borderTopRightRadius:5,
@@ -99,7 +99,7 @@ export default styles = ExStyleSheet.create({
         paddingTop:5,
     },
     btnSearchText:{
-        color:'white',
+        color:'black',
         fontSize:14,
     },
     accordianContent:{
@@ -234,8 +234,12 @@ export default styles = ExStyleSheet.create({
         justifyContent:'center',
     },
     products:{
-        flex:1,
-        width:'100%',
-        backgroundColor:'rgba(0,0,0,0)'
+        flex:.95,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent:'center',
+        // alignItems:'center',
+        borderRadius:5,
+        overflow:'hidden'
     }
 });

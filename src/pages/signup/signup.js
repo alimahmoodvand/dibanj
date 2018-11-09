@@ -47,7 +47,7 @@ import Loading from "../../components/laoding/laoding";
                                 <View style={styles.logoContainer}>
                                     <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
                                 </View>
-                                <Label style={styles.labelText}> لطفا برای خود نام کاربری,ایمیل و رمز عبور انتخاب
+                                <Label  style={[styles.labelText,{textAlign:'center'}]}> لطفا برای خود نام کاربری,ایمیل و رمز عبور انتخاب
                                     کنید. </Label>
                                 <Item fixedLabel>
                                     <Input style={styles.inputText}

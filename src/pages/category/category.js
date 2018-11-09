@@ -134,7 +134,7 @@ class Category extends Component{
                         let style={};
                         let btnStyle={};
                         if(item===this.category){
-                            style.color='white';
+                            style.color='black';
                             style.fontWeight='bold';
                             btnStyle=styles.subCatsBtnSelected;
                         }

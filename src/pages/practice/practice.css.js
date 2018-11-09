@@ -45,7 +45,7 @@ export default styles = EStyleSheet.create({
         marginBottom:10,
     },
     uploadBtnText: {
-        color: 'white',
+        color: 'black',
         width:'100%',
         textAlign:'center'
     },

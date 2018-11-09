@@ -15,14 +15,14 @@ import  {Animated,Easing}from "react-native";
      }
     render(){
          setTimeout(()=>{
-             Animated.timing(
-                 this.state.offsetX,
-                 {
-                     toValue: 1000,
-                     easing: Easing.back(),
-                     duration: 2000,
-                 }
-             ).start();
+             // Animated.timing(
+             //     this.state.offsetX,
+             //     {
+             //         toValue: 1000,
+             //         easing: Easing.back(),
+             //         duration: 2000,
+             //     }
+             // ).start();
              this._selectState();
 
          },1000)

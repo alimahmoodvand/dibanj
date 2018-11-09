@@ -269,14 +269,14 @@ class Absentia extends Component {
                                   this._getAdvPro(item, 'category');
                               }
                           }
-                          } style={styles.ddlist}><Text style={{color:item===this.state.selected?'red':'black'}}>{item.title}</Text></Button>
+                          } style={styles.ddlist}><Text style={{color:item===this.state.selected?'rgb(255, 170, 0)':'black'}}>{item.title}</Text></Button>
                       );
                   })
               }
             <View style={styles.collapseContainer}>
                 <MIcon name="keyboard-arrow-up" onPress={() => this.setState({
                     ddlist:!this.state.ddlist,selectable:''
-                })} color="red"
+                })} color="rgb(255, 170, 0)"
                        size={25}/>
             </View>
         </View>

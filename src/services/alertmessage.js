@@ -22,7 +22,7 @@ export default class AlertMessage{
        offEmpty:'لطفا کد تخفیف خود را وارد کنید',
        addressEmpty:'لطفا یک آدرس انتخاب کنید',
        rateEmpty:'لطفا برای نظر دهی امتیاز را نیز مشخص کنید',
-       commentDone:'نظر شما ثبت شد',
+       commentDone:'با سپاس. ارسال پیام موفقیت آمیز بود و پس از تایید قرار داده خواهد شد',
        answerEmpty:'جواب های خالی را پر کنید',
        answerDone:'جواب های شما ثبت شد',
        passwordChange:'رمز عبور شما تغییر کرد',

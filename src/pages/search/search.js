@@ -59,6 +59,69 @@ class Search extends Component{
         })
 
     }
+    _headerRender=()=>{
+        return(<View style={{backgroundColor:'white'}}>
+            <View style={styles.searchSection}>
+                <View style={styles.serachBtnSection}>
+                    <Button key={0} small   style={styles.btnSearch} title={0} onPress={()=>{
+                        this.products=[];
+                        this.setState({page:1},()=>{
+                            this._searchProduct()
+                        });
+                    }}>
+                        <Text  style={styles.btnSearchText} >جستجو</Text>
+                    </Button>
+                </View>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(text) => this.searchParams.text = text}
+                    placeholder="جستجو مانند : بازاریابی . مدیریت ..."
+                    underlineColorAndroid="transparent"
+                />
+                <View style={styles.searchIcon}>
+                    <FIcon  name="search" size={20} color="#000"/>
+                </View>
+            </View>
+            <View style={styles.filterSection}>
+                <Text style={styles.filterHeader}>
+                    نوع آموزش
+                </Text>
+                <SegmentedControls
+                    containerStyle={styles.filterOptions}
+                    tint={'#1e2126'}
+                    selectedTint= {'black'}
+                    backTint= {'white'}
+                    containerBorderTint={'rgb(255, 200, 0)'}
+                    separatorTint={'rgb(255, 200, 0)'}
+                    selectedBackgroundColor={'rgb(255, 200, 0)'}
+                    optionContainerStyle  ={styles.filterOption}
+                    options={ this.options }
+                    onSelection={ this._setSelectedOption.bind(this) }
+                    selectedIndex ={this.state.selectedOptionIndex}
+                    extractText={ (option) => option.label }
+                />
+            </View>
+            <View style={styles.categorySection}>
+                {/*<View style={styles.categoryBtnContainer}>*/}
+                <Button style={styles.categoryToggle} small title={0} onPress={()=>this._toggleModal()}>
+                    <MIcon  name="arrow-drop-down" size={20} color="black"/>
+                    <Text >نمایش دسته ها</Text>
+                </Button>
+                {/*</View>*/}
+
+                <Text style={styles.categoryHeader}>
+                    انتخاب دسته
+                </Text>
+
+            </View>
+            {/*modal place*/}
+            <View style={styles.serachOptions}>
+                {this._renderCatButton()}
+
+            </View>
+        </View>)
+
+    }
     componentWillUnmount(){
         if(this.state.isModalVisible)
             this._toggleModal();
@@ -86,110 +149,13 @@ class Search extends Component{
 
                 <HeaderLayout/>
                 <View style={styles.content}>
-                    <View style={{backgroundColor:'white'}}>
-                    <View style={styles.searchSection}>
-                        <View style={styles.serachBtnSection}>
-                            <Button key={0} small   style={styles.btnSearch} title={0} onPress={()=>{
-                                this.products=[];
-                                this.setState({page:1},()=>{
-                                    this._searchProduct()
-                                });
-                            }}>
-                                <Text  style={styles.btnSearchText} >جستجو</Text>
-                            </Button>
-                        </View>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(text) => this.searchParams.text = text}
-                        placeholder="جستجو مانند : بازاریابی . مدیریت ..."
-                            underlineColorAndroid="transparent"
-                        />
-                        <View style={styles.searchIcon}>
-                            <FIcon  name="search" size={20} color="#000"/>
-                        </View>
-                    </View>
-                    <View style={styles.filterSection}>
-                        <Text style={styles.filterHeader}>
-                            نوع آموزش
-                        </Text>
-                        <SegmentedControls
-                            containerStyle={styles.filterOptions}
-                            tint={'#1e2126'}
-                            selectedTint= {'white'}
-                            backTint= {'white'}
-                            containerBorderTint={'rgb(255, 200, 0)'}
-                            separatorTint={'rgb(255, 200, 0)'}
-                            selectedBackgroundColor={'rgb(255, 200, 0)'}
-                            optionContainerStyle  ={styles.filterOption}
-                        options={ this.options }
-                        onSelection={ this._setSelectedOption.bind(this) }
-                        selectedIndex ={this.state.selectedOptionIndex}
-                        extractText={ (option) => option.label }
-                    />
-                   </View>
-                    <View style={styles.categorySection}>
-                        {/*<View style={styles.categoryBtnContainer}>*/}
-                            <Button style={styles.categoryToggle} small title={0} onPress={()=>this._toggleModal()}>
-                                <MIcon  name="arrow-drop-down" size={20} color="black"/>
-                            <Text >نمایش دسته ها</Text>
-                        </Button>
-                        {/*</View>*/}
 
-                        <Text style={styles.categoryHeader}>
-                            انتخاب دسته
-                        </Text>
-
-                    </View>
-                    <Modal
-                        onBackButtonPress={this._toggleModal}
-                        onBackdropPress={this._toggleModal}
-                        backdropColor="transparent"
-                        style={styles.modal}
-                        isVisible={this.state.isModalVisible}>
-                    <ScrollView style={styles.categories}>
-                        {/*{console.log(this.state.selectCatIndex!==false?this.state.selectCatIndex:-1)}*/}
-                        <View>
-                        {selectCatIndex === false &&
-                        <Accordion
-                            duration={500}
-                            sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
-                                if (!item.parentId) {
-                                    return item;
-                                }
-                            })) : []}
-
-                            onChange={this._change}
-                            renderHeader={this._renderHeader}
-                            renderContent={this._renderContent}
-                        />
-                        }
-                        {selectCatIndex !== false &&
-                        <Accordion
-                            duration={500}
-                            sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
-                                if (!item.parentId) {
-                                    return item;
-                                }
-                            })) : []}
-                            initiallyActiveSection={selectCatIndex}
-                            onChange={this._change}
-                            renderHeader={this._renderHeader}
-                            renderContent={this._renderContent}
-                        />
-                        }
-                        </View>
-                    </ScrollView>
-                    </Modal>
-                    <View style={styles.serachOptions}>
-                        {this._renderCatButton()}
-
-                    </View>
-                    </View>
                 <View style={styles.products}>
 
                 {
-                        this.state.page>0&&
+                        // this.state.page>0&&
                             <FlatList
+                                ListHeaderComponent={this._headerRender}
                                 data={this.products}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({item, index}) =>
@@ -215,6 +181,46 @@ class Search extends Component{
                     </View>
 
                 </View>
+                <Modal
+                    onBackButtonPress={this._toggleModal}
+                    onBackdropPress={this._toggleModal}
+                    backdropColor="transparent"
+                    style={styles.modal}
+                    isVisible={this.state.isModalVisible}>
+                    <ScrollView style={styles.categories}>
+                        {/*{console.log(this.state.selectCatIndex!==false?this.state.selectCatIndex:-1)}*/}
+                        <View>
+                            {selectCatIndex === false &&
+                            <Accordion
+                                duration={500}
+                                sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
+                                    if (!item.parentId) {
+                                        return item;
+                                    }
+                                })) : []}
+
+                                onChange={this._change}
+                                renderHeader={this._renderHeader}
+                                renderContent={this._renderContent}
+                            />
+                            }
+                            {selectCatIndex !== false &&
+                            <Accordion
+                                duration={500}
+                                sections={(this.props.categories && this.props.categories.length > 0) ? (this.props.categories.filter((item, index) => {
+                                    if (!item.parentId) {
+                                        return item;
+                                    }
+                                })) : []}
+                                initiallyActiveSection={selectCatIndex}
+                                onChange={this._change}
+                                renderHeader={this._renderHeader}
+                                renderContent={this._renderContent}
+                            />
+                            }
+                        </View>
+                    </ScrollView>
+                </Modal>
             </View>
         );
     }
@@ -257,9 +263,9 @@ class Search extends Component{
                     subType: this.options[this.state.selectedOptionIndex].subType,
                     page: this.state.page
                 }
-                // console.log(data)
                 this.setState({loading:true})
                 let response = await Http._postAsyncData(data, 'search')
+                // console.log(response)
                 let page=this.state.page;
                 if (Array.isArray(response)) {
                     this.products = this.products.concat(response);
@@ -310,7 +316,7 @@ class Search extends Component{
                         let style={};
                         let btnStyle={};
                         if(this.searchParams.cats.indexOf(item)!==-1){
-                            style.color='white';
+                            style.color='black';
                             style.fontWeight='bold';
                             btnStyle=styles.subCatsBtnSelected;
                         }

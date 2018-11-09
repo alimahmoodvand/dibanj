@@ -72,48 +72,15 @@ class Home extends Component {
                     </View>
                     <View style={style.circles}>
                         <Text style={style.label}>
-                            دوره های مجازی
+                            محصولات آموزشی
                         </Text>
-                        <TouchableOpacity  style={[ style.circle, {marginRight: one}]} onPress={() => {Actions.absentia({
-                            subType:2,
-                            proType:1,
-                            img:"absentia",
-                            label:"دوره های مجازی",
-                            empty:'دوره ای یافت نشد',
-                        });}} >
-                            {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/absentia.svg')}/>*/}
-                            <Image style={styles.menuIcon} source={require('../../assets/images/absentia.png')} />
-                            </TouchableOpacity >
-
-                    </View>
-                    <View style={style.circles}>
-                        <Text style={style.label}>
-                            دوره های حضوری
-                        </Text>
-                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: two}]} onPress={() => {Actions.absentia({
-                            subType:1,
-                            proType:1,
-                            img:"course",
-                            label:"دوره های حضوری",
-                            empty:'دوره ای یافت نشد',
-                        });}}>
-                            {/*<SVGImage style={{width:'80%',*/}
-                                {/*height:'80%',}} source={require('../../assets/images/absentia.svg')}/>*/}
-                            <Image style={styles.menuIcon} source={require('../../assets/images/course.png')} />
-
-                        </TouchableOpacity>
-                    </View>
-                    <View style={style.circles}>
-                        <Text style={style.label}>
-                            فروشگاه
-                        </Text>
-                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: three}]} onPress={() => Actions.absentia(
+                        <TouchableOpacity  style={[ style.circle, {marginRight: one}]} onPress={() => Actions.absentia(
                             {
                                 isstore:true,
                                 subType:-1,
                                 proType:-1,
                                 img:"store",
-                                label:"فروشگاه",
+                                label:"محصولات آموزشی",
                                 empty:'محصولی یافت نشد',
 
                             }
@@ -127,7 +94,7 @@ class Home extends Component {
                         <Text style={style.label}>
                             رایگان
                         </Text>
-                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: four}]} onPress={() => Actions.absentia({
+                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: two}]}  onPress={() => Actions.absentia({
                             subType:-1,
                             proType:0,
                             img:"lock",
@@ -139,11 +106,12 @@ class Home extends Component {
 
                         </TouchableOpacity>
                     </View>
+
                     <View style={style.circles}>
                         <Text style={style.label}>
-                            پیشنهادات ویژه
+                            پیشنهاد ویژه
                         </Text>
-                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: five}]}  onPress={() => Actions.absentia({
+                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: three}]}  onPress={() => Actions.absentia({
                             subType:0,
                             proType:-1,
                             img:"roocket",
@@ -155,6 +123,40 @@ class Home extends Component {
                             <Image style={styles.menuIcon} source={require('../../assets/images/roocket.png')} />
                         </TouchableOpacity>
                     </View>
+                    <View style={style.circles}>
+                        <Text style={style.label}>
+                            دوره های مجازی
+                        </Text>
+                        <TouchableOpacity  style={[styles.circle, style.circle, {marginRight: four}]}  onPress={() => {Actions.absentia({
+                            subType:2,
+                            proType:1,
+                            img:"absentia",
+                            label:"دوره های مجازی",
+                            empty:'دوره ای یافت نشد',
+                        });}} >
+                            {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/absentia.svg')}/>*/}
+                            <Image style={styles.menuIcon} source={require('../../assets/images/absentia.png')} />
+                        </TouchableOpacity >
+
+                    </View>
+                    <View style={style.circles}>
+                        <Text style={style.label}>
+                            دوره های حضوری
+                        </Text>
+                        <TouchableOpacity style={[styles.circle, style.circle, {marginRight: five}]} onPress={() => {Actions.absentia({
+                            subType:1,
+                            proType:1,
+                            img:"course",
+                            label:"دوره های حضوری",
+                            empty:'دوره ای یافت نشد',
+                        });}}>
+                            {/*<SVGImage style={{width:'80%',*/}
+                            {/*height:'80%',}} source={require('../../assets/images/absentia.svg')}/>*/}
+                            <Image style={styles.menuIcon} source={require('../../assets/images/course.png')} />
+
+                        </TouchableOpacity>
+                    </View>
+
                 </View>
 
             </View>

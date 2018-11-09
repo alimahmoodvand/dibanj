@@ -34,7 +34,7 @@ class Unauthorized extends Component{
                     this.props.emptyFavoriets();
                     Actions.reset('auth');
                 }}>
-                    <Text>خروج</Text>
+                    <Text >خروج</Text>
                 </Button>
             </View>
         );

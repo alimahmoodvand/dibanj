@@ -65,7 +65,7 @@ export default styles = EStyleSheet.create({
       backgroundColor:'$mainColor',
     },
     purchaseBtnText:{
-        color:'white'
+        color:'black'
     },
     priceSection:{
         flex:0.55,
@@ -98,7 +98,7 @@ export default styles = EStyleSheet.create({
         alignItems:'center',
     },
     offcodeBtnText:{
-      color:'white'
+      color:'black'
     },
     input: {
         flex: 0.6,

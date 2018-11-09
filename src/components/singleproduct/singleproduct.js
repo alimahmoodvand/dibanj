@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container} from "native-base";
-import {Image, ImageBackground, ScrollView, Text, View} from "react-native";
+import {Image, ImageBackground, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import styles from './singleproduct.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -68,7 +68,14 @@ class SingleProduct extends Component{
         return false;
     }
     render(){
-        const {prod}=this.props
+        const {prod,masters,category,search}=this.props
+        if(prod.fullName&&prod.userId){
+            masters.unshift({
+                fullName:prod.fullName,
+                userId:prod.userId,
+                uniqueCode:prod.uniqueCode,
+            })
+        }
         const myProduct=this._findProduct();
         // console.log(prod)
 
@@ -87,6 +94,12 @@ class SingleProduct extends Component{
         let descStyle={}
         if(!this.canBy(prod)){
             descStyle.flex=1
+        }
+        let duration=false;
+        // prod.Duration="10 روز"
+        // prod.Title+=' '+prod.Title+' '+prod.Title+' '+prod.Title;
+        if(prod.Duration&&prod.Duration.trim()!==''){
+            duration=true;
         }
         return(
             <View style={styles.main}>
@@ -112,10 +125,17 @@ class SingleProduct extends Component{
                     <View style={[styles.details,descStyle]}>
                         <Text  style={[styles.detalsText]}>{prod.Title}</Text>
                         <Text  style={[styles.detalsText]}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):''}</Text>
-                        <Text  style={[styles.detalsText]}>{prod.Duration}</Text>
-                        <Text  style={[styles.detalsText]}>{prod.fullName}</Text>
+                        {
+                            duration&&
+                            <Text style={styles.detalsText}>{'مدت دوره:'+prod.Duration}</Text>
+                        }
                         <Text  style={[styles.detalsText]}>{prod.Description}</Text>
                         {/*<Text>{prod.Description}</Text>*/}
+                        {masters.map((item,index)=>{
+                           return (<TouchableOpacity key={index} style={styles.btns} onPress={()=>Actions.user({userId:item.userId,category,search})}>
+                                <Text style={[styles.detalsText,{color:'blue'}]} >{item.fullName}</Text>
+                            </TouchableOpacity>)
+                        })}
                         {this._getPrices(prod)}
                     </View>
                 </View>

@@ -12,8 +12,10 @@ export default class Http extends Component {
     static baseurl="http://199.127.99.12:3001/";
     static async _postAsyncData(data,url='login'){
         try {
+            // console.log("_postAsyncData", url, data)
             let token=data.token
             delete data.token;
+
             let response = await fetch(Http.baseurl+url, {
                 method: 'POST',
                 headers: {
@@ -24,6 +26,8 @@ export default class Http extends Component {
                 body: JSON.stringify(data),
             });
             const statusCode = response.status;
+            // console.log("_postAsyncData", url, data)
+
             if(statusCode==401){
                 // alert('مجوز استفاده از اپ صادر نشد')
                 Actions.unauthorized();

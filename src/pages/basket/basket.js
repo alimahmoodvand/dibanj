@@ -66,7 +66,7 @@ class Basket extends Component{
                             <View style={styles.offSwitch}>
                                 <Switch value={this.state.offcode}
                                         onValueChange={(offcode) => this.setState({offcode})} tintColor="#f1f1f1"
-                                        onTintColor="yellow" thumbTintColor="#b2b2b2"/>
+                                        onTintColor="yellow" thumbTintColor={this.state.offcode?"yellow":"#b2b2b2"}/>
                             </View>
                             <View style={styles.offSectionText}>
                                 <Text style={styles.offText}>کد تخفیف دارم</Text>

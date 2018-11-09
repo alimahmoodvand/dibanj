@@ -15,7 +15,7 @@ export default styles = EStyleSheet.create({
         alignItems:'center',
     },
     btn:{
-      backgroundColor:"$mainColor"
+      backgroundColor:"$mainColor",
     },
     content: {
         flex: 1,

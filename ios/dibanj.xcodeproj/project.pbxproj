@@ -70,6 +70,8 @@
 		4E63E363C443477FB7E13CA5 /* special.png in Resources */ = {isa = PBXBuildFile; fileRef = 71E0A35774A1478D9D096282 /* special.png */; };
 		A167AA3CC2504862BAFC942D /* splash.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4E57FBCF3EB9406DB7741045 /* splash.jpg */; };
 		4BF7946CC1F449EE887C65D2 /* store.png in Resources */ = {isa = PBXBuildFile; fileRef = 05A7BB99FC254EEA9EF4D878 /* store.png */; };
+		CD7334CB99254A97BFDA878F /* progress.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DCEFFDE71AD4F98B1D2616A /* progress.png */; };
+		1B8E8DB3BD5F44498DF0B6C5 /* registering.png in Resources */ = {isa = PBXBuildFile; fileRef = 7828923BABC648238D190D4C /* registering.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -358,6 +360,8 @@
 		71E0A35774A1478D9D096282 /* special.png */ = {isa = PBXFileReference; name = "special.png"; path = "../src/assets/images/special.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		4E57FBCF3EB9406DB7741045 /* splash.jpg */ = {isa = PBXFileReference; name = "splash.jpg"; path = "../src/assets/images/splash.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		05A7BB99FC254EEA9EF4D878 /* store.png */ = {isa = PBXFileReference; name = "store.png"; path = "../src/assets/images/store.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7DCEFFDE71AD4F98B1D2616A /* progress.png */ = {isa = PBXFileReference; name = "progress.png"; path = "../src/assets/images/progress.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7828923BABC648238D190D4C /* registering.png */ = {isa = PBXFileReference; name = "registering.png"; path = "../src/assets/images/registering.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -653,6 +657,8 @@
 				71E0A35774A1478D9D096282 /* special.png */,
 				4E57FBCF3EB9406DB7741045 /* splash.jpg */,
 				05A7BB99FC254EEA9EF4D878 /* store.png */,
+				7DCEFFDE71AD4F98B1D2616A /* progress.png */,
+				7828923BABC648238D190D4C /* registering.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1076,6 +1082,8 @@
 				4E63E363C443477FB7E13CA5 /* special.png in Resources */,
 				A167AA3CC2504862BAFC942D /* splash.jpg in Resources */,
 				4BF7946CC1F449EE887C65D2 /* store.png in Resources */,
+				CD7334CB99254A97BFDA878F /* progress.png in Resources */,
+				1B8E8DB3BD5F44498DF0B6C5 /* registering.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1209,8 +1217,6 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dibanj.app/dibanj";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1239,8 +1245,6 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dibanj.app/dibanj";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1329,8 +1333,6 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1368,8 +1370,6 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1402,8 +1402,6 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1428,8 +1426,6 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Release;

@@ -26,11 +26,14 @@ var categories=null;
         loading:false,
     };
     userCats=[];
+    initUserCats=[];
+
      _getUserCats=async()=>{
          let response = await Http._postAsyncData({userId:this.props.user.userId,token:this.props.user.token},'userCategoryBookmarks');
          // console.log(response)
          if(Array.isArray(response)){
-             this.userCats=response;
+             this.initUserCats=JSON.parse(JSON.stringify(response));
+             this.userCats=JSON.parse(JSON.stringify(response));
              this.setState({updateUI:this.state.updateUI++});
          }
      }
@@ -46,13 +49,13 @@ var categories=null;
     render() {
         const {cats} = this.props;
         categories=cats;
-       // console.log(field)
+       console.log(this.initUserCats.length)
         return (
             <View style={styles.container}>
                 <Loading visible={this.state.loading} />
                 <TouchableOpacity onPress={() => this._toggleModal()}>
                 <View style={styles.textContainer}>
-                    <MIcon  name="add" size={20} color="red" style={styles.addIcon}/>
+                    <MIcon  name="add" size={20} color="rgb(255, 170, 0)" style={styles.addIcon}/>
                     <Text  style={styles.fieldText}>موضوعات مورد علاقه</Text>
                 </View>
                 <View>
@@ -90,7 +93,10 @@ var categories=null;
                         {this._renderSubCat()}
                         {this._renderSelectedCat()}
                         <View style={styles.modalButton}>
-                            <Button style={styles.modalButtonCancel} title={0} onPress={this._toggleModal}>
+                            <Button style={styles.modalButtonCancel} title={0} onPress={()=>{
+                                this.userCats=JSON.parse(JSON.stringify(this.initUserCats))
+                                this._toggleModal();
+                            }}>
                                 <Text style={styles.modalButtonCancelText} >انصراف</Text>
                             </Button>
                             <Button  style={styles.modalButtonVerify} title={0} onPress={()=>{
@@ -172,9 +178,9 @@ var categories=null;
             <View style={[styles.tabBtnContainer]}>
                 {(this.state.index === item.categoryId) &&
                 (
-                    <Button style={[styles.tabBtn, {borderBottomColor: 'red', borderBottomWidth: 3}]}
+                    <Button style={[styles.tabBtn, {borderBottomColor: 'rgb(255, 170, 0)', borderBottomWidth: 3}]}
                             onPress={() =>{this.setState({index:item.categoryId});}}>
-                        <Text style={{color: 'red' }}>{item.title}</Text></Button>
+                        <Text style={{color: 'rgb(255, 170, 0)' }}>{item.title}</Text></Button>
                 )}
                 {(this.state.index !== item.categoryId) &&
                     (<Button style={[styles.tabBtn, {borderBottomColor: 'black', borderBottomWidth: 3}]}

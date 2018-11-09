@@ -11,10 +11,12 @@ export default styles = EStyleSheet.create({
     main: {
         flex: 1,
         // height:200,
-        backgroundColor: 'rgba(0,0,0,0)'
+        backgroundColor: 'rgba(0,0,0,0)',
     },
     content:{
         flex:1,
+        // marginBottom:50,
+
         backgroundColor:'rgba(0,0,0,0)',
         // marginBottom:100,
         // justifyContent:'center',

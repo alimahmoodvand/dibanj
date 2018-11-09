@@ -85,7 +85,7 @@ export default styles = EStyleSheet.create({
         alignItems:'center',
     },
     modalButtonCancelText:{
-        color:'$mainColor'
+        color:'black'
     },
     modalButtonVerify:{
         backgroundColor:'$mainColor',
@@ -97,6 +97,6 @@ export default styles = EStyleSheet.create({
         alignItems:'center',
     },
     modalButtonVerifyText:{
-        color:'white'
+        color:'black'
     }
 })

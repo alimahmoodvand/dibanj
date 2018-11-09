@@ -107,7 +107,7 @@ class Profile extends Component {
 
                                         // console.log(image);
                                     });
-                                }} color="red" size={25}/>
+                                }} color="rgb(255, 170, 0)" size={25}/>
                             </View>
                         </View>
                         <Text>{this.props.user.userName}</Text>

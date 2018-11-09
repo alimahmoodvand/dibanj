@@ -178,5 +178,15 @@ flexDirection:'row',
     masterProduct:{
         flex:1,
         // backgroundColor:'red'
+    },
+    about:{
+       margin:10,
+        backgroundColor:'white',
+        padding:10,
+        borderRadius:5,
+    },
+    aboutText:{
+        color:'black',
+
     }
 });

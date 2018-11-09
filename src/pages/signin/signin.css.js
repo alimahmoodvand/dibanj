@@ -18,7 +18,7 @@ export default styles = EStyleSheet.create({
         left: 0
     },
     labelText:{
-        color:'white'
+        color:'white',
     },
     loginBtn: {
         marginTop: 15,
@@ -37,6 +37,6 @@ export default styles = EStyleSheet.create({
     },
     btnText:{
         fontSize:20,
-        color:'white'
+        color:'black'
     },
 })

@@ -34,7 +34,7 @@ import AlertMessage from "../../services/alertmessage";
                             <Image source={require("../../assets/images/dibanzhnew.png")} style={styles.logo}/>
                         </View>
                         <Form>
-                            <Label style={styles.labelText}>ایمیل و رمز عبور خود را وارد کنید</Label>
+                            <Label  style={[styles.labelText,{textAlign:'center'}]}>ایمیل و رمز عبور خود را وارد کنید</Label>
                             <Item fixedLabel>
                                 <Input style={styles.inputText} keyboardType="email-address"  onChangeText={ (text) => this.email = text }  />
                                 <Label style={styles.labelText}>ایمیل</Label>
