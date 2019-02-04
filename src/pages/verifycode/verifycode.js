@@ -93,6 +93,9 @@ import AlertMessage from "../../services/alertmessage";
                                     onChangeText={(text) => {
                                         this.autoread = false;
                                         this.activationCode = text
+                                        if(this.activationCode.toString().length===5){
+                                            this._verifyCode();
+                                        }
                                     }}/>}
                                 {this.autoread &&
                                 <Input
@@ -103,7 +106,11 @@ import AlertMessage from "../../services/alertmessage";
                                     keyboardType="numeric"
                                     onChangeText={(text) => {
                                         this.autoread = false;
+
                                         this.activationCode = text
+                                        if(this.activationCode.toString().length===5){
+                                            this._verifyCode();
+                                        }
                                     }}/>}
                                 <Label style={styles.labelText}>کد ورود</Label>
                             </Item>

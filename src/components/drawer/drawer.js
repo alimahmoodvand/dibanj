@@ -22,7 +22,7 @@ class DrawerLayout extends Component{
     }
     statusCode=0;
     render(){
-        // console.log("mmmmm",this.props.user)
+        // console.log(this.props.user.imageUrl+"?v="+new Date().getTime().toString())
         return <Container style={{backgroundColor: 'gray'}}>
             <Loading visible={this.state.loading} />
             <View style={{flexDirection:'row'}}>
@@ -63,52 +63,64 @@ class DrawerLayout extends Component{
                 }}>
                     <View style={styles.userInfo}>
                         <View style={styles.userImageContainer}>
+                            <Image source={require('../../assets/images/drawer/hat.png')} style={styles.userHat}/>
                              <Image style={styles.userImage} source={{uri: this.props.user.imageUrl}}/>
                         </View>
                         <View style={styles.userInfoContainer}>
+                            <View style={styles.usernameLine}>
+
+                            </View>
                             <Text style={styles.userInfoText}>{this.props.user.fullName}</Text>
+                            <View style={styles.usernameLine}>
+
+                            </View>
                             {/*<Text style={styles.userInfoText}>{this.props.user.ostan}</Text>*/}
                         </View>
                     </View>
                 </TouchableOpacity>
             </View>
+
             <Button block style={styles.drawerBtn} onPress={() => Actions.profile()}>
                 <Text style={styles.proImageText}>اطلاعات کاربری</Text>
+                <Image style={styles.menuIcon} source={require('../../assets/images/drawer/profile.png')}/>
             </Button>
             <Button block style={styles.drawerBtn} onPress={() => {
                 Actions.bookmark()
             }}>
                 <Text style={styles.proImageText}>لیست علاقه مندی ها</Text>
+                <Image style={styles.menuIcon} source={require('../../assets/images/drawer/bookmark.png')}/>
             </Button>
             <Button block style={styles.drawerBtn} onPress={() => {
-                Actions.term()
+                Actions.term({fromApp:true})
             }}>
                 <Text style={styles.proImageText}>دوره های من</Text>
+                <Image style={styles.menuIcon} source={require('../../assets/images/drawer/term.png')}/>
             </Button>
             <Button block style={styles.drawerBtn} onPress={() => {
                 Actions.workout({examType: 2})
             }}>
                 <Text style={styles.proImageText}>تمرین های من</Text>
+                <Image style={styles.menuIcon} source={require('../../assets/images/drawer/practice.png')}/>
             </Button>
             <Button block style={styles.drawerBtn} onPress={() => {
                 Actions.workout({examType: 1})
             }}>
                 <Text style={styles.proImageText}>ازمون های من</Text>
+                <Image style={styles.menuIcon} source={require('../../assets/images/drawer/exam.png')}/>
             </Button>
             <Button block style={styles.drawerBtn} onPress={() => {
                 Actions.order()
             }}>
                 <Text style={styles.proImageText}> سفارشات</Text>
+                <Image style={styles.menuIcon} source={require('../../assets/images/drawer/order.png')}/>
             </Button>
-            <Button block style={styles.drawerBtn} onPress={() => {
-                Actions.help()
-            }}>
+            <Button block style={styles.drawerBtn} onPress={() => {Actions.help()}}>
                 <Text style={styles.proImageText}>راهنما</Text>
+                <Image style={styles.menuIcon} source={require('../../assets/images/drawer/help.png')}/>
             </Button>
-            <Button block style={styles.drawerBtn} onPress={() => {
-                Actions.contact()
-            }}>
+            <Button block style={styles.drawerBtn} onPress={() => {Actions.contact()}}>
                 <Text style={styles.proImageText}>تماس با ما</Text>
+                <Image style={styles.menuIcon} source={require('../../assets/images/drawer/contact.png')}/>
             </Button>
             <Button block style={styles.drawerBtn} onPress={() => {
                 this.props.removeUser(this.props.user);
@@ -119,14 +131,36 @@ class DrawerLayout extends Component{
                 Actions.reset('auth');
             }}>
                 <Text style={styles.proImageText}>خروج</Text>
+                <Image style={styles.menuIcon} source={require('../../assets/images/drawer/logout.png')}/>
             </Button>
+            <Image source={require('../../assets/images/drawer/drawerfooter.png')} style={{width:'100%',height:150}}/>
         </Container>;
     }
 }
 
 const styles = EStyleSheet.create({
+    usernameLine:{
+        height:1,
+        width:75,
+        backgroundColor:'white'
+    },
+    menuIcon:{
+        width:25,
+        height:25,
+        // backgroundColor:'red',
+        marginRight:15,
+    },
+    userHat:{
+        width:20,
+        height:25,
+        position:'absolute',
+        top:0,
+        zIndex:10,
+        right:0,
+    },
     proImageContainer:{
         flex:1,
+        marginBottom:'$productBntRaduis/10',
     },
     proImageBG:{
         width:300,
@@ -138,15 +172,25 @@ const styles = EStyleSheet.create({
     drawerBtn:{
         backgroundColor:'$mainColor',
         justifyContent:'flex-end',
+        flexDirection:'row',
         borderBottomColor:'white',
+        height:35,
+        marginBottom:2,
+        marginTop:2,
+        borderRadius:5,
         borderBottomWidth:0.25
     },
-    proImageText:{
-        color:'black',
-        fontSize:17,
+    proImageText: {
+        color: 'black',
+        fontSize: 14,
+        textAlign: 'right',
+        // alignSelf: 'stretch',
+        padding: 0,
+        flexWrap:'wrap',
+        // backgroundColor: 'blue'
     },
     userInfo:{
-        flexDirection:'row-reverse',
+        // flexDirection:'row-reverse',
         justifyContent:'flex-start',
         alignItems:'center',
     },
@@ -154,16 +198,21 @@ const styles = EStyleSheet.create({
         marginLeft:5,
     },
     userImage:{
-        width:'$productBntRaduis',
-        height:'$productBntRaduis',
-        borderRadius:'$productBntRaduis',
+        marginTop:'$productBntRaduis/10',
+        width:'$productBntRaduis/2',
+        height:'$productBntRaduis/2',
+        borderRadius:'$productBntRaduis/2',
     },
     userInfoContainer:{
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'center',
     },
     userInfoText:{
         color:'white',
         textAlign:'right',
-        fontSize:15,
+        fontSize:17,
+        margin:3,
     },
 })
 

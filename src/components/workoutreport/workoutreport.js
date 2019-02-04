@@ -28,7 +28,7 @@ export default class WorkoutReport extends Component{
         );
     }
     render(){
-        const {workout}=this.props
+        const {workout,EAPtype}=this.props
         let style={backgroundColor:'white'}
         let status='حل نشده'
         if(workout.status==1){
@@ -56,7 +56,7 @@ export default class WorkoutReport extends Component{
                 }
                 {workout.status === 0 &&
                 <Button style={styles.buy} title={workout.id}
-                        onPress={() => Actions.practice({userCoursesExamAndPracticeId: workout.examAndPracticeId})}>
+                        onPress={() => Actions.practice({userCoursesExamAndPracticeId: workout.examAndPracticeId,ProductAndCourseId: workout.courseId,EAPtype})}>
                     <Text style={styles.proBtnText}>حل کردن</Text>
                 </Button>
                 }
@@ -75,9 +75,8 @@ export default class WorkoutReport extends Component{
                                         EAPStatus:workout.status
                                     })
                                 }else{
-                                    Actions.practice({userCoursesExamAndPracticeId: workout.examAndPracticeId})
+                                    Actions.practice({userCoursesExamAndPracticeId: workout.examAndPracticeId,ProductAndCourseId: workout.courseId,EAPtype})
                                 }
-
                             }}>
                                 <Text style={styles.practiceDescText}>
                                     {workout.title}</Text>

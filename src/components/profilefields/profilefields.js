@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container, Input} from "native-base";
-import {Image, ImageBackground, Picker, Text, TouchableHighlight, TouchableOpacity, View} from "react-native";
+import {
+    Image, ImageBackground, Keyboard, Picker, ScrollView, Text, TouchableHighlight, TouchableOpacity,
+    View
+} from "react-native";
 import styles from './profilefields.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -31,11 +34,11 @@ class ProfileFields extends Component {
         const {field} = this.props;
         this.textValue=field.value
         return (
-            <View style={styles.container}>
-                <Loading visible={this.state.loading} />
-                <View style={styles.fieldIcon}>
+
+            <View style={styles.container} >
+                <TouchableOpacity style={styles.fieldIcon}  onPress={this._toggleModal}>
                     <FIcon name="angle-left" onPress={() => this._toggleModal()} color="black" size={25}/>
-                </View>
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.textContainer}  onPress={this._toggleModal}>
                     <Text style={styles.fieldText}>{field.value}</Text>
                     <Text style={styles.fieldText}>:</Text>
@@ -48,7 +51,13 @@ class ProfileFields extends Component {
                     style={styles.modal}
                     isVisible={this.state.isModalVisible}>
                     <View style={styles.modalContainer}>
+                    <ScrollView
+                        keyboardShouldPersistTaps="handled"
+
+                        style={styles.modalContainer}>
                         <View style={styles.inputContainer}>
+                            <Loading visible={this.state.loading} />
+
                             <Input style={[styles.inputText]}
                                    underlineColorAndroid="green"
                                    onChangeText={(text) => this.textValue = text}
@@ -69,7 +78,9 @@ class ProfileFields extends Component {
                                 <Text style={styles.modalButtonVerifyText}>تاييد</Text>
                             </Button>
                         </View>
+                    </ScrollView>
                     </View>
+
                 </Modal>
             </View>
         )

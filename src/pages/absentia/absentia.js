@@ -116,15 +116,17 @@ class Absentia extends Component {
     render() {
         let icon=null;
         if(this.props.img==="absentia"){
-            icon=require('../../assets/images/absentia.png')
+            icon=require('../../assets/images/home/absentia.png')
         }else if(this.props.img==="course"){
-            icon=require('../../assets/images/course.png')
+            icon=require('../../assets/images/home/course.png')
         }else if(this.props.img==="store"){
-            icon=require('../../assets/images/store.png')
+            icon=require('../../assets/images/home/store.png')
         }else if(this.props.img==="lock"){
-            icon=require('../../assets/images/lock.png')
+            icon=require('../../assets/images/home/lock.png')
         }else if(this.props.img==="roocket"){
             icon=require('../../assets/images/roocket.png')
+        }else if(this.props.img==="discount"){
+            icon=require('../../assets/images/discount.png')
         }
         return (
             <View style={styles.main}>

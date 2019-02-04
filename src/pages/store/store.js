@@ -72,7 +72,7 @@ export default class Store extends Component{
                             فروشگاه
                         </Text>
                         <View style={[styles.circle, style.circle]}>
-                            <Image style={styles.menuIcon} source={require('../../assets/images/course.png')} />
+                            <Image style={styles.menuIcon} source={require('../../assets/images/home/course.png')} />
                         </View>
                     </View>
                     <View style={styles.products}>

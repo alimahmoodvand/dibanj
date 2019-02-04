@@ -32,8 +32,8 @@ import AlertMessage from "../../services/alertmessage";
                             <Label style={[styles.labelText,{textAlign:'center'}]}>ورود</Label>
                             <Item fixedLabel>
 
-                            <Input style={styles.inputText} keyboardType="numeric" onChangeText={ (text) => this.mobile = text } placeholder='مانند 09123456789'  />
-                            <Label style={styles.labelText}>شماره تلفن</Label>
+                            <Input placeholderTextColor={'#c7c7c7'} style={styles.inputText} keyboardType="numeric" onChangeText={ (text) => this.mobile = text } placeholder=' 09123456789'  />
+                            <Label style={styles.labelText}>شماره تلفن :</Label>
                         </Item>
                         <Button  full style={styles.loginBtn} onPress={this._sendCode}>
                             <Text style={styles.btnText}>ادامه</Text>

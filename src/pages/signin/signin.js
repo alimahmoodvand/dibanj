@@ -36,12 +36,12 @@ import AlertMessage from "../../services/alertmessage";
                         <Form>
                             <Label  style={[styles.labelText,{textAlign:'center'}]}>ایمیل و رمز عبور خود را وارد کنید</Label>
                             <Item fixedLabel>
-                                <Input style={styles.inputText} keyboardType="email-address"  onChangeText={ (text) => this.email = text }  />
-                                <Label style={styles.labelText}>ایمیل</Label>
+                                <Input style={styles.inputText} placeholderTextColor={'yellow'} keyboardType="email-address"  onChangeText={ (text) => this.email = text }  />
+                                <Label style={styles.labelText}>ایمیل :</Label>
                             </Item>
                             <Item fixedLabel>
-                                <Input style={styles.inputText} secureTextEntry={true} onChangeText={ (text) => this.password = text }  />
-                                <Label style={styles.labelText}>رمزکاربری</Label>
+                                <Input style={styles.inputText} placeholderTextColor={'yellow'} secureTextEntry={true} onChangeText={ (text) => this.password = text }  />
+                                <Label style={styles.labelText}>رمزکاربری :</Label>
                             </Item>
                             <Button title={1} full style={styles.loginBtn} onPress={()=>{
                                 this._signin();

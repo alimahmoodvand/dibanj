@@ -7,7 +7,7 @@ import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {connect} from "react-redux";
-import {addBasket, removeBookmark, saveProducts} from "../../redux/actions";
+import {addBasket, addProducts, removeBookmark, saveProducts} from "../../redux/actions";
 
 //import HTML from 'react-native-render-html';
 import Modal from "react-native-modal";
@@ -87,37 +87,9 @@ class Product extends Component{
         }
         return false;
     }
-    _renderImages=(prod)=> {
-        let images=[]
 
-
-
-        if((prod.remainCount===0||prod.remainCount<-1)||new Date(prod.EndDate).getTime()<new Date().getTime()){
-            images.push(<Image style={styles.imageStickerDate} key={0} source={require('../../assets/images/finish.png')}/>);
-        }
-        else if(new Date(prod.StartDate).getTime()>new Date().getTime()){
-            images.push(<Image style={styles.imageStickerDate} key={3}  source={require('../../assets/images/registering.png')}/>);
-        }
-        else if(new Date(prod.StartDate).getTime()<new Date().getTime()&&new Date(prod.EndDate).getTime()>new Date().getTime()){
-            images.push(<Image style={styles.imageStickerDate} key={4}  source={require('../../assets/images/progress.png')}/>);
-        }
-        let marginFree={}
-        if(prod.PriceAfterDiscount===0){
-            images.push(<Image style={styles.imageStickerFree} key={1} source={require('../../assets/images/free.png')}/>);
-        }else{
-            marginFree={marginLeft:'20%'}
-            //images.push(<Image style={[styles.imageStickerFree,{height:0}]} key={1} source={require('../../assets/images/free.png')}/>);
-
-        }
-        if(prod.isSpecial===1){
-            images.push(<Image style={[styles.imageStickerFree,marginFree]} key={2} source={require('../../assets/images/special.png')}/>);
-        }
-        return images.map((item,index)=>{
-            return  item;
-        })
-    }
     render(){
-        const {prod,bookmark,category,search}=this.props
+        const {prod,bookmark,category,search,fromParent}=this.props
         const myProduct=this._findProduct();
         // console.log(prod)
         let maxlimit=50;
@@ -144,7 +116,11 @@ class Product extends Component{
         //         deadline=true;
         //     }
         // }
-        let price=this._getPrices(prod);
+        // console.log(prod)
+        let price=this._getPrices(JSON.parse(JSON.stringify(prod)));
+        // console.log(prod)
+        let canBuy=this.canBuy(prod);
+        let isFree=this.isFree(prod);
         return(
             <View style={styles.main}>
                 {bookmark &&
@@ -167,7 +143,7 @@ class Product extends Component{
                     Http._postAsyncData(data, 'bookmark')
                 }} color="red" size={22}/>
                 }
-                <Button style={styles.buy} title={prod.id} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
+                <Button style={styles.buy} title={prod.id} onPress={()=>Actions.course({fromParent,id:prod.ProductAndCourseId,category,search})}>
                     <Text style={styles.proBtnText}>جزئیات</Text>
                 </Button>
                 <View style={styles.content}>
@@ -179,33 +155,33 @@ class Product extends Component{
                         </View>
 
                         <View style={[styles.infoSide,this.infoSideStyle]}>
-                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
+                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({fromParent,id:prod.ProductAndCourseId,category,search})}>
                         <Text style={[styles.detalsText,{fontWeight:'bold'}]}>{prod.Title}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btns} onPress={()=>Actions.user({userId:prod.MasterId,category,search})}>
                             <Text style={[styles.detalsText,{color:'blue'}]} >{prod.fullName}</Text>
                         </TouchableOpacity>
                         {duration&&
-                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
+                        <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({fromParent,id:prod.ProductAndCourseId,category,search})}>
                         <Text style={styles.detalsText}>{'مدت دوره:'+prod.Duration}</Text>
                         </TouchableOpacity>
                         }
-                        <TouchableOpacity  style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
+                        <TouchableOpacity  style={styles.btns} onPress={()=>Actions.course({fromParent,id:prod.ProductAndCourseId,category,search})}>
                         <Text style={[styles.detalsText,{textAlign:'right',fontSize:10,color:'black'}]}>{(prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):'')}</Text>
                         </TouchableOpacity>
                         </View>
-                        {/*<TouchableOpacity style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId})}>*/}
+                        {/*<TouchableOpacity style={styles.btns} onPress={()=>Actions.course({fromParent,id:prod.ProductAndCourseId})}>*/}
                             {price}
                         {/*</TouchableOpacity>*/}
                     </View>
-                        <TouchableOpacity style={styles.image}  onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
+                        <TouchableOpacity style={styles.image}  onPress={()=>Actions.course({fromParent,id:prod.ProductAndCourseId,category,search})}>
                             <ImageBackground style={styles.image} source={{uri: prod.thumbnailUrl}}>{overlay}</ImageBackground>
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.basket}>
-                        {this.canBuy(prod)&&
-                        <Button style={[styles.buyBtn,{backgroundColor:(prod.price>0?'#0094cc':'green')}]} title={prod.id} onPress={() => {
+                        {canBuy&&
+                        <Button style={[styles.buyBtn,{backgroundColor:(prod.price>0?'rgb(255, 200, 0)':'rgb(255, 200, 0)')}]} title={prod.id} onPress={() => {
                             if (this._findBasket()) {
                                 alert("قبلا به سبد اضافه شده است")
                             }else{
@@ -216,8 +192,25 @@ class Product extends Component{
                             <Text style={styles.proBtnText}>رایگان</Text>
                             }
                             {prod.price > 0 &&
-                            <Text style={styles.proBtnText}>خرید</Text>
+                            <Text style={styles.proBtnText}> افزودن به سبد خرید </Text>
                             }
+                            {prod.price > 0 &&
+                            <MIcon  name="shopping-basket"
+                                    color="white" size={22}/>
+                            }
+                        </Button>
+                        }
+                        {isFree&&
+                        <Button style={[styles.buyBtn,{backgroundColor:(prod.price>0?'rgb(255, 200, 0)':'rgb(255, 200, 0)')}]} title={prod.id} onPress={() => {
+                            if (this._findProduct()) {
+                                alert("قبلا به دوره های من اضافه شده است")
+                            }else{
+                                this.props.addProducts([prod]);
+                            }
+                        }}>
+                            <Text style={styles.proBtnText}> افزودن به دوره های من </Text>
+                            <MIcon  name="shopping-basket"
+                                    color="white" size={22}/>
                         </Button>
                         }
                     </View>
@@ -239,6 +232,45 @@ class Product extends Component{
             </View>
         );
     }
+    _renderImages=(prod)=> {
+        let images = []
+        if (prod.type === 1) {
+            if ((prod.remainCount === 0 || prod.remainCount < -1) || new Date(prod.EndDate).getTime() < new Date().getTime()) {
+                images.push(<Image style={styles.imageStickerDate} key={0}
+                                   source={require('../../assets/images/finish.png')}/>);
+            }
+            else if (new Date(prod.StartDate).getTime() > new Date().getTime()) {
+                images.push(<Image style={styles.imageStickerDate} key={3}
+                                   source={require('../../assets/images/registering.png')}/>);
+            }
+            else if (new Date(prod.StartDate).getTime() < new Date().getTime() && new Date(prod.EndDate).getTime() > new Date().getTime()) {
+                images.push(<Image style={styles.imageStickerDate} key={4}
+                                   source={require('../../assets/images/progress.png')}/>);
+            }
+        }else{
+            if (prod.subType===1&&prod.remainCount === 0) {
+                images.push(<Image style={styles.imageStickerDate} key={0}
+                                   source={require('../../assets/images/finish.png')}/>);
+            }
+        }
+        let marginFree = {}
+        // console.log(prod)
+        if (prod.PriceAfterDiscount === 0) {
+            images.push(<Image style={styles.imageStickerFree} key={1}
+                               source={require('../../assets/images/free.png')}/>);
+        } else {
+            marginFree = {marginLeft: '20%'}
+            //images.push(<Image style={[styles.imageStickerFree,{height:0}]} key={1} source={require('../../assets/images/free.png')}/>);
+
+        }
+        if (prod.isSpecial === 1) {
+            images.push(<Image style={[styles.imageStickerFree, marginFree]} key={2}
+                               source={require('../../assets/images/home/special.png')}/>);
+        }
+        return images.map((item, index) => {
+            return item;
+        })
+    }
     canBuy=(prod)=>{
         let deadline=false;
         if(prod.RegisterDeadLine){
@@ -254,8 +286,30 @@ class Product extends Component{
             count=true;
         }
             const myProduct=this._findProduct();
-        // console.log((prod.canBuySeperatly != 0||!prod.ParentId),prod.price>0,!deadline,!myProduct,!count)
-        if(((prod.canBuySeperatly != 0||!prod.ParentId)&&prod.price>0)&&!deadline&&!myProduct&&!count){
+        // console.log((prod.canBuySeperatly != 0||!prod.ParentId),prod.PriceAfterDiscount>0,!deadline,!myProduct,!count,prod)
+        if(((prod.canBuySeperatly != 0||!prod.ParentId)&&prod.PriceAfterDiscount>0)&&!deadline&&!myProduct&&!count){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    isFree=(prod)=>{
+        let deadline=false;
+        if(prod.RegisterDeadLine){
+            // let now=new Date(new Date().toISOString()).getTime()
+            // let deadline=new Date(prod.RegisterDeadLine).getTime()
+            // console.log((new Date(prod.RegisterDeadLine)-new Date(new Date().toISOString())),deadline<now,deadline,now,new Date(prod.RegisterDeadLine),new Date(),prod.Title)
+            if((new Date(prod.RegisterDeadLine)-new Date(new Date().toISOString()))<0){
+                deadline=true;
+            }
+        }
+        let count=false;
+        if(prod.remainCount!==-1&&prod.remainCount<1){
+            count=true;
+        }
+            const myProduct=this._findProduct();
+        // console.log((prod.canBuySeperatly != 0||!prod.ParentId),prod.PriceAfterDiscount>0,!deadline,!myProduct,!count,prod)
+        if(((prod.canBuySeperatly != 0||!prod.ParentId)&&prod.PriceAfterDiscount===0)&&!deadline&&!myProduct&&!count){
             return true;
         }else{
             return false;
@@ -271,6 +325,9 @@ const mapDispatchToProps=(dispatch)=> {
         },
         removeBookmark:(product)=>{
             dispatch(removeBookmark(product));
+        },
+        addProducts:(products)=>{
+            dispatch(addProducts(products));
         },
     }
 }

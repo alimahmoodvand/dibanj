@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container, Input} from "native-base";
 import {
-    FlatList, Image, ImageBackground, ScrollView, Text, TextInput, TouchableHighlight, TouchableOpacity,
+    FlatList, Image, ImageBackground, Keyboard, ScrollView, Text, TextInput, TouchableHighlight, TouchableOpacity,
     View
 } from "react-native";
 import styles from './profile.css'
@@ -66,8 +66,45 @@ class Profile extends Component {
                         <View style={styles.profileInfoCircle}>
 
                         </View>
-                        <View style={styles.profilePicSection}>
-                            <Image style={styles.profilePic} source={{uri:this.props.user.imageUrl}}>
+                        <TouchableOpacity style={styles.profilePicSection} onPress={() => {
+                            ImagePicker.openPicker({
+                                width: 300,
+                                height: 300,
+                                cropping: true
+                            }).then(image => {
+                                let path=image.path.split('/');
+                                image.type=image.mime;
+                                image.uri=image.path;
+                                image.fileName=path[path.length-1];
+                                this.setState({loading:true});
+                                Http._postFilePromise({
+                                    token: this.props.user.token,
+                                    uniqueCode: this.props.user.uniqueCode,
+                                    userId: this.props.user.userId
+                                }, [image], 'userImage')
+                                    .then((response) =>{
+                                        this.setState({loading:false})
+                                        this.statusCode=response.status;
+                                        return   response.json()
+                                    }).then(response => {
+                                    if (this.statusCode == 200) {
+                                        let user = this.props.user;
+                                        user.imageUrl = response.image;
+                                        user.image = response.image;
+                                        this.props.saveUser(user);
+                                    } else if (this.statusCode == 401) {
+                                        Actions.unauthorized();
+                                    }
+                                    this.setState({loading: false});
+                                }).catch(err => {
+                                    this.setState({loading:false});
+                                    new AlertMessage().error('serverError',err.message?err.message:'')
+                                })
+
+                                // console.log(image);
+                            });
+                        }}>
+                            <Image style={styles.profilePic}   source={{uri:this.props.user.imageUrl}}>
                             </Image>
                             <View style={styles.profileTakePic}>
                                 <MIcon name="photo-camera" onPress={() => {
@@ -109,15 +146,25 @@ class Profile extends Component {
                                     });
                                 }} color="rgb(255, 170, 0)" size={25}/>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                         <Text>{this.props.user.userName}</Text>
                         <Text>{this.props.user.userId}</Text>
                     </View>
-                    <ScrollView style={styles.editableInfo}>
+                    <ScrollView style={styles.editableInfo}
+                                keyboardShouldPersistTaps="handled"
+                                // keyboardDismissMode="interactive"
+                    >
 
                         <View style={{flex: 1}}>
                             <ProfileCategory/>
                             <FlatList
+                                keyboardShouldPersistTaps="handled"
+
+                                // keyboardDismissMode='interactive'
+                                // keyboardShouldPersistTaps="always"
+                                // onScrollBeginDrag={()=>{
+                                //     Keyboard.dismiss()
+                                // }}
                                 data={this.fields}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({item, index}) =>

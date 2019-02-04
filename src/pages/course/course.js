@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container} from "native-base";
-import {FlatList, Image, ScrollView, SectionList, Slider, Switch, Text, TextInput, View,Share,ToastAndroid} from "react-native";
+import {FlatList, Image, ScrollView, SectionList, Slider, Switch, Text, TextInput, View,Share,ToastAndroid,BackHandler} from "react-native";
 import styles from './course.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -23,6 +23,7 @@ import {Keyboard} from 'react-native'
 class Course extends Component{
 
     componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         this._findProduct();
         this.setState({
             interval: setInterval(() => {
@@ -42,8 +43,15 @@ class Course extends Component{
     }
     componentWillUnmount() {
         clearInterval(this.state.interval);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    handleBackButtonClick=()=>{
+        // console.log(this.props)
+        this.refs.headerLayout._clickBack();
+        return true;
     }
     componentWillReceiveProps(props){
+        // console.log(props)
         this.props=props;
         this.product=null;
         this.comment="";
@@ -113,7 +121,7 @@ class Course extends Component{
 
     _renderItem = (item,index) => {
         item['id']=index;
-       return( <Product prod={item}/>);
+       return( <Product fromParent={this.props.id} prod={item}/>);
     };
     _renderWindowItem = (item,index) => {
         item['id']=index;
@@ -125,14 +133,14 @@ class Course extends Component{
     };
 
     render() {
-        const {category=false,search=false}=this.props;
+        const {category=false,search=false,fromParent}=this.props;
 
         return (
             <View style={styles.main}>
                 <Loading visible={this.state.loading} />
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
 
-                <HeaderLayout category={category} search={search} back={true}/>
+                <HeaderLayout ref='headerLayout' fromParent={fromParent} category={category} search={search} back={true}/>
 
                 <ScrollView style={styles.content}
                             keyboardDismissMode='interactive'

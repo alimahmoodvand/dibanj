@@ -27,7 +27,6 @@ import Profile from "./pages/profile/profile";
 import Term from "./pages/term/term";
 import Practice from "./pages/practice/practice";
 import User from "./pages/user/user";
-import FIcon from 'react-native-vector-icons/FontAwesome';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import Workout from "./pages/workout/workout";
 import Category from "./pages/category/category";
@@ -83,7 +82,7 @@ export default class App extends Component{
         const RouterRedux = connect()(Router);
         return (
             <Provider store={PStorage}>
-                <RouterRedux>
+                <RouterRedux uriPrefix="dibaanzh.ir">
                     <Scene key="root" hideNavBar initial>
                         <Drawer
                             key="drawer"
@@ -105,11 +104,9 @@ export default class App extends Component{
                                 inactiveTintColor="white"
                                 tabBarOnPress={(scene, jumpToIndex) => {
                                     const { navigation,defaultHandler} = scene;
-                                    // console.log(navigation,scene)
-
-                                    if (navigation.isFocused()) return; // Skip transition when if a tab is already focused to prevent unwanted hard refresh.
-                                    const { key } = navigation.state; // This is a key of a scene has been tapped.
-                                    // console.log(key, navigation.router.childRouters)
+                                    // if (navigation.isFocused()) return;
+                                    const { key } = navigation.state;
+                                    // console.log(key === 'خانه' , navigation.router.childRouters)
                                     if (key === 'خانه' && navigation.router.childRouters) { // You've leave a child scene before, excepts default.
                                         Actions.replace('homep') // This might be what you want to do. It will show you default scene with fresh state.
                                         return;
@@ -134,7 +131,7 @@ export default class App extends Component{
                                     return <ConnectedYourTabIcon field="basketCount" name="shopping-basket" focused={focused} />
                                 }}
                                 >
-                                    <Scene key="basketp" hideNavBar component={Basket}  title="سبد خرید">
+                                    <Scene key="basketp"  hideNavBar component={Basket}  title="سبد خرید">
                                     </Scene>
                                 </Stack>
                                 <Stack
@@ -204,7 +201,7 @@ export default class App extends Component{
                                                              size={28}/>;
                                            }}>
                                     </Scene>
-                                    <Scene key="term" hideNavBar component={Term} title="term" icon={({focused}) => {
+                                    <Scene key="term" hideNavBar   path={"/payment/"} component={Term} title="term" icon={({focused}) => {
                                         return <MIcon name="home" color={(focused ? "#ffc800" : "white")} size={28}/>;
                                     }}>
                                     </Scene>
@@ -248,7 +245,7 @@ export default class App extends Component{
                             </Scene>
                             <Scene key="signuppage" hideNavBar component={Signup} title="پیام ها">
                             </Scene>
-                            <Scene key="splashpage" hideNavBar initial component={Splash} title="پیام ها">
+                            <Scene key="splashpage" path={"/payment/"} hideNavBar initial component={Splash} title="پیام ها">
                             </Scene>
                             <Scene key="verfiycodepage" hideNavBar component={VerifyCode} title="پیام ها">
                             </Scene>

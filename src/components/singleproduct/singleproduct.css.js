@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 export default styles = EStyleSheet.create({
     main: {
-        flexDirection: 'row',
+        // flexDirection: 'row',
         marginTop:10,
         justifyContent:'center',
         alignItems:'center'
@@ -69,6 +69,8 @@ export default styles = EStyleSheet.create({
         // top:'25%',
         flex:0.8,
         flexDirection:'row',
+        marginTop:10,
+        marginBottom:10,
         // alignItems:'center',
         justifyContent:'space-around',
 
@@ -88,5 +90,23 @@ export default styles = EStyleSheet.create({
         flexDirection:'row-reverse',
         width:'95%',
         // backgroundColor:'blue',
+    },
+    basket:{
+        // flex:0.2,
+        // height:10,
+        // width:10,
+        width:'100%',
+
+        backgroundColor:'red',
+        justifyContent:'center',
+        alignItems:'center',
+        // backgroundColor:'red',
+    },
+    buyBtn:{
+        width:'100%',
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'#0094cc',
+        height:30,
     },
 });

@@ -5,7 +5,10 @@ import {Image, StyleSheet, View} from "react-native";
 import {connect} from "react-redux";
 import {Actions} from "react-native-router-flux";
 import Http from "../../services/http";
-import {initBookmark, initProduct, removeUser, saveCategories, saveMessages, saveUser} from "../../redux/actions";
+import {
+    initBookmark, initProduct, removeBasket, removeUser, saveCategories, saveMessages,
+    saveUser
+} from "../../redux/actions";
 import DrawerLayout from "../../components/drawer/drawer";
 import  {Animated,Easing}from "react-native";
 
@@ -58,13 +61,21 @@ import  {Animated,Easing}from "react-native";
                         this.statusCode=response.status;
                         return response.json()
                     }).then((responseData) => {
-                        console.log(responseData)
+                        // console.log(responseData)
                             if(this.statusCode==200) {
                                 this.props.saveCategories(responseData[0])
                                 this.props.saveMessages(responseData[1])
                                 this.props.saveUser(responseData[2][0])
                                 this.props.initBookmark(responseData[3])
                                 this.props.initProduct(responseData[4])
+                                for(let i=0;i<responseData[4].length;i++) {
+                                    for (let j = 0; j < this.props.basket.basket.length; j++) {
+                                        if(responseData[4][i].ProductAndCourseId===this.props.basket.basket[j].ProductAndCourseId){
+                                            this.props.removeBasket(this.props.basket.basket[j])
+                                            break;
+                                        }
+                                    }
+                                }
                                 setTimeout(()=> {
                                     Actions.reset('drawer');
                                 },500);
@@ -121,6 +132,7 @@ const styles=StyleSheet.create({
 const mapStateToProps=state=>{
      return{
          user:state.user,
+         basket:state.basket,
          rehydrated:state.rehydrated
      }
 }
@@ -143,6 +155,9 @@ const mapDispatchToProps=(dispatch)=> {
         },
         initProduct:(products)=>{
             dispatch(initProduct(products))
+        },
+        removeBasket:(product)=>{
+            dispatch(removeBasket(product))
         }
     }
 }

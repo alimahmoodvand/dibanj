@@ -63,7 +63,7 @@ class BasketProduct extends Component{
             overlay=<Image style={styles.imageLabel} source={require('../../assets/images/free.png')}/>;
         }
         else if(prod.isSpecial==1){
-            overlay=<Image style={styles.imageLabel} source={require('../../assets/images/special.png')}/>;
+            overlay=<Image style={styles.imageLabel} source={require('../../assets/images/home/special.png')}/>;
         }
         return(
             <View style={styles.main}>

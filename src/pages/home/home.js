@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
-import {Image, Text, View, Dimensions, StyleSheet, TouchableOpacity} from "react-native";
+import {Image, Text, View, Dimensions, StyleSheet, TouchableOpacity, Linking} from "react-native";
 import styles from './home.css'
 import {Actions} from "react-native-router-flux";
 import Slideshow from "react-native-slideshow";
@@ -9,6 +9,7 @@ import {removeUser, saveProducts} from "../../redux/actions";
 import Http from "../../services/http";
 
 import Pushe from 'react-native-pushe'
+import Dialog from "react-native-dialog";
 
 // import SVGImage from 'react-native-remote-svg';
 // import DIcon from "../../components/dicon/dicon";
@@ -26,11 +27,24 @@ class Home extends Component {
             // },2000)
         }
     }
+    _getDiscounts =async()=> {
+        let response = await Http._postAsyncData({token: this.props.user.token}, 'getDiscounts')
+        if (Array.isArray(response)) {
+            // console.log(response)
+            if(response.length===1&&response[0].exist>0){
+                this.discount=response[0];
+
+                this.setState({showDialog:true})
+            }
+        }
+    }
+    discount=null;
     dataSource=[]
     state= {
         position: 1,
         updateUI:0,
         dataSource: [],
+        showDialog: false,
         interval: setInterval(() => {
             this.setState({
                 position: this.state.position + 1 === this.dataSource.length ? 0 : this.state.position + 1
@@ -45,6 +59,7 @@ class Home extends Component {
         });
         // setTimeout(()=>{
            this._getSlider();
+           this._getDiscounts();
        // },2000)
     }
 
@@ -86,7 +101,7 @@ class Home extends Component {
                             }
                         )} >
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/store.svg')}/>*/}
-                            <Image style={styles.menuIcon} source={require('../../assets/images/store.png')} />
+                            <Image style={styles.menuIcon} source={require('../../assets/images/home/store.png')} />
 
                         </TouchableOpacity>
                     </View>
@@ -102,7 +117,7 @@ class Home extends Component {
                             empty:'محصولی یافت نشد',
                         })}>
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/lock.svg')}/>*/}
-                            <Image style={styles.menuIcon} source={require('../../assets/images/lock.png')} />
+                            <Image style={styles.menuIcon} source={require('../../assets/images/home/lock.png')} />
 
                         </TouchableOpacity>
                     </View>
@@ -135,7 +150,7 @@ class Home extends Component {
                             empty:'دوره ای یافت نشد',
                         });}} >
                             {/*<SVGImage style={styles.menuIcon} source={require('../../assets/images/absentia.svg')}/>*/}
-                            <Image style={styles.menuIcon} source={require('../../assets/images/absentia.png')} />
+                            <Image style={styles.menuIcon} source={require('../../assets/images/home/absentia.png')} />
                         </TouchableOpacity >
 
                     </View>
@@ -152,23 +167,45 @@ class Home extends Component {
                         });}}>
                             {/*<SVGImage style={{width:'80%',*/}
                             {/*height:'80%',}} source={require('../../assets/images/absentia.svg')}/>*/}
-                            <Image style={styles.menuIcon} source={require('../../assets/images/course.png')} />
+                            <Image style={styles.menuIcon} source={require('../../assets/images/home/course.png')} />
 
                         </TouchableOpacity>
                     </View>
-
                 </View>
+                {this.state.showDialog&&false&&
+                    <Dialog.Container contentStyle={{justifyContent: 'center', alignItems: 'center'}}
+                                      visible={this.state.showDialog}>
+                        <Dialog.Title>{this.discount.title} </Dialog.Title>
+                        <Dialog.Description>
+                            {this.discount.text}
+                        </Dialog.Description>
+                        <Dialog.Button buttonStyle={style.agreeBtn} color={'black'} label={this.discount.rejectButtonText} onPress={() => {
+                            this.setState({showDialog: false});
+                            if(this.discount.rejectButtonLink){
+                                Linking.openURL(this.discount.rejectButtonLink);
+                            }
 
+                        }}/>
+                        <Dialog.Button buttonStyle={style.disagreeBtn} color={'black'} label={this.discount.acceptButtonText} onPress={() => {
+                            this.setState({showDialog: false});
+                            if(this.discount.acceptButtonLink){
+                                Linking.openURL(this.discount.acceptButtonLink);
+                            }else{
+                                Actions.absentia({
+                                    subType: 0,
+                                    proType: 0,
+                                    img: "discount",
+                                    label: this.discount.pageTitle,
+                                    empty: 'دوره ای یافت نشد',
+                                })
+                            }
+
+                        }}/>
+                    </Dialog.Container>
+                }
             </View>
-
                 );
     }
-
-    // _rendeMenu() {
-    //     return (
-    //
-    //     );
-    // }
 }
 const heightCircle=width*0.6*2;
 const pad=width*0.6;
@@ -184,6 +221,8 @@ const four=(split*-1)+pad;
 const five=(split*-2)+pad;
 const slideHeight=(heightCircle-10);
 const style= StyleSheet.create({
+    disagreeBtn:{backgroundColor:'rgb(255, 200, 0)',marginLeft:10,width:100,borderTopRightRadius:20,borderBottomRightRadius:20},
+    agreeBtn:{backgroundColor:'rgb(255, 200, 0)',marginLeft:10,width:100,borderTopLeftRadius:20,borderBottomLeftRadius:20},
     content:{
         paddingTop:margin/2,
         paddingBottom:margin/2,
@@ -193,6 +232,7 @@ const style= StyleSheet.create({
         width:heightCircle/2,
         borderBottomLeftRadius:heightCircle,
         borderTopLeftRadius:heightCircle,
+        borderWidth:2,
         overflow:'visible',
         right:0
 

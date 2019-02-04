@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container} from "native-base";
-import {FlatList, Image, ImageBackground, Switch, Text, TextInput, View} from "react-native";
+import {FlatList, Image, ImageBackground, Switch, Text, TextInput, View, WebView,Linking } from "react-native";
 import styles from './basket.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -27,6 +27,7 @@ class Basket extends Component{
         discountId:0,
         isModalVisible: false,
         loading: false,
+        link:null,
     };
     componentWillUnmount(){
         if(this.state.isModalVisible)
@@ -46,7 +47,10 @@ class Basket extends Component{
 
                 <Image style={styles.bgimage} source={require('../../assets/images/bg.jpg')}/>
                 <HeaderLayout/>
+                {(!this.state.link) &&
+
                 <View style={styles.content}>
+
                     <View style={styles.products}>
                         <FlatList
                             data={this.props.basket.basket}
@@ -56,17 +60,18 @@ class Basket extends Component{
                             }
                         />
                     </View>
-                    {(this.props.basket.basket.length > 0 )&&
+                    {(this.props.basket.basket.length > 0) &&
                     <View style={styles.paymentSection}>
                         {this.addressRequired &&
                         <Location setAddress={this._setAddress}/>
                         }
-                      {this.prices.price > 0 &&
+                        {this.prices.price > 0 &&
                         <View style={styles.offSection}>
                             <View style={styles.offSwitch}>
                                 <Switch value={this.state.offcode}
                                         onValueChange={(offcode) => this.setState({offcode})} tintColor="#f1f1f1"
-                                        onTintColor="yellow" thumbTintColor={this.state.offcode?"yellow":"#b2b2b2"}/>
+                                        onTintColor="yellow"
+                                        thumbTintColor={this.state.offcode ? "yellow" : "#b2b2b2"}/>
                             </View>
                             <View style={styles.offSectionText}>
                                 <Text style={styles.offText}>کد تخفیف دارم</Text>
@@ -105,9 +110,19 @@ class Basket extends Component{
                         </View>
 
                     </View>
+
                     }
                 </View>
-            </View>
+                }
+                {this.state.link&&
+                <View style={styles.content}>
+                    <WebView
+                        source={{uri: this.state.link}}
+                        style={{flex: 1,width:'100%'}}
+                    />
+                </View>
+                }
+                </View>
         );
     }
     _setAddress=(add)=>{
@@ -147,6 +162,8 @@ class Basket extends Component{
     }
 
     buyBasket=async()=> {
+
+
         if(this.address||!this.addressRequired) {
             let data = {
                 token: this.props.user.token,
@@ -158,13 +175,36 @@ class Basket extends Component{
             }
             this.setState({loading:true})
             let response = await Http._postAsyncData(data, 'order');
-            this.setState({loading:false})
+            // this.setState({loading:false})
 
-            if (Array.isArray(response)) {
-                this.props.emptyBasket()
-                this.props.initProduct(response)
-                alert("خرید با موفقیت انجام شد");
-                Actions.order();
+            if ((response)&&response.orderId) {
+               //this.props.emptyBasket()
+                let gateway = await fetch("https://api.idpay.ir/v1/payment", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-KEY': '7dcef333-ddbe-4e76-8938-98b15119a27f',
+                        'X-SANDBOX': true
+                    },
+                    body: JSON.stringify({
+                        "order_id": response.orderId,
+                        "amount": response.paymentCost,
+                        // "callback": "http://shop.dibaanzh.ir/mobilecallback"
+                        "callback": "http://shop.dibaanzh.ir/mobilecallback"
+                    }),
+                });
+                if(gateway.status===201){
+                    let data= await gateway.json();
+                     await Http._postAsyncData({token: this.props.user.token,orderId:response.orderId,link:data.link}, 'saveTransaction');
+                    Linking.openURL(data.link);
+                    // this.setState({link:})
+                }else{
+                    new AlertMessage().error("paymentError")
+                }
+                this.setState({loading:false})
+                // this.props.initProduct(response)
+               // alert("خرید با موفقیت انجام شد");
+               // Actions.order();
             }
         } else {
             new AlertMessage().error("addressEmpty")

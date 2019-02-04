@@ -8,8 +8,8 @@ import {Text, View} from "react-native";
 export default class Http extends Component {
     render(){
         return(<View><Text></Text></View>)
-}
-    static baseurl="http://199.127.99.12:3001/";
+    }
+    static baseurl="http://app.dibaanzh.ir/";
     static async _postAsyncData(data,url='login'){
         try {
             // console.log("_postAsyncData", url, data)

@@ -39,7 +39,7 @@ class Workout extends Component{
     }
     _renderItem = (item, index) => {
         item['id'] = index;
-        return (<WorkoutReport workout={item}/>);
+        return (<WorkoutReport EAPtype={this.props.examType} workout={item}/>);
     };
     render() {
         return (

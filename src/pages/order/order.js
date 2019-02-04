@@ -232,19 +232,20 @@ class Order extends Component{
     _renderContentItem=(section)=>{
         let bg={}
         let status='ثبت شده'
-        if(section.dstatus===1){
+        if(section.status===1){
             bg={backgroundColor:'#daff1d82'};
             status='در حال بررسی'
-        }else if(section.dstatus===2){
+        }else if(section.status===2){
             bg={backgroundColor:'#1d4cff33'}
             status='ارسال شده'
-        }else if(section.dstatus===3){
+        }else if(section.status===3||section.status===100){
             bg={backgroundColor:'#5bff1d33'}
             status='موفق'
-        }else if(section.dstatus===-1){
+        }else if(section.status===-1){
             bg={backgroundColor:'#ff000a22'}
             status='ناموفق'
         }
+        // console.log(bg,status)
         return (
             <View key={section.orderDetailId} style={[styles.accordianHeader,bg]}>
                 <View style={styles.accordianHeaderContainerText}>

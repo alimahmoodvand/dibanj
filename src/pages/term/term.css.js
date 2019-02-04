@@ -109,10 +109,10 @@ export default styles = EStyleSheet.create({
         fontSize:20,
     },
     categories:{
-        backgroundColor:'white',
-        margin:10,
+        // backgroundColor:'white',
+        // margin:10,
         flex:1,
-        borderRadius:5,
+        // borderRadius:5,
     },
     accordianSubContent:{
         flexDirection:'row',

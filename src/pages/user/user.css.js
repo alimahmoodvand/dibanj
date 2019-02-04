@@ -90,7 +90,7 @@ flexDirection:'row',
     userInfo:{
         flexDirection:'row',
         // flex:1,
-        marginBottom:20,
+        // marginBottom:20,
     },
     userImageContainer:{
         flex:0.4,

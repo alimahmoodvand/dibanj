@@ -57,6 +57,31 @@ class User extends Component{
         }
         // console.log(this.page,this.state)
     }
+    _getUserProduct=async()=>{
+        if(!this.pending) {
+            this.pending=true;
+            let response = await Http._postAsyncData({
+                UserId: this.props.userId,
+                token: this.props.user.token,
+                page: this.page
+            }, 'getUserPAC');
+            if (Array.isArray(response)) {
+                this.userProduct = this.userProduct.concat(response ? response : []);
+                if (this.userProduct.length == 0) {
+                    this.showSpinner = false;
+                } else {
+                    this.showSpinner = true;
+                }
+                if (response && response.length > 0)
+                    this.page = this.page + 1;
+                else
+                    this.footer=(<View><Text> </Text></View>);
+                this.setState({updateUI: this.state.updateUI++});
+            }
+            this.pending=false;
+        }
+        // console.log(this.page,this.state)
+    }
     state = {
         updateUI:0,
         refreshing:false,
@@ -66,6 +91,7 @@ class User extends Component{
     userCats=[];
     userComments=[];
     masterProduct=[];
+    userProduct=[];
     user=null;
     pending=false;
     footer=<Spinner/>;
@@ -88,6 +114,7 @@ class User extends Component{
         if(isUser) {
             this._getUserCats();
             this._getUserComments();
+            this._getUserProduct();
         }else{
             this._getMasterProduct();
         }
@@ -97,6 +124,7 @@ class User extends Component{
         if(isUser) {
             this._getUserCats();
             this._getUserComments();
+            this._getUserProduct();
         }else{
             this._getMasterProduct();
         }
@@ -126,6 +154,7 @@ class User extends Component{
                     <View style={styles.userInfo}>
                         <View style={styles.userInfoContainer}>
                             <Text style={styles.userInfoText}>{this.user.fullName}</Text>
+                            <Text style={styles.userInfoText}>{this.user.city}</Text>
                             <Text style={styles.userInfoText}>{this.user.persianRegdate.split(' ')[0]}</Text>
                         </View>
                         <View style={styles.userImageContainer}>
@@ -183,21 +212,62 @@ class User extends Component{
                                 </View>
                             </View>
                             }
-                            <View style={styles.productsSection}>
+
+
+                           {/* <View style={styles.productsSection}>
                                 <View style={styles.products}>
-                                    {/*<FlatList*/}
-                                    {/*numColumns={2}*/}
-                                    {/*ListHeaderComponent={this._renderHeader}*/}
-                                    {/*data={this.state.products}*/}
-                                    {/*keyExtractor={(item,index)=>index.toString()}*/}
-                                    {/*renderItem={({item,index})=>*/}
-                                    {/*this._renderWindowItem(item,index)*/}
-                                    {/*}*/}
-                                    {/*/>*/}
+                                    <FlatList
+                                    numColumns={2}
+                                    ListHeaderComponent={this._renderHeader}
+                                    data={this.state.products}
+                                    keyExtractor={(item,index)=>index.toString()}
+                                    renderItem={({item,index})=>
+                                    this._renderWindowItem(item,index)
+                                    }
+                                    />
                                 </View>
-                            </View>
+                            </View>*/}
                         </View>
                     </ScrollView>
+                    }
+
+                    {this.userProduct.length > 0 &&
+
+                    <View style={styles.masterProduct}>
+                        <FlatList
+                            data={this.userProduct}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({item, index}) =>
+                                this._renderItem(item, index)
+                            }
+                            refreshControl={
+                                <RefreshControl
+                                    onRefresh={this._pullRefresh}
+                                    refreshing={this.state.refreshing}
+                                    title="Pull to refresh"
+                                    tintColor="#ccc"
+                                    titleColor="#ddd"
+                                />
+                            }
+                            ListEmptyComponent={()=>
+                            {
+
+                                if(this.showSpinner){
+                                    return(<Spinner/>);
+                                }
+                                else{
+                                    return(<View>  </View>)
+                                }
+
+                            }}
+                            onEndReached={()=>{
+                                //console.log("onEndReached")
+                                this._getUserProduct();
+                            }}
+                            ListFooterComponent={() => { return this.footer }}
+                            onEndReachedThreshold={0.1}
+                        />
+                    </View>
                     }
                     {this.masterProduct.length > 0 &&
 
@@ -229,7 +299,7 @@ class User extends Component{
 
                     }}
                         onEndReached={()=>{
-                        console.log("onEndReached")
+                        //console.log("onEndReached")
                         this._getMasterProduct();
                     }}
                         ListFooterComponent={() => { return this.footer }}
@@ -237,6 +307,7 @@ class User extends Component{
                         />
                         </View>
                     }
+
                 </View>
 
             </View>
@@ -246,6 +317,13 @@ class User extends Component{
         this.setState({
             refreshing:true
         });
+        if(this.props.isUser){
+            await this._getUserProduct();
+
+        }else{
+            await this._getMasterProduct();
+
+        }
         await this._getMasterProduct();
         this.setState({
             refreshing:false

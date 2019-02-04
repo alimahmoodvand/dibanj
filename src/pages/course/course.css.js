@@ -102,7 +102,8 @@ flexDirection:'row',
         width:'95%',
         justifyContent:'center',
         alignItems:'center',
-        overflow:'hidden'
+        overflow:'hidden',
+        marginBottom:50,
     },
     comments:{
         width:'100%',
@@ -115,7 +116,8 @@ flexDirection:'row',
     },
     commentBtn: {
         backgroundColor: 'rgb(255, 200, 0)',
-        width:'100%'
+        width:'100%',
+        marginBottom:30,
     },
     commentBtnText: {
         color: 'white',

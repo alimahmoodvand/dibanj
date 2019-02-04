@@ -11,13 +11,27 @@ export default styles = EStyleSheet.create({
     },
     content: {
         flex:0.93,
-        backgroundColor: 'white',
         overflow:'hidden',
         // flexDirection:'row',
         // justifyContent:'center',
         // alignItems:'center',
         borderRadius:5,
         flexWrap:'wrap'
+    },
+    expandableList:{
+        width:'100%',
+        backgroundColor: '$grayColor'
+
+    },expandableIcon:{
+        backgroundColor:'white',
+        borderBottomRightRadius:5,
+        paddingLeft:3,
+        paddingRight:3,
+    },
+    expandable:{
+        width:'100%',
+        flexDirection:'row',
+        backgroundColor:'transparent',
     },
     buy: {
         position:'absolute',
@@ -39,14 +53,28 @@ export default styles = EStyleSheet.create({
         fontSize:15,
         textAlign:'center'
     },
-    modal: {
+    practiceSection:{
+        width: '$productBnt',
+        backgroundColor:'white',
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    practiceBtn:{
+        width: '$productBnt',
+        height: '$productBnt',
+        borderRadius: '$productBnt',
+        backgroundColor:'$mainColor',
+        alignItems:'center',
+        justifyContent:'center',
 
+    },
+    modal: {
         justifyContent: "flex-end",
         margin: 0
     },
     sample: {
         position:'absolute',
-        top:'10%',
+        top:'$productBnt/4',
         right:0,
         backgroundColor: '$mainColor',
         height: '$productBntRaduis',
@@ -94,6 +122,7 @@ export default styles = EStyleSheet.create({
         // paddingTop:15,
         flex:0.8,
         flexWrap:'wrap',
+        backgroundColor: 'white',
 
         // flexDirection:'column-reverse',
         // alignItems:'flex-end',
@@ -168,6 +197,7 @@ export default styles = EStyleSheet.create({
         flexDirection:'row',
         minHeight:'$productImage',
         height:'$productImage',
+
         // justifyContent:'flex-end'
     },
     buyBtn:{
@@ -175,7 +205,6 @@ export default styles = EStyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         backgroundColor:'#0094cc',
-        height:30,
     },
     btns:{
         flexWrap:'wrap',

@@ -21,11 +21,14 @@ export default class AlertMessage{
        commentEmpty:'لطفا نظر خود را وارد کنید',
        offEmpty:'لطفا کد تخفیف خود را وارد کنید',
        addressEmpty:'لطفا یک آدرس انتخاب کنید',
+       practiceEmpty:'تمرینی پیدا نشد',
+       examEmpty:'آزمونی پیدا نشد',
        rateEmpty:'لطفا برای نظر دهی امتیاز را نیز مشخص کنید',
        commentDone:'با سپاس. ارسال پیام موفقیت آمیز بود و پس از تایید قرار داده خواهد شد',
        answerEmpty:'جواب های خالی را پر کنید',
        answerDone:'جواب های شما ثبت شد',
        passwordChange:'رمز عبور شما تغییر کرد',
+       paymentError:'خطا در تراکنش بانکی دوباره تلاش کنید',
     };
     error=(index=null,more='',delay=ToastAndroid.LONG,position=ToastAndroid.BOTTOM)=> {
         let textMessage = ``;

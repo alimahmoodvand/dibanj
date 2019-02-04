@@ -42,6 +42,7 @@ export default styles = EStyleSheet.create({
     fieldIcon:{
         padding:5,
         flex:.3,
+        // backgroundColor:'red',
         justifyContent:'center',
         alignItems:'flex-start',
     },
@@ -53,6 +54,8 @@ export default styles = EStyleSheet.create({
     modalContainer:{
         borderWidth: 1,
         padding:10,
+
+
         backgroundColor:'white',
         borderColor: 'black'
     },

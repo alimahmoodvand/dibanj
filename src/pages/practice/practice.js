@@ -18,9 +18,20 @@ class Practice extends Component{
         let response = await Http._postAsyncData({
             userId:this.props.user.userId,
             token:this.props.user.token,
+            type:this.props.EAPtype,
+            ProductAndCourseId:this.props.ProductAndCourseId,
             userCoursesExamAndPracticeId:this.props.userCoursesExamAndPracticeId,
         },'getQuestions');
         if (Array.isArray(response)) {
+            if(response.length===0) {
+                if (this.props.EAPtype === 2) {
+                    this.emptyList="تمرینی پیدا نشد"
+                 //   new AlertMessage().error('practiceEmpty')
+                } else if (this.props.EAPtype === 1) {
+                    this.emptyList="آزمونی پیدا نشد"
+                   // new AlertMessage().error('examEmpty')
+                }
+            }
             this.questions=response;
         }
         this.setState({loading:false})
@@ -29,12 +40,11 @@ class Practice extends Component{
     componentWillMount() {
         this.setState({changeUI:1,loading:true})
         this._getQuestions();
-        // console.log("scdjhbjhbjhsvddZsd")
     }
     _findQuestions=(question)=>{
        let tmp=[];
        this.questions.map((item,index)=>{
-           if(item.QuestionId==question.QuestionId&&question.QuestionOptionId!=item.QuestionOptionId){
+           if(item.QuestionId===question.QuestionId&&question.QuestionOptionId!==item.QuestionOptionId){
                item.label=item.title;
                item.value=item.QuestionOptionId;
                tmp.push(item)
@@ -42,6 +52,7 @@ class Practice extends Component{
        })
         return tmp;
     }
+    emptyList="";
     answers=[];
     files=[];
     render() {
@@ -57,10 +68,18 @@ class Practice extends Component{
                 <HeaderLayout back={true}/>
                 <View style={styles.content}>
                     <ScrollView style={styles.practiceContainer}>
+                        {this.emptyList!==""&&
+                            <View style={styles.practiceTitle}>
+                                <Text style={styles.practiceTitleText}>
+                                    {this.emptyList}
+                                </Text>
+                            </View>
+                        }
                         <View style={styles.practiceTitle}>
                             <Text style={styles.practiceTitleText}>
                                 {this.questions.length>0?this.questions.Title:""}</Text>
                         </View>
+
                         <View style={styles.practiceQuestionContainer}>
 
                             {
@@ -79,11 +98,13 @@ class Practice extends Component{
 
                             }
                         </View>
+                        {this.questions.length > 0 &&
                         <View style={styles.uploadBtnSection}>
-                            <Button small style={styles.uploadBtn} title={0} onPress={() =>this._sendAnswer()}>
+                            <Button small style={styles.uploadBtn} title={0} onPress={() => this._sendAnswer()}>
                                 <Text style={styles.uploadBtnText}>انجام</Text>
                             </Button>
                         </View>
+                        }
                     </ScrollView>
 
                 </View>
@@ -155,7 +176,7 @@ class Practice extends Component{
     // }
 
     _sendAnswer=()=> {
-        if(this.answers.length==0){
+        if(this.answers.length===0){
             new AlertMessage().error("answerEmpty")
             return;
         }else{

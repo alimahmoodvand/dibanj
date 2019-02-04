@@ -3,6 +3,7 @@ import {
     Image,
     StyleSheet,
     Text,
+
 } from 'react-native';
 import {Actions} from "react-native-router-flux";
 import {Container, Header, Left, View, Right, Body, Title} from "native-base";
@@ -13,20 +14,27 @@ import search from "../../pages/search/search";
 
 export default class HeaderLayout extends Component {
     _getBackArrow() {
-        const {back = false,category=false,search=false} = this.props;
         if(this.isback)
         return(
         <MIcon name="chevron-left" onPress={() =>{
-            if(category){
-                Actions.categoriesp()
-            }else if(search){
-                Actions.searchp()
-            }else{
-                Actions.pop()
-            }
+            this._clickBack();
         }} color="white" size={35}/>);
         return;
     };
+    _clickBack=()=>{
+        const {back = false,category=false,search=false,fromParent} = this.props;
+        // console.log(category,search,fromParent)
+
+        if(fromParent){
+            Actions.course({id:fromParent,category,search,fromParent:null})
+        }else if(category){
+            Actions.categoriesp()
+        }else if(search){
+            Actions.searchp()
+        }else{
+            Actions.pop()
+        }
+    }
     isback=false;
     category=false;
 

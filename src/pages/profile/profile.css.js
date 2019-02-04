@@ -54,6 +54,7 @@ export default styles = EStyleSheet.create({
         width:'$productImage*0.5',
         height:'$productImage*0.5',
         borderRadius:'$productImage*0.5',
+        // backgroundColor:'red'
     },
     profileTakePic:{
         position:'absolute',
