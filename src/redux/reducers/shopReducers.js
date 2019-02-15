@@ -6,6 +6,7 @@ const initState={
 export default basket=(state=initState, action={})=>{
     switch (action.type){
         case ADD_BASKET:
+            action.product.addedTime=new Date(new Date().setHours(new Date().getHours()+4)).getTime();
             return {
                 ...state,
                 basket: [...state.basket, action.product]

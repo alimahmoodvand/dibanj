@@ -30,6 +30,9 @@ class BasketProduct extends Component{
         // console.log(prod,decStyle,prod.PriceAfterDiscount,prod.price,prod.DiscountPercent)
         return(
             <View style={styles.prices}>
+                <Text style={[{fontSize:11,fontWeight:'normal',color:'black'}]}>
+                    قیمت (تومان)
+                </Text>
                 { prod.price>0&&
                 <Text style={[styles.detalsText,decStyle]}>
                     {prod.price}
@@ -75,7 +78,7 @@ class BasketProduct extends Component{
                     <View style={styles.details}>
                         <Text style={styles.detalsText}>{prod.Title}</Text>
                         <Text style={styles.detalsText}>{prod.fullName}</Text>
-                        <Text style={styles.detalsText}>{prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):''}</Text>
+                        <Text style={styles.detalsText}>{prod.persianRegisterDeadLine&&prod.persianRegisterDeadLine!=="1"?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):''}</Text>
                     </View>
                     <View style={styles.prices}>
                         <View style={styles.price}>

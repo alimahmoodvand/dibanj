@@ -12,6 +12,7 @@ import {addBasket, removeBookmark, saveProducts} from "../../redux/actions";
 //import HTML from 'react-native-render-html';
 import Modal from "react-native-modal";
 import Http from "../../services/http";
+import AlertMessage from "../../services/alertmessage";
 
 
 class TermProduct extends Component{
@@ -125,6 +126,36 @@ class TermProduct extends Component{
             return  item;
         })
     }
+    _goToEAP=async(prod,EAPtype)=>{
+        let response = await Http._postAsyncData({
+            userId: this.props.user.userId,
+            ProductAndCourseId:prod.ProductAndCourseId,
+            type: EAPtype,
+            token: this.props.user.token
+        }, 'userCourseAndPractice');
+       // console.log(response)
+        if (Array.isArray(response)&&response.length===1&&response[0].status===0) {
+            Actions.practice({ProductAndCourseId:prod.ProductAndCourseId,EAPtype})
+        }else{
+            let status='';
+            if(response[0].status==1){
+                status='در حال بررسی'
+            }else if(response[0].status==2){
+                status='قبول'
+            }else if(response[0].status==-2){
+                status='مردود'
+            }
+            if(status){
+                let typeText=``;
+                if (EAPtype===1)
+                    typeText=(' آزمون ')
+                else
+                    typeText=(' تمرین ')
+                let msg=`وضعیت آخرین ${typeText+status} است `;
+                new AlertMessage().error(null,msg)
+            }
+        }
+    }
     render(){
         const {prod,category,search,isChild}=this.props
         let child=this._findProduct();
@@ -147,10 +178,10 @@ class TermProduct extends Component{
                 <View style={styles.content}>
                     <View style={styles.container}>
                         <View style={styles.practiceSection}>
-                            <TouchableOpacity style={styles.practiceBtn} onPress={()=>Actions.practice({ProductAndCourseId:prod.ProductAndCourseId,EAPtype:1})}>
+                            <TouchableOpacity style={styles.practiceBtn} onPress={()=>this._goToEAP(prod,1)}>
                                 <Text style={[{color:'black'}]} >آزمون</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.practiceBtn} onPress={()=>Actions.practice({ProductAndCourseId:prod.ProductAndCourseId,EAPtype:2})}>
+                            <TouchableOpacity style={styles.practiceBtn} onPress={()=>this._goToEAP(prod,2)}>
                                 <Text style={[{color:'black'}]} >تمرین</Text>
                             </TouchableOpacity>
                         </View>
@@ -168,7 +199,7 @@ class TermProduct extends Component{
                         </TouchableOpacity>
                         }
                         <TouchableOpacity  style={styles.btns} onPress={()=>Actions.course({id:prod.ProductAndCourseId,category,search})}>
-                        <Text style={[styles.detalsText,{textAlign:'right',fontSize:10,color:'black'}]}>{(prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):'')}</Text>
+                        <Text style={[styles.detalsText,{textAlign:'right',fontSize:10,color:'black'}]}>{(prod.persianRegisterDeadLine&&prod.persianRegisterDeadLine!=="1"?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):'')}</Text>
                         </TouchableOpacity>
                         </View>
 

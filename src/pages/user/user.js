@@ -150,92 +150,17 @@ class User extends Component{
 
                 <View style={styles.content}>
                     {/*<View style={styles.userInfo}*/}
-                    {this.user &&
-                    <View style={styles.userInfo}>
-                        <View style={styles.userInfoContainer}>
-                            <Text style={styles.userInfoText}>{this.user.fullName}</Text>
-                            <Text style={styles.userInfoText}>{this.user.city}</Text>
-                            <Text style={styles.userInfoText}>{this.user.persianRegdate.split(' ')[0]}</Text>
-                        </View>
-                        <View style={styles.userImageContainer}>
-                            <Image style={styles.userImage} source={{uri: this.user.imageUrl+"?v="+new Date().getTime()}}/>
-                        </View>
-                    </View>
-                    }
-                    {this.user&&this.user.about &&
-                    <View style={styles.about}>
-                        <Text style={styles.aboutText}>
-                            {this.user.about}
-                        </Text>
-                    </View>
-                    }
-                    {!this.user &&
-                        <Spinner/>
-                    }
-                {/*</View>*/}
-                    {(this.userCats.length + this.userComments.length) > 0 &&
-
-                    <ScrollView>
-                        <View style={styles.courseInfo}>
-                            {this.userCats.length > 0 &&
-                            <View style={styles.bookmarkContainer}>
-                                <Text style={styles.bookmarkTitle}>
-                                    موضوعات مورد علاقه
-                                </Text>
-                                <View style={styles.bookmarks}>
-                                    {
-                                        this.userCats.map((item, index) => {
-                                            return (<Text key={index} style={styles.bookmarkText}>
-                                                #{item.title}
-                                            </Text>)
-                                        })
-                                    }
-                                </View>
-                            </View>
-                            }
-                            {this.userComments.length > 0 &&
-                            <View style={styles.commentsContainer}>
-                                <View style={styles.commentsTitle}>
-                                    <Text style={styles.commentsTitleText}>
-                                        نظرات اساتید
-                                    </Text>
-                                </View>
-                                <View style={styles.ratingContainer}>
-
-                                    {
-                                        this.userComments.map((item, index) => {
-                                                return this._renderComments(item, index);
-                                            }
-                                        )
-
-                                    }
-                                </View>
-                            </View>
-                            }
-
-
-                           {/* <View style={styles.productsSection}>
-                                <View style={styles.products}>
-                                    <FlatList
-                                    numColumns={2}
-                                    ListHeaderComponent={this._renderHeader}
-                                    data={this.state.products}
-                                    keyExtractor={(item,index)=>index.toString()}
-                                    renderItem={({item,index})=>
-                                    this._renderWindowItem(item,index)
-                                    }
-                                    />
-                                </View>
-                            </View>*/}
-                        </View>
-                    </ScrollView>
-                    }
 
                     {this.userProduct.length > 0 &&
 
                     <View style={styles.masterProduct}>
                         <FlatList
-                            data={this.userProduct}
+                            ListHeaderComponent={this._renderProductHeader}
+                                data={this.userProduct.filter((item)=>{
+                                    if(!item.ParentId){
+                                        return item
+                                    }
+                                })}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({item, index}) =>
                                 this._renderItem(item, index)
@@ -260,12 +185,12 @@ class User extends Component{
                                 }
 
                             }}
-                            onEndReached={()=>{
-                                //console.log("onEndReached")
-                                this._getUserProduct();
-                            }}
-                            ListFooterComponent={() => { return this.footer }}
-                            onEndReachedThreshold={0.1}
+                            // onEndReached={()=>{
+                            //     //console.log("onEndReached")
+                            //     this._getUserProduct();
+                            // }}
+                            // ListFooterComponent={() => { return this.footer }}
+                            // onEndReachedThreshold={0.1}
                         />
                     </View>
                     }
@@ -273,7 +198,8 @@ class User extends Component{
 
                     <View style={styles.masterProduct}>
                         <FlatList
-                        data={this.masterProduct}
+                            ListHeaderComponent={this._renderProductHeader}
+                            data={this.masterProduct}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item, index}) =>
                         this._renderItem(item, index)
@@ -328,6 +254,91 @@ class User extends Component{
         this.setState({
             refreshing:false
         });
+    }
+    _renderProductHeader=()=>{
+        return(
+            <View>
+                {this.user &&
+                <View style={styles.userInfo}>
+                    <View style={styles.userInfoContainer}>
+                        <Text style={styles.userInfoText}>{this.user.fullName}</Text>
+                        <Text style={styles.userInfoText}>{this.user.city}</Text>
+                        <Text style={styles.userInfoText}>{this.user.persianRegdate.split(' ')[0]}</Text>
+                    </View>
+                    <View style={styles.userImageContainer}>
+                        <Image style={styles.userImage} source={{uri: this.user.imageUrl+"?v="+new Date().getTime()}}/>
+                    </View>
+                </View>
+                }
+                {this.user&&this.user.about &&
+                <View style={styles.about}>
+                    <Text style={styles.aboutText}>
+                        {this.user.about}
+                    </Text>
+                </View>
+                }
+                {!this.user &&
+                <Spinner/>
+                }
+                {(this.userCats.length + this.userComments.length) > 0 &&
+
+                <View >
+                    <View style={styles.courseInfo}>
+                        {this.userCats.length > 0 &&
+                        <View style={styles.bookmarkContainer}>
+                            <Text style={styles.bookmarkTitle}>
+                                موضوعات مورد علاقه
+                            </Text>
+                            <View style={styles.bookmarks}>
+                                {
+                                    this.userCats.map((item, index) => {
+                                        return (<Text key={index} style={styles.bookmarkText}>
+                                            #{item.title}
+                                        </Text>)
+                                    })
+                                }
+                            </View>
+                        </View>
+                        }
+                        {this.userComments.length > 0 &&
+                        <View style={styles.commentsContainer}>
+                            <View style={styles.commentsTitle}>
+                                <Text style={styles.commentsTitleText}>
+                                    نظرات اساتید
+                                </Text>
+                            </View>
+                            <View style={styles.ratingContainer}>
+
+                                {
+                                    this.userComments.map((item, index) => {
+                                            return this._renderComments(item, index);
+                                        }
+                                    )
+
+                                }
+                            </View>
+                        </View>
+                        }
+
+
+                        {/* <View style={styles.productsSection}>
+                                <View style={styles.products}>
+                                    <FlatList
+                                    numColumns={2}
+                                    ListHeaderComponent={this._renderHeader}
+                                    data={this.state.products}
+                                    keyExtractor={(item,index)=>index.toString()}
+                                    renderItem={({item,index})=>
+                                    this._renderWindowItem(item,index)
+                                    }
+                                    />
+                                </View>
+                            </View>*/}
+                    </View>
+                </View>
+                }
+            </View>
+        )
     }
     _renderHeader=()=> {
         return (

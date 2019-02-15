@@ -147,8 +147,7 @@ class Profile extends Component {
                                 }} color="rgb(255, 170, 0)" size={25}/>
                             </View>
                         </TouchableOpacity>
-                        <Text>{this.props.user.userName}</Text>
-                        <Text>{this.props.user.userId}</Text>
+                        <Text>{this.props.user.fullName}</Text>
                     </View>
                     <ScrollView style={styles.editableInfo}
                                 keyboardShouldPersistTaps="handled"
@@ -232,6 +231,7 @@ class Profile extends Component {
         );
     }
     mapUser=[
+        {enTitle:"email",faTitle:'ایمیل',},
         {enTitle:"fullName",faTitle:'نام نام خانوادگی',},
         {enTitle:"ostan",faTitle:'استان',},
         {enTitle:"city",faTitle:'شهر',},

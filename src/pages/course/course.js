@@ -123,9 +123,10 @@ class Course extends Component{
         item['id']=index;
        return( <Product fromParent={this.props.id} prod={item}/>);
     };
-    _renderWindowItem = (item,index) => {
+    _renderWindowItem = (item,index,search,category) => {
         item['id']=index;
-       return(<WindowProduct   prod={item}/>);
+        // console.log(item,index)
+       return(<WindowProduct prod={item} search={search} category={category} />);
     };
     _renderCommentItem= (item, index) => {
         item['id'] = index
@@ -283,24 +284,34 @@ class Course extends Component{
                                     data={this.comments}
                                     keyExtractor={(item,index)=>index.toString()}
                                     renderItem={({item,index})=>
-                                        this._renderCommentItem(item,index)
+                                        this._renderCommentItem(item,index,search,category)
                                     }/>
                             </View>
                         </View>
                     }
                     {/*<View style={styles.productsSection}>*/}
-                        {/*{this._renderHeaderComment()}*/}
+                        {this._renderHeaderComment('محصولات مشابه','import-contacts')}
                         {/*<View style={styles.products}>*/}
                         {/*<FlatList*/}
                             {/*// numColumns={2}*/}
-                            {/*horizontal={true}*/}
+                            {/*// horizontal={true}*/}
                             {/*// ListHeaderComponent={this._renderHeader}*/}
-                            {/*data={this.props.products.products}*/}
+                            {/*data={this.props.bookmarks}*/}
+                            {/*// extraData={this.state}*/}
                             {/*keyExtractor={(item,index)=>index.toString()}*/}
                             {/*renderItem={({item, index}) => {*/}
+                                {/*// console.log(index)*/}
                                 {/*this._renderWindowItem(item, index)*/}
                             {/*}}*/}
                         {/*/>*/}
+                            < FlatList
+                                // numColumns={2}
+                                horizontal={true}
+                                data={this.props.bookmarks}
+                                keyExtractor={(item,index)=>index.toString()}
+                                renderItem={({item,index})=>
+                                    this._renderWindowItem(item,index)
+                                }/>
                     {/*</View>*/}
                     {/*</View>*/}
                 </ScrollView>
@@ -320,13 +331,13 @@ class Course extends Component{
             </View>*/
         )
     }
-    _renderHeaderComment() {
+    _renderHeaderComment(title='نظرات',icon='comment') {
         return (
             <View style={styles.headerCommentContainer}>
                 <View style={styles.headerCommentHeaderSection}>
                 <View style={styles.headerCommentHeader}>
-                    <Text style={styles.headerCommentHeaderText}>نظرات</Text>
-                    <MIcon name="comment" onPress={() => Actions.pop()} color="white" size={25}/>
+                    <Text style={styles.headerCommentHeaderText}>{title}</Text>
+                    <MIcon name={icon} onPress={() => Actions.pop()} color="white" size={25}/>
                 </View>
                 </View>
             </View>
@@ -396,6 +407,7 @@ const mapStateToProps=state=>{
     return{
         user:state.user,
         products:state.products,
+        bookmarks:state.favorites.bookmarks,
     }
 };
 export default connect(mapStateToProps,mapDispatchToProps)(Course);

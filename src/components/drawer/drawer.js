@@ -118,6 +118,10 @@ class DrawerLayout extends Component{
                 <Text style={styles.proImageText}>راهنما</Text>
                 <Image style={styles.menuIcon} source={require('../../assets/images/drawer/help.png')}/>
             </Button>
+            <Button block style={styles.drawerBtn} onPress={() => {Actions.issue()}}>
+                <Text style={styles.proImageText}>مشکلات اپلیکیشن</Text>
+                <Image style={styles.menuIcon} source={require('../../assets/images/drawer/issue.png')}/>
+            </Button>
             <Button block style={styles.drawerBtn} onPress={() => {Actions.contact()}}>
                 <Text style={styles.proImageText}>تماس با ما</Text>
                 <Image style={styles.menuIcon} source={require('../../assets/images/drawer/contact.png')}/>

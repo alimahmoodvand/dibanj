@@ -114,6 +114,15 @@ class Term extends Component{
             if(!item.ParentId){
                 return item;
             }
+            let isAlone=true;
+            this.props.products.map((pro,index)=>{
+                if(pro.ProductAndCourseId===item.ParentId){
+                    isAlone=false;
+                }
+            })
+            if(isAlone){
+                return item;
+            }
         });
         const body={ProductAndCourseId:162,isSample:1}
         const token=this.props.user.token;

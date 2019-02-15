@@ -172,8 +172,14 @@ class Order extends Component{
             bg={backgroundColor:'#5bff1d33'};
         }
         return (
-            <View key={index} onPress={()=>{}} >
-                <View style={styles.accordianHeader}>
+            <View key={index}  >
+                <TouchableOpacity style={styles.accordianHeader} onPress={()=> {
+                    if (this.state.selectCatIndex !== index)
+                        this._selectOrder(index)
+                    else
+                        this._selectOrder(false)
+
+                }}>
                     {
                         this.state.selectCatIndex !== index &&
                         <FIcon style={styles.filterIcon} onPress={()=>{this._selectOrder(index)}} name="angle-left" color="black" size={30}/>
@@ -191,7 +197,7 @@ class Order extends Component{
                     <Text  style={styles.accordianHeaderText}> شماره </Text>
 
                 </View>
-              </View>
+              </TouchableOpacity>
                 {
                     this._renderContent(section,index)
                 }

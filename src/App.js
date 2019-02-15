@@ -36,6 +36,7 @@ import PStorage from "./redux/store";
 import Bookmark from "./pages/bookmark/bookmark";
 import Contact from "./pages/contact/contact";
 import Help from "./pages/help/help";
+import Issue from "./pages/issue/issue";
 import VerifyCode from "./pages/verifycode/verifycode";
 import Messages from "./pages/message/message";
 import Lesson from "./pages/lesson/lesson";
@@ -176,6 +177,10 @@ export default class App extends Component{
                                     <Scene key="help" icon={({focused}) => {
                                         return <MIcon name="home" color={(focused ? "#ffc800" : "white")} size={28}/>;
                                     }} hideNavBar component={Help}>
+                                    </Scene>
+                                    <Scene key="issue" icon={({focused}) => {
+                                        return <MIcon name="home" color={(focused ? "#ffc800" : "white")} size={28}/>;
+                                    }} hideNavBar component={Issue}>
                                     </Scene>
                                     <Scene key="contact" icon={({focused}) => {
                                         return <MIcon name="home" color={(focused ? "#ffc800" : "white")} size={28}/>;

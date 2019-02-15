@@ -57,7 +57,7 @@ export default class WorkoutReport extends Component{
                 {workout.status === 0 &&
                 <Button style={styles.buy} title={workout.id}
                         onPress={() => Actions.practice({userCoursesExamAndPracticeId: workout.examAndPracticeId,ProductAndCourseId: workout.courseId,EAPtype})}>
-                    <Text style={styles.proBtnText}>حل کردن</Text>
+                    <Text style={styles.proBtnText}>پاسخ دهی</Text>
                 </Button>
                 }
                 <View style={styles.content}>
@@ -90,8 +90,7 @@ export default class WorkoutReport extends Component{
                         </View>
                 </View>
                 <Button style={styles.sample} title={workout.id} onPress={()=>Actions.course({id:workout.courseId})}>
-                        <Text style={styles.proBtnText}>اطلاعات
-                        دوره</Text>
+                        <Text style={styles.proBtnText}>جزییات</Text>
                 </Button>
             </View>
         );

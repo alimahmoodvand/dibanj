@@ -61,7 +61,7 @@ import  {Animated,Easing}from "react-native";
                         this.statusCode=response.status;
                         return response.json()
                     }).then((responseData) => {
-                        // console.log(responseData)
+                        console.log(responseData)
                             if(this.statusCode==200) {
                                 this.props.saveCategories(responseData[0])
                                 this.props.saveMessages(responseData[1])
@@ -74,6 +74,12 @@ import  {Animated,Easing}from "react-native";
                                             this.props.removeBasket(this.props.basket.basket[j])
                                             break;
                                         }
+                                    }
+                                }
+                                for (let j = 0; j < this.props.basket.basket.length; j++) {
+                                    // console.log(this.props.basket.basket[j].addedTime<new Date().getTime(),this.props.basket.basket[j].addedTime,new Date().getTime())
+                                    if(this.props.basket.basket[j].addedTime<new Date().getTime()){
+                                        this.props.removeBasket(this.props.basket.basket[j])
                                     }
                                 }
                                 setTimeout(()=> {

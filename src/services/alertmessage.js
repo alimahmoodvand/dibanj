@@ -27,8 +27,10 @@ export default class AlertMessage{
        commentDone:'با سپاس. ارسال پیام موفقیت آمیز بود و پس از تایید قرار داده خواهد شد',
        answerEmpty:'جواب های خالی را پر کنید',
        answerDone:'جواب های شما ثبت شد',
+       issueDone:'مشکل شما ثبت شد',
        passwordChange:'رمز عبور شما تغییر کرد',
        paymentError:'خطا در تراکنش بانکی دوباره تلاش کنید',
+       addedProduct:'به دوره های من افزوده میشه',
     };
     error=(index=null,more='',delay=ToastAndroid.LONG,position=ToastAndroid.BOTTOM)=> {
         let textMessage = ``;

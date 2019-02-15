@@ -90,7 +90,7 @@ flexDirection:'row',
     userInfo:{
         flexDirection:'row',
         // flex:1,
-        // marginBottom:20,
+        marginBottom:20,
     },
     userImageContainer:{
         flex:0.4,
@@ -116,6 +116,7 @@ flexDirection:'row',
         alignItems:'flex-end',
         flexWrap:'wrap',
         paddingBottom:10,
+
     },
     bookmarkTitle:{
         color:'black',

@@ -143,7 +143,7 @@ class Practice extends Component{
                             buttonColor='yellow'
                             formHorizontal={false}
                             radio_props={options}
-                            // initial={0}
+                            initial={20}
                             onPress={(value) => {
                                 question.answer=value;
                                 this.answers[index]=question;
@@ -164,7 +164,7 @@ class Practice extends Component{
                                 }
                             })
                         }}>
-                            <Text style={styles.uploadBtnText}>آپلود</Text>
+                            <Text style={styles.uploadBtnText}>انتخاب فایل</Text>
                         </Button>)
                     }
                 </View>
@@ -176,7 +176,10 @@ class Practice extends Component{
     // }
 
     _sendAnswer=()=> {
-        if(this.answers.length===0){
+        //console.log(this.answers,this.questions.filter((item,index)=>{if(item.sortNumber===-1){return item;}}))
+        let anws=this.answers.filter(item=>{if(item)return item})
+        let ques=this.questions.filter((item,index)=>{if(item.sortNumber===-1){return item;}})
+        if(anws.length<ques.length){
             new AlertMessage().error("answerEmpty")
             return;
         }else{
@@ -192,6 +195,7 @@ class Practice extends Component{
                 this.statusCode=response.status;
                 return   response.json()
             }).then(response=> {
+                console.log(response)
                 this.setState({loading: false})
                 if (this.statusCode == 200) {
                     new AlertMessage().error("answerDone")

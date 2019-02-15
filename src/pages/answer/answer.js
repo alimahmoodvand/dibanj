@@ -103,10 +103,11 @@ class Answer extends Component{
     }
 
     _renderQuestion=(question,options,index)=>{
-        // console.log(question,options,index)
+        console.log(question,options,index)
         let radioAnswer=-1
         if(options.length>0){
             options.map((item,index)=>{
+                // console.log(item.value==item.answer,item.value,item.answer)
                 if(item.value==item.answer){
                     radioAnswer=index
                 }
@@ -144,9 +145,10 @@ class Answer extends Component{
                             formHorizontal={false}
                             radio_props={options}
                             disabled={true}
-                            initial={index}
+                            initial={radioAnswer}
                             onPress={(value) => {
                                 question.answer=value;
+
                                 this.answers[index]=question;
                                 // this._onSelect(0,value,question)
                             }}

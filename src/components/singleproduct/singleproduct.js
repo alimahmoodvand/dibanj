@@ -127,9 +127,9 @@ class SingleProduct extends Component{
                 <View style={styles.content}>
                     <View style={[styles.details,descStyle]}>
                         <Text  style={[styles.detalsText,{fontWeight:'bold',color:'black',fontSize:18,marginBottom:10}]}>{prod.Title}</Text>
-                        <Text  style={[styles.detalsText]}>{prod.persianRegisterDeadLine?' مهلت ثبت نام : '+prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/') :''}</Text>
-                        <Text  style={[styles.detalsText]}>{prod.persianStartDate?' شروع دوره : '+prod.persianStartDate.split(' ')[0].replace(/-/gi,'/') :''}</Text>
-                        <Text  style={[styles.detalsText]}>{prod.persianEndDate?' پایان دوره : '+prod.persianEndDate.split(' ')[0].replace(/-/gi,'/') :''}</Text>
+                        <Text  style={[styles.detalsText]}>{prod.persianRegisterDeadLine&&prod.persianRegisterDeadLine!=="1"?' مهلت ثبت نام : '+prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/') :''}</Text>
+                        <Text  style={[styles.detalsText]}>{prod.persianStartDate&&prod.persianRegisterDeadLine!=="1"?' شروع دوره : '+prod.persianStartDate.split(' ')[0].replace(/-/gi,'/') :''}</Text>
+                        <Text  style={[styles.detalsText]}>{prod.persianEndDate&&prod.persianRegisterDeadLine!=="1"?' پایان دوره : '+prod.persianEndDate.split(' ')[0].replace(/-/gi,'/') :''}</Text>
                         {
                             duration&&
                             <Text style={styles.detalsText}>{' مدت دوره: '+prod.Duration}</Text>
@@ -141,7 +141,7 @@ class SingleProduct extends Component{
                                 <Text style={[styles.detalsText,{color:'blue'}]} >{item.fullName}</Text>
                             </TouchableOpacity>)
                         })}
-                        {this._getPrices(prod)}
+                        {this._getPrices(JSON.parse(JSON.stringify(prod)))}
                     </View>
 
                 </View>

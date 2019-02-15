@@ -37,7 +37,7 @@ export default styles = EStyleSheet.create({
     },
     sample: {
         position:'absolute',
-        bottom:'10%',
+        bottom:'20%',
         right:0,
         backgroundColor: '$mainColor',
         height: '$productBntRaduis',
@@ -107,6 +107,6 @@ export default styles = EStyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         backgroundColor:'#0094cc',
-        height:30,
+        height:60,
     },
 });

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container} from "native-base";
-import {Image, ImageBackground, Text, View} from "react-native";
+import {Image, ImageBackground, Text, TouchableOpacity, View} from "react-native";
 import styles from './windowproduct.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -25,16 +25,15 @@ export default class WindowProduct extends Component{
         );
     }
     render(){
-        const {prod}=this.props
-        // console.log(this.props)
+        const {prod,category=false,search=false}=this.props
         return(
             <View style={styles.main}>
-                <View style={styles.content}>
-                    <Image style={styles.image} source={{uri:prod.image}}/>
+                <TouchableOpacity style={styles.content} onPress={()=>{Actions.course({id:prod.ProductAndCourseId,search,category})}}>
+                    <Image style={styles.image} source={{uri:prod.thumbnailUrl}}/>
                     <View style={styles.details}>
-                        <Text style={styles.detailsText}>{prod.title}</Text>
+                        <Text style={styles.detailsText}>{prod.Title}</Text>
                     </View>
-                </View>
+                </TouchableOpacity>
             </View>
         );
     }

@@ -102,10 +102,10 @@ class Basket extends Component{
                                 </Button>
                             </View>
                             <View style={styles.priceSection}>
-                                <Text style={[styles.priceText]}>{this.prices.priceDiscount}</Text>
-                                <Text style={[styles.priceText]}>{this.prices.offPercent}</Text>
-                                <Text style={[styles.priceText, this.prices.decStyle]}>{this.prices.price}</Text>
-                                <Text style={styles.priceSumText}>جمع مبلغ</Text>
+                                <Text style={[styles.priceText]}>{this.prices.priceDiscount||this.prices.price}</Text>
+                                {/*<Text style={[styles.priceText]}>{this.prices.offPercent}</Text>*/}
+                                {/*<Text style={[styles.priceText, this.prices.decStyle]}>{this.prices.price}</Text>*/}
+                                <Text style={styles.priceSumText}>مبلغ پرداختی(تومان)</Text>
                             </View>
                         </View>
 
@@ -158,6 +158,8 @@ class Basket extends Component{
             // this.prices.priceDiscount=price-this.state.offPrice;
             // this.prices.offPercent=this.state.offPrice;
         }
+        // console.log(this.state.offPercent,this.prices.priceDiscount||this.prices.price,this.prices.priceDiscount)
+
         return price;
     }
 
@@ -188,7 +190,7 @@ class Basket extends Component{
                     },
                     body: JSON.stringify({
                         "order_id": response.orderId,
-                        "amount": response.paymentCost,
+                        "amount": response.paymentCost*10,
                         // "callback": "http://shop.dibaanzh.ir/mobilecallback"
                         "callback": "http://shop.dibaanzh.ir/mobilecallback"
                     }),

@@ -38,8 +38,9 @@ export default styles = EStyleSheet.create({
     },
     products:{
         flex:.95,
-        backgroundColor:'red',
         // height:100,
+        backgroundColor:'red',
+        height:200,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent:'center',

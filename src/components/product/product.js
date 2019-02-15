@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderLayout from "../../components/header/header";
 import {Button, Container} from "native-base";
-import {Image, ImageBackground, Text, TouchableOpacity, View, WebView} from "react-native";
+import {Image, ImageBackground, Linking, Text, TouchableOpacity, View, WebView} from "react-native";
 import styles from './product.css'
 import {Actions} from "react-native-router-flux";
 import FIcon from 'react-native-vector-icons/FontAwesome';
@@ -12,6 +12,7 @@ import {addBasket, addProducts, removeBookmark, saveProducts} from "../../redux/
 //import HTML from 'react-native-render-html';
 import Modal from "react-native-modal";
 import Http from "../../services/http";
+import AlertMessage from "../../services/alertmessage";
 
 
 class Product extends Component{
@@ -51,6 +52,10 @@ class Product extends Component{
         return(
             <View style={[styles.priceSide,sectionStyle]}>
             <View style={styles.prices}>
+
+                <Text style={[{fontSize:10,fontWeight:'normal'}]}>
+                    قیمت (تومان)
+                </Text>
                 { prod.price>0&&
                     <Text style={[decStyle,{fontSize:11,fontWeight:'normal'}]}>
                         {this._priceSeparate(prod.price)}
@@ -163,11 +168,11 @@ class Product extends Component{
                         </TouchableOpacity>
                         {duration&&
                         <TouchableOpacity style={styles.btns} onPress={()=>Actions.course({fromParent,id:prod.ProductAndCourseId,category,search})}>
-                        <Text style={styles.detalsText}>{'مدت دوره:'+prod.Duration}</Text>
+                        <Text style={[styles.detalsText,{fontSize:10}]}>{'مدت دوره:'+prod.Duration}</Text>
                         </TouchableOpacity>
                         }
                         <TouchableOpacity  style={styles.btns} onPress={()=>Actions.course({fromParent,id:prod.ProductAndCourseId,category,search})}>
-                        <Text style={[styles.detalsText,{textAlign:'right',fontSize:10,color:'black'}]}>{(prod.persianRegisterDeadLine?prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):'')}</Text>
+                        <Text style={[styles.detalsText,{textAlign:'right',fontSize:10}]}>{(prod.persianRegisterDeadLine&&prod.persianRegisterDeadLine!=="1"? 'مهلت ثبت نام: '+ prod.persianRegisterDeadLine.split(' ')[0].replace(/-/gi,'/'):'')}</Text>
                         </TouchableOpacity>
                         </View>
                         {/*<TouchableOpacity style={styles.btns} onPress={()=>Actions.course({fromParent,id:prod.ProductAndCourseId})}>*/}
@@ -205,6 +210,7 @@ class Product extends Component{
                             if (this._findProduct()) {
                                 alert("قبلا به دوره های من اضافه شده است")
                             }else{
+                                this._buyBasket(prod);
                                 this.props.addProducts([prod]);
                             }
                         }}>
@@ -231,6 +237,25 @@ class Product extends Component{
                 }
             </View>
         );
+    }
+    _buyBasket=async(prod)=> {
+        let data = {
+                token: this.props.user.token,
+                UserId: this.props.user.userId,
+                products: [prod],
+                address:0,
+                discountCode: 0,
+                discountId:  0,
+            }
+            let response = await Http._postAsyncData(data, 'order');
+            // this.setState({loading:false})
+
+            if ((response)&&response.orderId) {
+                new AlertMessage().error("addedProduct");
+            }else{
+                new AlertMessage().error("serverError");
+            }
+        // console.log(response,data)
     }
     _renderImages=(prod)=> {
         let images = []
@@ -308,7 +333,7 @@ class Product extends Component{
             count=true;
         }
             const myProduct=this._findProduct();
-        // console.log((prod.canBuySeperatly != 0||!prod.ParentId),prod.PriceAfterDiscount>0,!deadline,!myProduct,!count,prod)
+        // console.log((prod.canBuySeperatly != 0||!prod.ParentId),prod.PriceAfterDiscount==0,!deadline,!myProduct,!count,prod)
         if(((prod.canBuySeperatly != 0||!prod.ParentId)&&prod.PriceAfterDiscount===0)&&!deadline&&!myProduct&&!count){
             return true;
         }else{
